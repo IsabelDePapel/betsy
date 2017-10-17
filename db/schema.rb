@@ -10,10 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171017224234) do
+ActiveRecord::Schema.define(version: 20171017231155) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "categories", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "categories_products", force: :cascade do |t|
+    t.bigint "category_id"
+    t.bigint "product_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_categories_products_on_category_id"
+    t.index ["product_id"], name: "index_categories_products_on_product_id"
+  end
+
+  create_table "categories_products_joins", force: :cascade do |t|
+  end
 
   create_table "merchants", force: :cascade do |t|
     t.bigint "user_id"
@@ -24,6 +42,18 @@ ActiveRecord::Schema.define(version: 20171017224234) do
     t.index ["email"], name: "index_merchants_on_email", unique: true
     t.index ["user_id"], name: "index_merchants_on_user_id"
     t.index ["username"], name: "index_merchants_on_username", unique: true
+  end
+
+  create_table "products", force: :cascade do |t|
+    t.string "name"
+    t.decimal "price"
+    t.text "description"
+    t.string "photo_url"
+    t.integer "quantity"
+    t.boolean "visible", default: false
+    t.integer "merchant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
