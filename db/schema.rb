@@ -44,6 +44,13 @@ ActiveRecord::Schema.define(version: 20171017231155) do
     t.index ["username"], name: "index_merchants_on_username", unique: true
   end
 
+<<<<<<< HEAD
+  create_table "orders", force: :cascade do |t|
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_orders_on_user_id"
+=======
   create_table "products", force: :cascade do |t|
     t.string "name"
     t.decimal "price"
@@ -54,6 +61,7 @@ ActiveRecord::Schema.define(version: 20171017231155) do
     t.integer "merchant_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+>>>>>>> af8926d5fda16b2f018d84261297575333abe4db
   end
 
   create_table "users", force: :cascade do |t|
@@ -72,4 +80,5 @@ ActiveRecord::Schema.define(version: 20171017231155) do
   end
 
   add_foreign_key "merchants", "users"
+  add_foreign_key "orders", "users"
 end
