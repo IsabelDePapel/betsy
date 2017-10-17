@@ -10,10 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171017224234) do
+ActiveRecord::Schema.define(version: 20171017234422) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "categories", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "categories_products", force: :cascade do |t|
+    t.bigint "category_id"
+    t.bigint "product_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_categories_products_on_category_id"
+    t.index ["product_id"], name: "index_categories_products_on_product_id"
+  end
+
+  create_table "categories_products_joins", force: :cascade do |t|
+  end
 
   create_table "merchants", force: :cascade do |t|
     t.bigint "user_id"
@@ -26,6 +44,32 @@ ActiveRecord::Schema.define(version: 20171017224234) do
     t.index ["username"], name: "index_merchants_on_username", unique: true
   end
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> add-user-model
+  create_table "orders", force: :cascade do |t|
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_orders_on_user_id"
+<<<<<<< HEAD
+=======
+  create_table "products", force: :cascade do |t|
+    t.string "name"
+    t.decimal "price"
+    t.text "description"
+    t.string "photo_url"
+    t.integer "quantity"
+    t.boolean "visible", default: false
+    t.integer "merchant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+>>>>>>> af8926d5fda16b2f018d84261297575333abe4db
+=======
+>>>>>>> add-user-model
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -36,10 +80,12 @@ ActiveRecord::Schema.define(version: 20171017224234) do
     t.string "zip"
     t.string "country"
     t.string "ccnum"
-    t.date "ccexp"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "ccmonth"
+    t.integer "ccyear"
   end
 
   add_foreign_key "merchants", "users"
+  add_foreign_key "orders", "users"
 end
