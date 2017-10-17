@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171017231155) do
+ActiveRecord::Schema.define(version: 20171017234422) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,11 +45,15 @@ ActiveRecord::Schema.define(version: 20171017231155) do
   end
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> add-user-model
   create_table "orders", force: :cascade do |t|
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_orders_on_user_id"
+<<<<<<< HEAD
 =======
   create_table "products", force: :cascade do |t|
     t.string "name"
@@ -62,6 +66,8 @@ ActiveRecord::Schema.define(version: 20171017231155) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
 >>>>>>> af8926d5fda16b2f018d84261297575333abe4db
+=======
+>>>>>>> add-user-model
   end
 
   create_table "users", force: :cascade do |t|
@@ -74,9 +80,10 @@ ActiveRecord::Schema.define(version: 20171017231155) do
     t.string "zip"
     t.string "country"
     t.string "ccnum"
-    t.date "ccexp"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "ccmonth"
+    t.integer "ccyear"
   end
 
   add_foreign_key "merchants", "users"
