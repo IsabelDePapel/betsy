@@ -12,6 +12,7 @@
 
 ActiveRecord::Schema.define(version: 20171018000352) do
 
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -93,8 +94,8 @@ ActiveRecord::Schema.define(version: 20171018000352) do
     t.string "ccnum"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "ccmonth"
-    t.string "ccyear"
+    t.integer "ccmonth"
+    t.integer "ccyear"
   end
 
   add_foreign_key "merchants", "users"
