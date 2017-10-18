@@ -1,57 +1,47 @@
 require "test_helper"
 
 describe Billing do
-  let(:bridget) { billings(:bridget) }
+  let(:bridget) { billings(:bridget) } #ALL FIXTURES ARE VALID
+
 
   describe "validations" do
-    it "must have a name" do
+    it "must have a all fields except street2 to be valid" do
+      all_req_fields = [:name, :email, :street1, :city, :state_prov, :zip, :country, :ccnum, :ccmonth, :ccyear]
+
       bridget.valid?.must_equal true
 
-      bridget.name = nil
-      bridget.valid?.must_equal false
+      all_req_fields.each do |field|
+        bridget[field] = nil
+        bridget.valid?.must_equal false
+        bridget.reload
+      end
     end
 
-    it "must have an email" do
-      bridget.email = nil
-      bridget.valid?.must_equal false
+    it "will still be valid without field street2" do
+      bridget.street2.wont_be_nil
+      bridget.street2 = nil
+      bridget.valid?.must_equal true
     end
 
-    it "must have a street1" do
-      bridget.street1 = nil
-      bridget.valid?.must_equal false
-    end
+    it "will not be valid if CC month is not an integer between 1 & 12" do
+      invalid_months = ["cat", 1.5, -2, 13, 0]
+      valid_months = (1..12).to_a
 
-    it "must have a city" do
+      valid_months.each do |month|
+        bridget.ccmonth = month
+        bridget.valid?.must_equal true, "#{month} should be a valid month"
+      end
 
-    end
-
-    it "must have a state/prov" do
-
-    end
-
-    it "must have a zip" do
-
-    end
-
-    # do we want to make this default to USA?
-    it "must have a country" do
-
-    end
-
-    it "must have a ccnum" do
-
-    end
-
-    it "must have a ccyear" do
-
-    end
-
-    it "does not require street2 to be valid" do
-
+      invalid_months.each do |month|
+        bridget.ccmonth = month
+        bridget.valid?.must_equal false, "#{month} shoudn't be a valid month"
+      end
     end
   end
 
   describe "relations" do
+    describe "belongs to user" do
 
+    end
   end
 end
