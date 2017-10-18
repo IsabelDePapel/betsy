@@ -2,8 +2,8 @@ require "test_helper"
 
 describe Merchant do
   let(:merchant) { Merchant.new }
-  let(:merchant1) {merchants(:merchant1)}
-  let(:merchant2) {merchants(:merchant2)}
+  let(:merchant1) {merchants(:one)}
+  let(:merchant2) {merchants(:two)}
 
   describe "model relationships" do
     describe "belongs_to :user" do
@@ -25,7 +25,8 @@ describe Merchant do
         merchant1.user.must_be_kind_of User
         an_id = merchant1.user.id
         User.find(an_id).must_equal merchant1.user
-      
+
+        merchant1.user.email = "new@email.com"
       end
 
     end

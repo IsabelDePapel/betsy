@@ -6,7 +6,7 @@ one:
   street1: 6345 N Curtis Ave
   street2: 5
   city: Portland
-  state: Oregon
+  state_prov: Oregon
   zip: 97217
   ccnum: 5521456712340987
   ccmonth: 10
@@ -18,7 +18,7 @@ two:
   street1: 221b Baker St
   street2:
   city: Marylebone
-  state: London
+  state_prov: London
   zip: NW1 6XE
   ccnum: 2212654390783425
   ccmonth: 10
