@@ -9,7 +9,8 @@ one:
   state: Oregon
   zip: 97217
   ccnum: 5521456712340987
-  ccexp: 0420
+  ccmonth: 10
+  ccyear: 20
 
 two:
   name: Sherlock Holmes
@@ -20,4 +21,5 @@ two:
   state: London
   zip: NW1 6XE
   ccnum: 2212654390783425
-  ccexp: 2017-10-17
+  ccmonth: 10
+  ccyear: 20
