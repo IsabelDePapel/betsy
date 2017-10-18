@@ -1,13 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  status: MyString
-  quantity: 1
-  product_id: 1
-  order_id: 1
+pending:
+  status: pending
+  quantity: 2
+  product: croissant
+  order: one
 
-two:
-  status: MyString
+paid:
+  status: paid
   quantity: 1
-  product_id: 1
-  order_id: 1
+  product: cupcake
+  order: one

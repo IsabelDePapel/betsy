@@ -1,19 +1,19 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+croissant:
   name: Croissant
   price: 3.50
   description: Soft butter croissant
   photo_url: MyString
   quantity: 10
   visible: false
-  merchant_id: 1
+  merchant: one
 
-two:
+cupcake:
   name: Chocolate Peanut Butter Cupcake
   price: 4.00
   description: Gooey chocolate cupcake
   photo_url: MyString
   quantity: 5
   visible: false
-  merchant_id: 2
+  merchant: two
