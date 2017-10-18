@@ -10,10 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171018005711) do
+ActiveRecord::Schema.define(version: 20171018183907) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "billings", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "name"
+    t.string "email"
+    t.string "street1"
+    t.string "street2"
+    t.string "city"
+    t.string "state_prof"
+    t.string "zip"
+    t.string "country"
+    t.string "ccnum"
+    t.integer "ccmonth"
+    t.integer "ccyear"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_billings_on_user_id"
+  end
 
   create_table "categories", force: :cascade do |t|
     t.string "name"
@@ -97,6 +115,7 @@ ActiveRecord::Schema.define(version: 20171018005711) do
     t.integer "ccyear"
   end
 
+  add_foreign_key "billings", "users"
   add_foreign_key "merchants", "users"
   add_foreign_key "orders", "users"
 end
