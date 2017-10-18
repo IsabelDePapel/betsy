@@ -22,7 +22,6 @@ describe Merchant do
       end
 
       it "can access its user data and modify it" do
-        puts "POOP, MERCHANT VALUE: #{merchant1}"
         merchant1.user.must_be_kind_of User
         an_id = merchant1.user.id
         User.find(an_id).must_equal merchant1.user

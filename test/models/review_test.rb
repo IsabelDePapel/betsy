@@ -1,11 +1,17 @@
 require "test_helper"
 
 describe Review do
-  let(:review) { reviews(:cupcake_review) }
+  let(:review1) { reviews(:cupcake_review) }
 
   describe "model relationships" do
-    it "belongs to :user" do
+
+    describe "belongs to :user" do
+
+      it "must have a user to be valid" do
+
+      end
 
     end
+
   end
 end
