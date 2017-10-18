@@ -2,8 +2,8 @@ require "test_helper"
 
 describe Merchant do
   let(:merchant) { Merchant.new }
-  let(:merchant1) {merchants(:merchant1)}
-  let(:merchant2) {merchants(:merchant2)}
+  let(:merchant1) {merchants(:one)}
+  let(:merchant2) {merchants(:two)}
 
   describe "model relationships" do
     describe "belongs_to :user" do
