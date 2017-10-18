@@ -10,7 +10,7 @@ one:
   zip: 97217
   ccnum: 5521456712340987
   ccmonth: 10
-  ccyear: 20
+  ccyear: 2020
 
 two:
   name: Sherlock Holmes
@@ -22,4 +22,4 @@ two:
   zip: NW1 6XE
   ccnum: 2212654390783425
   ccmonth: 10
-  ccyear: 20
+  ccyear: 2018
