@@ -1,115 +1,39 @@
 Rails.application.routes.draw do
-  get 'users/index'
 
-  get 'users/show'
+  # User here interpreted as someone who's buying
+  # Have to be logged in to access these routes
+  # Display order_items of things they ordrered
+  resources :users do
+    resource :orders do
+      resource :order_items, only: [:index, :show]
+    end
 
-  get 'users/edit'
+    # Their own billing info (as a buyer)
+    resources :billings
+  end
 
-  get 'users/delete'
+  # Merchant here interpreted as someone who's selling
+  # Display order_items that have products owned by them
+  resources :merchants do
+    resources :orders do
+      resources :order_items
 
-  get 'users/new'
+      # Billing info of their buyers
+      resources :billings
+    end
 
-  get 'users/update'
+    # Products they own/are selling
+    resources :products
 
-  get 'users/create'
+  end
 
-  get 'reviews/index'
+  resources :categories do
+    resources :products
+  end
 
-  get 'reviews/show'
-
-  get 'reviews/edit'
-
-  get 'reviews/delete'
-
-  get 'reviews/new'
-
-  get 'reviews/update'
-
-  get 'reviews/create'
-
-  get 'products/index'
-
-  get 'products/show'
-
-  get 'products/edit'
-
-  get 'products/delete'
-
-  get 'products/new'
-
-  get 'products/update'
-
-  get 'products/create'
-
-  get 'orders/index'
-
-  get 'orders/show'
-
-  get 'orders/edit'
-
-  get 'orders/delete'
-
-  get 'orders/new'
-
-  get 'orders/update'
-
-  get 'orders/create'
-
-  get 'order_items/index'
-
-  get 'order_items/show'
-
-  get 'order_items/edit'
-
-  get 'order_items/delete'
-
-  get 'order_items/new'
-
-  get 'order_items/update'
-
-  get 'order_items/create'
-
-  get 'merchants/index'
-
-  get 'merchants/show'
-
-  get 'merchants/edit'
-
-  get 'merchants/delete'
-
-  get 'merchants/new'
-
-  get 'merchants/update'
-
-  get 'merchants/create'
-
-  get 'categories/index'
-
-  get 'categories/show'
-
-  get 'categories/edit'
-
-  get 'categories/delete'
-
-  get 'categories/new'
-
-  get 'categories/update'
-
-  get 'categories/create'
-
-  get 'billings/index'
-
-  get 'billings/show'
-
-  get 'billings/edit'
-
-  get 'billings/delete'
-
-  get 'billings/new'
-
-  get 'billings/update'
-
-  get 'billings/create'
+  resources :products do
+    resources :reviews
+  end
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
