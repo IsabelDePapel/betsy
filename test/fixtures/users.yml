@@ -1,7 +1,7 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-# 
-# one:
 #
-#
-# two:
-#
+one:
+  created_at: <%= Date.today %>
+
+two:
+  created_at: <%= Date.today - 1 %>

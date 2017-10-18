@@ -5,15 +5,20 @@ describe Billing do
 
   describe "validations" do
     it "must have a name" do
+      bridget.valid?.must_equal true
 
+      bridget.name = nil
+      bridget.valid?.must_equal false
     end
 
     it "must have an email" do
-
+      bridget.email = nil
+      bridget.valid?.must_equal false
     end
 
     it "must have a street1" do
-
+      bridget.street1 = nil
+      bridget.valid?.must_equal false
     end
 
     it "must have a city" do
@@ -38,7 +43,11 @@ describe Billing do
     end
 
     it "must have a ccyear" do
-      
+
+    end
+
+    it "does not require street2 to be valid" do
+
     end
   end
 
