@@ -11,7 +11,5 @@ describe User do
   end
 
   describe "relations" do
-
-
   end
 end

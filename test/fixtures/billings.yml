@@ -9,6 +9,7 @@ bridget:
   city: Portland
   state_prov: Oregon
   zip: 97217
+  country: USA
   ccnum: 5521456712340987
   ccmonth: 10
   ccyear: 2020
@@ -22,6 +23,7 @@ sherlock:
   city: Marylebone
   state_prov: London
   zip: NW1 6XE
+  country: England
   ccnum: 2212654390783425
   ccmonth: 10
   ccyear: 2018
