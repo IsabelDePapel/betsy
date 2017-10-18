@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171018223909) do
+ActiveRecord::Schema.define(version: 20171018224303) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -83,9 +83,10 @@ ActiveRecord::Schema.define(version: 20171018223909) do
     t.string "photo_url"
     t.integer "quantity"
     t.boolean "visible", default: false
-    t.integer "merchant_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "merchant_id"
+    t.index ["merchant_id"], name: "index_products_on_merchant_id"
   end
 
   create_table "reviews", force: :cascade do |t|
@@ -108,6 +109,7 @@ ActiveRecord::Schema.define(version: 20171018223909) do
   add_foreign_key "merchants", "users"
   add_foreign_key "order_items", "orders"
   add_foreign_key "orders", "users"
+  add_foreign_key "products", "merchants"
   add_foreign_key "reviews", "products"
   add_foreign_key "reviews", "users"
 end
