@@ -1,13 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  rating: 1
-  text: MyString
-  user_id: 1
-  product_id: 1
+cupcake_review:
+  rating: 3
+  text: These chocolate cupcakes are good but there's something missing :(
+  user: bridget
+  product: cupcake
 
-two:
-  rating: 1
-  text: MyString
-  user_id: 1
-  product_id: 1
+croissant_review:
+  rating: 5
+  text: These croissants are the best I've ever had!
+  user: sherlock
+  product: croissant
