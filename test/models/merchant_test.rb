@@ -25,6 +25,7 @@ describe Merchant do
         merchant1.user.must_be_kind_of User
         an_id = merchant1.user.id
         User.find(an_id).must_equal merchant1.user
+      
       end
 
     end
