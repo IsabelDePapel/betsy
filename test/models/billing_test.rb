@@ -1,6 +1,7 @@
 require "test_helper"
 
 describe Billing do
+  let(:billing) { Billing.new }
   let(:bridget) { billings(:bridget) } #ALL FIXTURES ARE VALID
 
 
@@ -41,7 +42,15 @@ describe Billing do
 
   describe "relations" do
     describe "belongs to user" do
+      it "must have a user to be valid" do
+        bridget.user = nil
+        bridget.valid?.must_equal false
+      end
 
+      it "must be able to access its users data" do
+        id = users(:one).id
+        bridget.user.id.must_equal id
+      end
     end
   end
 end
