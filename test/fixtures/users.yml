@@ -1,25 +1,6 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: Bridget Jones
-  email: bridgetjones@gmail.com
-  street1: 6345 N Curtis Ave
-  street2: 5
-  city: Portland
-  state_prov: Oregon
-  zip: 97217
-  ccnum: 5521456712340987
-  ccmonth: 10
-  ccyear: 2020
+
 
 two:
-  name: Sherlock Holmes
-  email: MyString
-  street1: 221b Baker St
-  street2:
-  city: Marylebone
-  state_prov: London
-  zip: NW1 6XE
-  ccnum: 2212654390783425
-  ccmonth: 10
-  ccyear: 2018

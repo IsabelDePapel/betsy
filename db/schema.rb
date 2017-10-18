@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171018183907) do
+ActiveRecord::Schema.define(version: 20171018185542) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 20171018183907) do
     t.string "street1"
     t.string "street2"
     t.string "city"
-    t.string "state_prof"
+    t.string "state_prov"
     t.string "zip"
     t.string "country"
     t.string "ccnum"
@@ -100,19 +100,8 @@ ActiveRecord::Schema.define(version: 20171018183907) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "name"
-    t.string "email"
-    t.string "street1"
-    t.string "street2"
-    t.string "city"
-    t.string "state_prov"
-    t.string "zip"
-    t.string "country"
-    t.string "ccnum"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "ccmonth"
-    t.integer "ccyear"
   end
 
   add_foreign_key "billings", "users"
