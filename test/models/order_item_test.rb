@@ -12,10 +12,10 @@ describe OrderItem do
       pending.valid?.must_equal false
     end
 
-    it "requires quantity to be an integer > 0" do
+    it "requires quantity to be an integer > 0 AND less than or equal to product quantity" do
       invalid_qtys = [-1, 0, 1.5]
 
-      valid_qtys = [1, 5, 1000]
+      valid_qtys = [1, 5]
 
       invalid_qtys.each do |qty|
         pending.quantity = qty
@@ -23,6 +23,7 @@ describe OrderItem do
       end
 
       valid_qtys.each do |qty|
+        puts "pending.quantity: #{qty}"
         pending.quantity = qty
         pending.valid?.must_equal true, "#{qty} is a valid quantity"
       end
