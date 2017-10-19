@@ -21,6 +21,8 @@ Rails.application.routes.draw do
       # Billing info of their buyers
       resources :billings
     end
+    #/merchants/:merchant_id/products/:id(.:format)
+    patch '/merchants/:merchant_id/products/:id/change_visibility', to: 'products#change_visibility', as: 'change_visibility_work'
 
     # Products they own/are selling
     resources :products
@@ -34,6 +36,9 @@ Rails.application.routes.draw do
   resources :products do
     resources :reviews
   end
+
+  # directs non-valid pages to 404.html
+  get '*path' => redirect('/404.html')
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
