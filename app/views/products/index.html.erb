@@ -1,2 +1,14 @@
-<h1>Products#index</h1>
-<p>Find me in app/views/products/index.html.erb</p>
+<h1>Foodsie Products</h1>
+
+<%= link_to "All Products", products_path, class: "button" %> <%= link_to "Login", products_path, class: "button" %> <%= link_to "Logout", products_path, class: "button" %>
+
+<ul>
+  <% @products.each do |product| %>
+  <%= link_to image_tag "https://loremflickr.com/500/500/felt,dessert/all?" %>
+  <li><%= link_to(product.name, product_path(product.id)) %></li>
+  <li>Description: <%= product.description %></li>
+  <li>Price: <%= product.price %></li>
+  <li>Quantity Available: <%= product.quantity %></li>
+  <li>Seller: <%= product.merchant.username %></li>
+  <% end %>
+</ul>

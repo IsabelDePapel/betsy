@@ -1,2 +1,13 @@
-<h1>Products#show</h1>
-<p>Find me in app/views/products/show.html.erb</p>
+<%= link_to "All Products", products_path, class: "button" %> <%= link_to "Login", products_path, class: "button" %> <%= link_to "Logout", products_path, class: "button" %>
+<ul>
+<% if @product %>
+<h3><%= @product.name %></h3>
+<%= link_to image_tag "https://loremflickr.com/500/500/felt,dessert/all?" %>
+<p>Description: <%= @product.description %></p>
+<p>Price: <%= @product.price %></p>
+<p>Quantity Available: <%= @product.quantity %></p>
+<% end %>
+</ul>
+
+<%= link_to "Purchase", products_path, class: "button" %>
+</article>
