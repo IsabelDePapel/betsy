@@ -1,11 +1,11 @@
 class ProductsController < ApplicationController
 
   def index
-    @products = Products.all
+    @products = Product.all
   end
 
   def show
-    @product = Products.find_by(id: params[:id].to_i)
+    @product = Product.find_by(id: params[:id].to_i)
   end
 
   def new
@@ -51,6 +51,6 @@ class ProductsController < ApplicationController
 
   private
   def product_params
-    return params.require(:product).permit(:category, :price, :quantity, :name, :description)
+    return params.require(:product).permit(:id, :name, :price, :description, :photo_url, :quantity, :merchant_id)
   end
 end
