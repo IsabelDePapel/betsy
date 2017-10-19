@@ -17,8 +17,7 @@ describe Order do
 
       order.user_id.must_equal expected_id
 
-      # WISHLIST - prevent this from happening
-      # TODO
+      # IDEA: WISHLIST - prevent this from happening
       order.user = users(:two)
       order.valid?.must_equal true
     end

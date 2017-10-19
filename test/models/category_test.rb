@@ -3,6 +3,7 @@ require "test_helper"
 describe Category do
   let(:category) { Category.new }
   let(:cupcakes) { categories(:cupcakes) }
+  let(:cupcake) { products(:cupcake) }
 
   describe "has and belongs to many products" do
     it "can have 0, 1 or many products and can list its products" do
@@ -19,7 +20,8 @@ describe Category do
     end
 
     it "can access its products data" do
-      
+      cupcakes.products << cupcake
+      cupcakes.products.first.name.must_equal "Chocolate Peanut Butter Cupcake"
     end
   end
 
