@@ -11,6 +11,10 @@ class Product < ApplicationRecord
   validates :price, presence: true
   validates :price, numericality: { greater_than: 0 }
 
+  validates :quantity, presence: true, numericality: { greater_than: -1 }
+
+  validates :visible, exclusion: { in: [nil] }
+
   validates :description, allow_blank: true, length: { maximum: 225 }
 
 end
