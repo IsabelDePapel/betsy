@@ -51,6 +51,18 @@ describe Billing do
         expected_id = orders(:one).id
         bridget.order.id.must_equal expected_id
       end
+
+      it "must belong to one and only one order to be valid (unique user id)" do
+        bridgets_bill = billings(:bridget) # assoc w order one
+        sherlocks_bill = billings(:sherlock) # assoc w order two
+
+        # confirm their order associations
+        bridgets_bill.order.must_equal orders(:one)
+        sherlocks_bill.order.must_equal orders(:two)
+
+        bridgets_bill.order = orders(:two)
+        bridgets_bill.valid?.must_equal false
+      end
     end
 
   end
