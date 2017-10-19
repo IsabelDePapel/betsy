@@ -1,5 +1,5 @@
 class Billing < ApplicationRecord
-  belongs_to :user
+  belongs_to :order
 
   # set country to default of USA??
   validates_presence_of :name, :email, :street1, :city, :state_prov, :zip, :country, :ccnum, :ccmonth, :ccyear
