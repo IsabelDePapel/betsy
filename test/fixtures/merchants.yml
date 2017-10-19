@@ -10,7 +10,7 @@ two:
   username: iwantobelieve
   email: danascully@gmail.com
 
-three:
-  user: three
-  username: daffyduck
-  email: daffy@duck.com
+# three:
+#   user: three
+#   username: daffyduck
+#   email: daffy@duck.com

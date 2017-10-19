@@ -1,5 +1,6 @@
 class Merchant < ApplicationRecord
   belongs_to :user
+  has_one :billing, through: :user
 
   validates :username, presence: true, uniqueness: { case_sensitive: false }
   validates :email, presence: true, uniqueness: { case_sensitive: false }
