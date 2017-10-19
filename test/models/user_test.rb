@@ -25,33 +25,18 @@ describe User do
         user_no_merchant.merchant.must_be_nil
         user_no_merchant.valid?.must_equal true
       end
+
+      it "has many reviews" do
+        user.must_respond_to :reviews
+        user.reviews.must_equal [reviews(:cupcake_review)]
+      end
+
+      it "cascade nullifies" do
+        user.destroy
+        merchants(:one).user_id.must_be_nil
+        reviews(:cupcake_review).user_id.must_be_nil
+      end
     end
 
-    # describe "has one billing" do
-    #   it "can access billing info" do
-    #     user.must_respond_to :billing
-    #     user.billing.must_equal billings(:bridget)
-    #   end
-
-      # it "can't have more than one billing" do
-      #   new_billing_data = {
-      #     user_id: user.id,
-      #     name: "new name",
-      #     email: "new@name.com",
-      #     street1: "11 test street",
-      #     city: "Nome",
-      #     state_prov: "AK",
-      #     zip: "85710",
-      #     country: "USA",
-      #     ccnum: "4444444444444444",
-      #     ccmonth: 10,
-      #     ccyear: 2018
-      #   }
-      #
-      #   extra_billing = Billing.new(new_billing_data)
-      #   extra_billing.valid?.must_equal false
-      # end
-
-    # end
   end
 end

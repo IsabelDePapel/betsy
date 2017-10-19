@@ -3,11 +3,11 @@
 cupcake_review:
   rating: 3
   text: These chocolate cupcakes are good but there's something missing :(
-  user: bridget
+  user: one
   product: cupcake
 
 croissant_review:
   rating: 5
   text: These croissants are the best I've ever had!
-  user: sherlock
+  user: two
   product: croissant
