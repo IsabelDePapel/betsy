@@ -29,7 +29,7 @@ classes = [
   Review
 ]
 
-files.each_at_index do | file, i |
+files.each_with_index do | file, i |
   media_file = Rails.root.join('db', 'seed_csv', file)
 
 
