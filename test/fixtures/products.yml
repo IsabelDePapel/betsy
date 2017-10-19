@@ -17,3 +17,12 @@ cupcake:
   quantity: 5
   visible: false
   merchant: two
+
+macaroon:
+  name: Yuzu Flavored macaroons
+  price: 4.20
+  description: Imported from Nippon
+  photo_url: MyString
+  quantity: 10
+  visible: true
+  merchant: one
