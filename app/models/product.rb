@@ -19,4 +19,8 @@ class Product < ApplicationRecord
 
   validates :description, allow_blank: true, length: { maximum: 225 }
 
+  def in_stock?
+    return quantity > 0
+  end
+  
 end

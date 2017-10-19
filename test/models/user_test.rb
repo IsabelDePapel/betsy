@@ -26,9 +26,15 @@ describe User do
         user_no_merchant.valid?.must_equal true
       end
 
+      it "has many reviews" do
+        user.must_respond_to :reviews
+        user.reviews.must_equal [reviews(:cupcake_review)]
+      end
+
       it "cascade nullifies" do
         user.destroy
         merchants(:one).user_id.must_be_nil
+        reviews(:cupcake_review).user_id.must_be_nil
       end
     end
 
