@@ -10,13 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171018224303) do
+ActiveRecord::Schema.define(version: 20171019021225) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "billings", force: :cascade do |t|
-    t.bigint "user_id"
     t.string "name"
     t.string "email"
     t.string "street1"
@@ -30,7 +29,8 @@ ActiveRecord::Schema.define(version: 20171018224303) do
     t.integer "ccyear"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_billings_on_user_id"
+    t.bigint "order_id"
+    t.index ["order_id"], name: "index_billings_on_order_id"
   end
 
   create_table "categories", force: :cascade do |t|
@@ -105,7 +105,7 @@ ActiveRecord::Schema.define(version: 20171018224303) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "billings", "users"
+  add_foreign_key "billings", "orders"
   add_foreign_key "merchants", "users"
   add_foreign_key "order_items", "orders"
   add_foreign_key "orders", "users"
