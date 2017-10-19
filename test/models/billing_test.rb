@@ -41,16 +41,17 @@ describe Billing do
   end
 
   describe "relations" do
-    describe "belongs to user" do
-      it "must have a user to be valid" do
-        bridget.user = nil
+    describe "belongs to order" do
+      it "must have an order to be valid" do
+        bridget.order = nil
         bridget.valid?.must_equal false
       end
 
-      it "must be able to access its users data" do
-        id = users(:one).id
-        bridget.user.id.must_equal id
+      it "must be able to access its order's data" do
+        expected_id = orders(:one).id
+        bridget.order.id.must_equal expected_id
       end
     end
+
   end
 end
