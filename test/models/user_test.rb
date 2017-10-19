@@ -27,11 +27,11 @@ describe User do
       end
     end
 
-    describe "has one billing" do
-      it "can access billing info" do
-        user.must_respond_to :billing
-        user.billing.must_equal billings(:bridget)
-      end
+    # describe "has one billing" do
+    #   it "can access billing info" do
+    #     user.must_respond_to :billing
+    #     user.billing.must_equal billings(:bridget)
+    #   end
 
       # it "can't have more than one billing" do
       #   new_billing_data = {
@@ -50,9 +50,8 @@ describe User do
       #
       #   extra_billing = Billing.new(new_billing_data)
       #   extra_billing.valid?.must_equal false
+      # end
 
-      end
-    end
+    # end
   end
-
 end

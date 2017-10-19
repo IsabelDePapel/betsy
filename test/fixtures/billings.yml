@@ -1,7 +1,7 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 bridget:
-  user: one
+  order: one
   name: Bridget Jones
   email: bridgetjones@gmail.com
   street1: 6345 N Curtis Ave
@@ -15,7 +15,7 @@ bridget:
   ccyear: 2020
 
 sherlock:
-  user: two
+  order: two
   name: Sherlock Holmes
   email: sherlock@pbs.org
   street1: 221b Baker St
