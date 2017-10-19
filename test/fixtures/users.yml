@@ -5,3 +5,6 @@ one:
 
 two:
   created_at: <%= Date.today - 1 %>
+
+three:
+  created_at: <%= Date.today - 2 %>
