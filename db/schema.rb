@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171018185542) do
+ActiveRecord::Schema.define(version: 20171018224303) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,9 +48,6 @@ ActiveRecord::Schema.define(version: 20171018185542) do
     t.index ["product_id"], name: "index_categories_products_on_product_id"
   end
 
-  create_table "categories_products_joins", force: :cascade do |t|
-  end
-
   create_table "merchants", force: :cascade do |t|
     t.bigint "user_id"
     t.string "username"
@@ -66,9 +63,10 @@ ActiveRecord::Schema.define(version: 20171018185542) do
     t.string "status"
     t.integer "quantity"
     t.integer "product_id"
-    t.integer "order_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "order_id"
+    t.index ["order_id"], name: "index_order_items_on_order_id"
   end
 
   create_table "orders", force: :cascade do |t|
@@ -85,18 +83,21 @@ ActiveRecord::Schema.define(version: 20171018185542) do
     t.string "photo_url"
     t.integer "quantity"
     t.boolean "visible", default: false
-    t.integer "merchant_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "merchant_id"
+    t.index ["merchant_id"], name: "index_products_on_merchant_id"
   end
 
   create_table "reviews", force: :cascade do |t|
     t.integer "rating"
     t.string "text"
-    t.integer "user_id"
-    t.integer "product_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.bigint "product_id"
+    t.index ["product_id"], name: "index_reviews_on_product_id"
+    t.index ["user_id"], name: "index_reviews_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -106,5 +107,9 @@ ActiveRecord::Schema.define(version: 20171018185542) do
 
   add_foreign_key "billings", "users"
   add_foreign_key "merchants", "users"
+  add_foreign_key "order_items", "orders"
   add_foreign_key "orders", "users"
+  add_foreign_key "products", "merchants"
+  add_foreign_key "reviews", "products"
+  add_foreign_key "reviews", "users"
 end
