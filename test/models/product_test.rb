@@ -49,7 +49,7 @@ describe Product do
 
   describe "#order_items" do
     it "can have multiple order items" do
-      product.order_items.count.must_equal 2
+      product.order_items.count.must_equal 3
     end
 
     it "can add an order item" do
