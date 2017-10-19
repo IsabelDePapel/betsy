@@ -26,7 +26,7 @@ describe Merchant do
         an_id = merchant1.user.id
         User.find(an_id).must_equal merchant1.user
 
-        merchant1.user.email = "new@email.com"
+        # merchant1.user.email = "new@email.com"
       end
 
     end
