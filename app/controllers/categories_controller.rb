@@ -3,6 +3,7 @@ class CategoriesController < ApplicationController
   end
 
   def show
+    @category = Category.find_by(id: params[:id])
   end
 
   def edit
