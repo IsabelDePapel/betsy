@@ -7,7 +7,7 @@ describe Billing do
 
   describe "validations" do
     it "must have a all fields except street2 to be valid" do
-      all_req_fields = [:name, :email, :street1, :city, :state_prov, :zip, :country, :ccnum, :ccmonth, :ccyear]
+      all_req_fields = [:name, :email, :street1, :city, :state_prov, :zip, :country, :ccnum, :ccmonth, :ccyear, :cvv]
 
       bridget.valid?.must_equal true
 
@@ -36,6 +36,15 @@ describe Billing do
       invalid_months.each do |month|
         bridget.ccmonth = month
         bridget.valid?.must_equal false, "#{month} shoudn't be a valid month"
+      end
+    end
+
+    it "will only be valid if CVV is an integer num > 0 and max 3 digits long" do
+      invalid_cvvs = ["cat", nil, "", "   ", 1.5, 0, 1000]
+
+      invalid_cvvs.each do |cvv|
+        bridget.cvv = cvv
+        bridget.valid?.must_equal false
       end
     end
   end

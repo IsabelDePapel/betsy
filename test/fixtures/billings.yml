@@ -13,6 +13,7 @@ bridget:
   ccnum: 5521456712340987
   ccmonth: 10
   ccyear: 2020
+  cvv: 222
 
 sherlock:
   order: two
@@ -27,3 +28,4 @@ sherlock:
   ccnum: 2212654390783425
   ccmonth: 10
   ccyear: 2018
+  cvv: 012

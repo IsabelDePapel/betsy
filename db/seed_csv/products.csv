@@ -1,21 +1,21 @@
 id,name,price,description,photo_url,quantity,visible,merchant_id
-1,Yummy,10,eat me!,"https://loremflickr.com/500/500/felt,dessert/all?",0,FALSE,1
-2,Yummy2,2.5,eat me first!,"https://loremflickr.com/500/500/felt,dessert/all?",1,FALSE,1
-3,Yummy3,3.95,eat me with a spoon!,"https://loremflickr.com/500/500/felt,dessert/all?",2,FALSE,1
-4,Yummy4,4.95,eat me!,"https://loremflickr.com/500/500/felt,dessert/all?",3,FALSE,1
-5,Yummy5,10.99,eat me first!,"https://loremflickr.com/500/500/felt,dessert/all?",4,FALSE,1
-6,Yummy6,6.25,eat me with a spoon!,"https://loremflickr.com/500/500/felt,dessert/all?",5,FALSE,1
-7,Yummy7,5,eat me!,"https://loremflickr.com/500/500/felt,dessert/all?",6,FALSE,1
-8,Tasty,5.25,eat me first!,"https://loremflickr.com/500/500/felt,dessert/all?",7,FALSE,2
-9,Tasty9,24,eat me with a spoon!,"https://loremflickr.com/500/500/felt,dessert/all?",8,FALSE,2
-10,Tasty10,19.99,eat me!,"https://loremflickr.com/500/500/felt,dessert/all?",9,FALSE,2
-11,Tasty11,10,eat me first!,"https://loremflickr.com/500/500/felt,dessert/all?",10,FALSE,2
-12,Tasty12,2.5,eat me with a spoon!,"https://loremflickr.com/500/500/felt,dessert/all?",12,FALSE,2
-13,Tasty13,3.95,eat me!,"https://loremflickr.com/500/500/felt,dessert/all?",14,FALSE,2
-14,Delicious14,4.95,eat me first!,"https://loremflickr.com/500/500/felt,dessert/all?",16,FALSE,3
-15,Delicious15,10.99,eat me with a spoon!,"https://loremflickr.com/500/500/felt,dessert/all?",18,FALSE,3
+1,Yummy,10,eat me!,"https://loremflickr.com/500/500/felt,dessert/all?",20,TRUE,1
+2,Yummy2,2.5,eat me first!,"https://loremflickr.com/500/500/felt,dessert/all?",20,TRUE,1
+3,Yummy3,3.95,eat me with a spoon!,"https://loremflickr.com/500/500/felt,dessert/all?",20,TRUE,1
+4,Yummy4,4.95,eat me!,"https://loremflickr.com/500/500/felt,dessert/all?",20,TRUE,1
+5,Yummy5,10.99,eat me first!,"https://loremflickr.com/500/500/felt,dessert/all?",20,TRUE,1
+6,Yummy6,6.25,eat me with a spoon!,"https://loremflickr.com/500/500/felt,dessert/all?",20,TRUE,1
+7,Yummy7,5,eat me!,"https://loremflickr.com/500/500/felt,dessert/all?",20,TRUE,1
+8,Tasty,5.25,eat me first!,"https://loremflickr.com/500/500/felt,dessert/all?",20,TRUE,2
+9,Tasty9,24,eat me with a spoon!,"https://loremflickr.com/500/500/felt,dessert/all?",20,TRUE,2
+10,Tasty10,19.99,eat me!,"https://loremflickr.com/500/500/felt,dessert/all?",20,TRUE,2
+11,Tasty11,10,eat me first!,"https://loremflickr.com/500/500/felt,dessert/all?",20,TRUE,2
+12,Tasty12,2.5,eat me with a spoon!,"https://loremflickr.com/500/500/felt,dessert/all?",20,FALSE,2
+13,Tasty13,3.95,eat me!,"https://loremflickr.com/500/500/felt,dessert/all?",20,FALSE,2
+14,Delicious14,4.95,eat me first!,"https://loremflickr.com/500/500/felt,dessert/all?",20,FALSE,3
+15,Delicious15,10.99,eat me with a spoon!,"https://loremflickr.com/500/500/felt,dessert/all?",20,FALSE,3
 16,Delicious16,6.25,eat me!,"https://loremflickr.com/500/500/felt,dessert/all?",20,FALSE,3
-17,Delicious17,5,eat me first!,"https://loremflickr.com/500/500/felt,dessert/all?",0,FALSE,3
-18,Delicious18,5.25,eat me with a spoon!,"https://loremflickr.com/500/500/felt,dessert/all?",0,FALSE,3
-19,Delicious19,24,eat me!,"https://loremflickr.com/500/500/felt,dessert/all?",1,FALSE,3
-20,Delicious20,19.99,eat me first!,"https://loremflickr.com/500/500/felt,dessert/all?",4,FALSE,3
+17,Delicious17,5,eat me first!,"https://loremflickr.com/500/500/felt,dessert/all?",20,FALSE,3
+18,Delicious18,5.25,eat me with a spoon!,"https://loremflickr.com/500/500/felt,dessert/all?",20,FALSE,3
+19,Delicious19,24,eat me!,"https://loremflickr.com/500/500/felt,dessert/all?",20,FALSE,3
+20,Delicious20,19.99,eat me first!,"https://loremflickr.com/500/500/felt,dessert/all?",20,FALSE,3
