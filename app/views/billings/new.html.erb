@@ -33,8 +33,8 @@
   <%= f.label "Credit Card Number" %>
   <%= f.text_field :ccnum %>
 
-  <%# f.label "Security Code" %>
-  <%# NEED AN EMPTY FIELD FOR THIS THAT WON'T BIND TO FORM %>
+  <%= f.label :cvv %>
+  <%= f.text_field :cvv %>
 
   <%= f.label "Expires: month" %>
   <%= f.text_field :ccmonth %>
@@ -42,6 +42,6 @@
   <%= f.label "Expires: year" %>
   <%= f.text_field :ccyear %>
 
-  <%= f.submit %>
+  <%= f.submit "Complete Checkout" %>
 
-]<% end %>
+<% end %>

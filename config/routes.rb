@@ -29,13 +29,16 @@ Rails.application.routes.draw do
   end
 
   resources :products do
-    resources :reviews
 
     post :add_to_cart, to: 'products#add_to_cart', as: 'add_to_cart'
+
+    resources :reviews, only: [:show, :new, :create]
+
   end
 
 
   resources :orders, only: [:index, :show] do
+    get 'confirmation', on: :member
     resources :billings, only: [:new, :create]
   end
 

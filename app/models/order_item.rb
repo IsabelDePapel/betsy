@@ -9,7 +9,7 @@ class OrderItem < ApplicationRecord
   validates :status, inclusion: { in: STATUSES}
   validates :quantity, presence: true, numericality: { only_integer: true, greater_than: 0 }
 
-  validate :cannot_add_an_order_item_if_more_than_quantity
+  validate :cannot_add_an_order_item_if_more_than_quantity, if: -> { product && quantity }
 
 
   def cannot_add_an_order_item_if_more_than_quantity
@@ -24,6 +24,10 @@ class OrderItem < ApplicationRecord
     if self.status == "paid"
       self.product.quantity -= self.quantity
     end
+  end
+
+  def price
+    return quantity * product.price
   end
 
 end
