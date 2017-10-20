@@ -7,9 +7,6 @@ Rails.application.routes.draw do
     resource :orders do
       resource :order_items, only: [:index, :show]
     end
-
-    # Their own billing info (as a buyer)
-    resources :billings
   end
 
   # Merchant here interpreted as someone who's selling
@@ -17,9 +14,6 @@ Rails.application.routes.draw do
   resources :merchants do
     resources :orders do
       resources :order_items
-
-      # Billing info of their buyers
-      resources :billings
     end
     #/merchants/:merchant_id/products/:id(.:format)
     patch '/merchants/:merchant_id/products/:id/change_visibility', to: 'products#change_visibility', as: 'change_visibility_work'
@@ -35,6 +29,10 @@ Rails.application.routes.draw do
 
   resources :products do
     resources :reviews
+  end
+
+  resources :orders, only: [:index, :show] do
+    resources :billings, only: [:new, :create]
   end
 
   # directs non-valid pages to 404.html
