@@ -1,18 +1,10 @@
 class BillingsController < ApplicationController
   # billing only exists when nested under order
-  before_action :find_order, only: [:new, :create]
+  before_action :verify_order_exists, only: [:new, :create]
 
   def new
-    # if order not found
-    unless @order
-      flash[:status] = :failure
-      flash[:message] = "Order does not exist"
-      # TODO add root_path
-      redirect_to root_path
-      return
-    end
-
     @billing = Billing.new
+    @billing.order_id = params[:order_id]
   end
 
   def create
@@ -20,10 +12,13 @@ class BillingsController < ApplicationController
 
     if @billing.save
       flash[:status] = :success
-      flash[:message] = "Thank you for your order"
+      flash[:message] = "Thank you for your order."
 
+      # TODO
       # change status from pending to paid
       # redirects to order confirmation page
+      # in the meantime
+      redirect_to root_path
     else
       flash[:status] = :failure
       flash[:message] = "Unable to complete your payment"
@@ -35,12 +30,19 @@ class BillingsController < ApplicationController
   private
 
   def billing_params
-    return params.require(:billing).permit(:name, :email, :street1, :street2, :state_prov, :zip, :country, :ccnum, :ccmonth, :ccyear, :order_id)
+    return params.require(:billing).permit(:name, :email, :street1, :street2, :city, :state_prov, :zip, :country, :ccnum, :ccmonth, :ccyear, :order_id)
   end
 
-  def find_order
-    @order = Order.find_by(id: params[:id])
+  def verify_order_exists
+    @order = Order.find_by(id: params[:order_id])
+
+    unless @order
+      flash[:status] = :failure
+      flash[:message] = "Order does not exist"
+      redirect_to root_path
+    end
   end
+
 
   # def index
   # end
