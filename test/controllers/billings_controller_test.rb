@@ -21,8 +21,7 @@ describe BillingsController do
   end
 
   describe "create" do
-    # TEMP will redirect to order confirmation page
-    it "should redirect to home page if billing created" do
+    it "should redirect to confirmation page if billing created" do
       billing_data = {
         billing: {
           order_id: new_order_id,
@@ -35,7 +34,8 @@ describe BillingsController do
           country: "USA",
           ccnum: "4444444444444444",
           ccmonth: 10,
-          ccyear: 2018
+          ccyear: 2018,
+          cvv: 222
         }
       }
 
@@ -45,9 +45,7 @@ describe BillingsController do
 
       Billing.count.must_equal start_count + 1
       must_respond_with :redirect
-
-      # TEMP
-      must_redirect_to root_path
+      must_redirect_to confirmation_order_path(new_order_id)
 
     end
 
@@ -68,7 +66,8 @@ describe BillingsController do
           country: "USA",
           ccnum: "4444444444444444",
           ccmonth: 10,
-          ccyear: 2018
+          ccyear: 2018,
+          cvv: 222
         }
       }
 
