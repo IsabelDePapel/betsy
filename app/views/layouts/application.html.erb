@@ -11,9 +11,12 @@
     <%= csrf_meta_tags %>
   </head>
 
-  <body>
+  <%= render partial: "/layouts/flash" %>
 
-    <%= yield %>
+  <body>
+    <main>
+      <%= yield %>
+    </main>
 
   </body>
 </html>
