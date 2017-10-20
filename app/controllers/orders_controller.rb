@@ -3,7 +3,8 @@ class OrdersController < ApplicationController
   before_action :verify_merchant_exists, only: [:index]
 
   def confirmation
-    
+    # check order id is valid
+    @order = Order.find_by(id: params[:id])
   end
 
   # will only existed as nested through merchant

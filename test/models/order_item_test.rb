@@ -15,7 +15,7 @@ describe OrderItem do
     it "requires quantity to be an integer > 0" do
       invalid_qtys = [-1, 0, 1.5]
 
-      valid_qtys = [1, 5, 1000]
+      valid_qtys = [1, 5]
 
       invalid_qtys.each do |qty|
         pending.quantity = qty
@@ -72,6 +72,17 @@ describe OrderItem do
 
       pending.order = nil
       pending.valid?.must_equal false
+    end
+  end
+
+  describe "item_price" do
+    it "returns the total price of an order item (qty * price)" do
+      croissant = products(:croissant)
+      expected_price = croissant.price * 2
+
+      # pending has 2 croissants
+      pending.price.must_equal expected_price
+
     end
   end
 end
