@@ -1,11 +1,29 @@
 class ProductsController < ApplicationController
-  
+
   def home
     # stuff goes here
   end
 
   def index
-    @products = Product.all
+    if params[:category_id] == nil && params[:merchant_id] == nil # General product page
+      @products = Product.all
+    elsif params[:category_id] != nil
+      # @products = Product.in_category(params[:category_id])
+      category = Category.find_by(id: params[:category_id])
+      if category != nil
+        @products = category.products
+      else
+        redirect_to products_path
+      end
+    elsif params[:merchant_id] != nil
+      # @products = Product.in_merchant(params[:merchant_id])
+      merchant = Merchant.find_by(id: params[:merchant_id])
+      if merchant != nil
+        @products = merchant.products
+      else
+        redirect_to products_path
+      end
+    end
   end
 
   def show

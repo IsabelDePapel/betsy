@@ -10,5 +10,11 @@
   <li>Price: <%= product.price %></li>
   <li>Quantity Available: <%= product.quantity %></li>
   <li>Seller: <%= product.merchant.username %></li>
+  <li>
+    Categories:
+    <% product.categories.each do |category| %>
+      <span class="button"><%= category.name %></span>
+    <% end %>
+  </li>
   <% end %>
 </ul>
