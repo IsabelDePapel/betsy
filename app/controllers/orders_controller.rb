@@ -25,10 +25,11 @@ class OrdersController < ApplicationController
 
   def cart
     @cart_items = OrderItem.where(status: "pending")
-    @current_order = Order.find_by(id: session[:order_id])
-    if @current_order == nil # Guest User
-      @current_order = Order.create
-    end
+
+    # @current_order = Order.find_by(id: session[:order_id])
+    # if @current_order == nil # Guest User
+    #   @current_order = Order.create
+    # end
 
   end
 

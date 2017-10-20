@@ -15,6 +15,8 @@ Rails.application.routes.draw do
   resources :merchants do
     resources :orders do
       resources :order_items
+      # Billing info of their buyers
+      resources :billings
     end
     # Products they own/are selling
     resources :products
