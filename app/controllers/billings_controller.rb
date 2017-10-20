@@ -14,8 +14,8 @@ class BillingsController < ApplicationController
       flash[:status] = :success
       flash[:message] = "Thank you for your order."
 
-      # TODO
-      # change status from pending to paid
+      @order.change_status("paid")
+
       # redirects to order confirmation page
       # in the meantime
       redirect_to root_path

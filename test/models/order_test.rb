@@ -56,4 +56,23 @@ describe Order do
     end
   end
 
+  describe "change_status" do
+    it "must change the status of all its order_items" do
+      items = order.order_items
+
+      # confirm status not what it's being changed to
+      items.each do |item|
+        item.status.wont_equal "complete"
+      end
+
+      order.change_status("complete")
+
+      items.each do |item|
+        item.reload
+        item.status.must_equal "complete"
+      end
+
+    end
+  end
+
 end
