@@ -71,6 +71,41 @@ class ProductsController < ApplicationController
     end
   end
 
+  # products/:id/add_to_cart
+  def add_to_cart
+    if session[:order_id] == nil # no order exists yet
+      user = User.find_by(id: session[:user_id])
+      if session[:user_id] == nil #no user session exists yet
+        user = User.new
+        user.save
+        session[:user_id] = user.id
+      end
+      new_order = Order.new()
+      new_order.user = user
+      new_order.save
+      session[:order_id] = new_order.id
+    end
+
+    # by this point, order now exists
+    # Create an OrderItem for the Product
+    order_item = OrderItem.new()
+    order_item.product = Product.find_by(params[:id])
+    if order_item.product == nil #:product_id is NOT valid
+      flash[:status] = :failure
+      flash[:message] = "Can't add non-existent product to cart."
+    else # product exists, :product_id is valid
+      flash[:status] = :success
+      flash[:message] = "Successfully added product to cart."
+    end
+    # by this point, order exists
+    # Assign it an order
+    order_to_add_to = Order.find_by(id: session[:order_id])
+    order_item.order = order_to_add_to
+    order_item.save
+
+    redirect_to products_path
+  end
+
   private
   def product_params
     return params.require(:product).permit(:id, :name, :price, :description, :photo_url, :quantity, :merchant_id)

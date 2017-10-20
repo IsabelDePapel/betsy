@@ -2,5 +2,21 @@
 
 <h2>Cart</h2>
 
+<% if @order == nil %>
+  <h3>You have nothing in your cart!</h3>
+  <p>Please add something to your cart!</p>
+  <%= link_to("See All Our Products", products_path, class: "button") %>
+<% else %>
+  <p>DEBUG: order.id = <%= @order.id %></p>
+  <% @order.order_items.each do |item| %>
+
+  <h3><%= item.product.name %></h3>
+  <p>Amount Ordered: <%= item.quantity %></p>
+
+  <hr>
+  <% end %>
+
+<% end %>
 
 <%= link_to("Checkout", href:"#", class: "button") %>
+<!--  Should go to order/order_id/billing/new -->

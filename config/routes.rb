@@ -22,7 +22,7 @@ Rails.application.routes.draw do
     resources :products
   end
 
-  patch '/merchants/:merchant_id/products/:id/change_visibility', to: 'products#change_visibility', as: 'change_visibility_work'
+  patch '/merchants/:merchant_id/products/:id/change_visibility', to: 'products#change_visibility', as: 'change_visibility_product'
 
   resources :categories do
     resources :products
@@ -30,11 +30,16 @@ Rails.application.routes.draw do
 
   resources :products do
     resources :reviews
+
+    post :add_to_cart, to: 'products#add_to_cart', as: 'add_to_cart'
   end
+
 
   resources :orders, only: [:index, :show] do
     resources :billings, only: [:new, :create]
   end
+
+  get '/cart', to: "orders#cart", as: 'cart'
 
   # directs non-valid pages to 404.html
   get '*path' => redirect('/404.html')
