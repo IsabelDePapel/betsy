@@ -69,6 +69,7 @@ GEM
     concurrent-ruby (1.0.5)
     crass (1.0.2)
     debug_inspector (0.0.3)
+    docile (1.1.5)
     erubi (1.7.0)
     execjs (2.7.0)
     ffi (1.9.18)
@@ -86,6 +87,7 @@ GEM
     jquery-turbolinks (2.1.0)
       railties (>= 3.1.0)
       turbolinks
+    json (2.0.2)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -171,6 +173,11 @@ GEM
     selenium-webdriver (3.6.0)
       childprocess (~> 0.5)
       rubyzip (~> 1.0)
+    simplecov (0.15.0)
+      docile (~> 1.1.0)
+      json (>= 1.8, < 3)
+      simplecov-html (~> 0.10.0)
+    simplecov-html (0.10.2)
     spring (2.0.2)
       activesupport (>= 4.2)
     spring-watcher-listen (2.0.1)
@@ -229,6 +236,7 @@ DEPENDENCIES
   rails-erd
   sass-rails (~> 5.0)
   selenium-webdriver
+  simplecov
   spring
   spring-watcher-listen (~> 2.0.0)
   turbolinks (~> 5)

@@ -1,7 +1,7 @@
 require "test_helper"
 
 describe ProductsController do
-  # routes: index, show, edit, delete, new, update, create
+  # routes: home, index, show, edit, delete, new, update, create
   let(:product) { products(:croissant) }
 
   describe "General Tests" do
@@ -9,6 +9,11 @@ describe ProductsController do
       fake_product_id = Product.last.id + 1
       get edit_work_path(fake_product_id)
       must_respond_with :not_found
+    end
+
+    it "successfully gets home page" do
+      get root_path
+      must_respond_with :success
     end
   end
 
