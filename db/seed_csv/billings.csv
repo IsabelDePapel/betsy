@@ -1,6 +1,3 @@
 id,name,email,street1,street2,city,state_prov,zip,country,ccnum,ccmonth,ccyear,cvv,order_id
 1,Ermina,Ermina@somesite.com,149 Rose Street,Unit 3,Snohomish,WA,97016,USA,1234900054672349,5,2021,012,1
 2,Franklin,Franklin@somesite.com,PO Box 12,,Seattle,WA,98112,USA,1234900054672350,6,2017,222,2
-3,Hollywood,Hollywood@somesite.com,15004 31st St,Unit #17,Tempe,AZ,85710,USA,1234900054672355,11,2017,999,3
-4,Ibecca,Ibecca@somesite.com,15005 Apple Lane,Apt 302,Rosemont,CA,90210,USA,1234900054672363,12,2018,333,4
-5,Jose,Jose@somesite.com,4 Iceburg,Apt #303,Montreal,QC,H2L 3J3,Canada,1234900054672364,1,2019,412,5

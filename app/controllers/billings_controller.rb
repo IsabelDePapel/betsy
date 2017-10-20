@@ -14,15 +14,15 @@ class BillingsController < ApplicationController
       flash[:status] = :success
       flash[:message] = "Thank you for your order."
 
-      # TODO
+      # TEMP
       # change status from pending to paid
       # redirects to order confirmation page
       # in the meantime
-      redirect_to root_path
+      redirect_to confirmation_order_path(@billing.order)
     else
-      flash[:status] = :failure
-      flash[:message] = "Unable to complete your payment"
-      flash[:details] = @billing.errors.messages
+      flash.now[:status] = :failure
+      flash.now[:message] = "Unable to complete your payment"
+      flash.now[:details] = @billing.errors.messages
       render :new, status: :bad_request
     end
   end
@@ -30,7 +30,7 @@ class BillingsController < ApplicationController
   private
 
   def billing_params
-    return params.require(:billing).permit(:name, :email, :street1, :street2, :city, :state_prov, :zip, :country, :ccnum, :ccmonth, :ccyear, :order_id)
+    return params.require(:billing).permit(:name, :email, :street1, :street2, :city, :state_prov, :zip, :country, :ccnum, :ccmonth, :ccyear, :cvv, :order_id)
   end
 
   def verify_order_exists

@@ -29,10 +29,11 @@ Rails.application.routes.draw do
   end
 
   resources :products do
-    resources :reviews
+    resources :reviews, only: [:show, :new, :create]
   end
 
   resources :orders, only: [:index, :show] do
+    get 'confirmation', on: :member
     resources :billings, only: [:new, :create]
   end
 

@@ -1,5 +1,15 @@
 class OrdersController < ApplicationController
+
+  before_action :verify_merchant_exists, only: [:index]
+
+  def confirmation
+    
+  end
+
+  # will only existed as nested through merchant
+  # must be merchants/:id/index
   def index
+    @orders = Order.find_by(merchant_id: params[:merchant_id])
   end
 
   def show
@@ -19,4 +29,18 @@ class OrdersController < ApplicationController
 
   def create
   end
-end
+
+  private
+
+
+
+  def verify_merchant_exists
+    @merchant = Merchant.find_by(id: params[:merchant_id])
+
+    unless @merchant
+      flash[:status] = :failure
+      flash[:message] = "User does not exist"
+      redirect_to root_path
+    end
+  end
+end # end of controller class
