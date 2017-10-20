@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  root 'products#home'
   # User here interpreted as someone who's buying
   # Have to be logged in to access these routes
   # Display order_items of things they ordrered
