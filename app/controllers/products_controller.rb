@@ -79,7 +79,7 @@ class ProductsController < ApplicationController
   def change_visibility
     product = Product.find_by(id: params[:id].to_i)
     # if user is not logged in as the merchant who owns product
-    if session[:merchant_id] == nil || session[:merchant_id] != product.merchant.id
+    if session[:user_id] == nil || session[:user_id] != product.merchant.id
       flash[:error] = "You must be logged in as product owner to change product visibility"
     else
       if product.visible == false

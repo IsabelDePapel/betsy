@@ -4,7 +4,7 @@
 <h3><%= @product.name %></h3>
 <%= link_to image_tag "https://loremflickr.com/500/500/felt,dessert/all?" %>
 <p>Description: <%= @product.description %></p>
-<p>Price: <%= @product.price %></p>
+<p>Price: <%= readable_price(@product.price) %></p>
 <p>Quantity Available: <%= @product.quantity %></p>
 <% end %>
 </ul>

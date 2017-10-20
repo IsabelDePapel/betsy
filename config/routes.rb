@@ -16,13 +16,11 @@ Rails.application.routes.draw do
     resources :orders do
       resources :order_items
     end
-    #/merchants/:merchant_id/products/:id(.:format)
-    patch '/merchants/:merchant_id/products/:id/change_visibility', to: 'products#change_visibility', as: 'change_visibility_work'
-
     # Products they own/are selling
     resources :products
-
   end
+
+  patch '/merchants/:merchant_id/products/:id/change_visibility', to: 'products#change_visibility', as: 'change_visibility_work'
 
   resources :categories do
     resources :products
