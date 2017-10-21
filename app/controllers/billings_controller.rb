@@ -14,10 +14,9 @@ class BillingsController < ApplicationController
       flash[:status] = :success
       flash[:message] = "Thank you for your order."
 
-      # TEMP
-      # change status from pending to paid
-      # redirects to order confirmation page
-      # in the meantime
+      # change status to paid and redirect to confirmation page
+      @order.change_status("paid")
+
       redirect_to confirmation_order_path(@billing.order)
     else
       flash.now[:status] = :failure
@@ -31,6 +30,10 @@ class BillingsController < ApplicationController
 
   def billing_params
     return params.require(:billing).permit(:name, :email, :street1, :street2, :city, :state_prov, :zip, :country, :ccnum, :ccmonth, :ccyear, :cvv, :order_id)
+  end
+
+  def order_params
+    return params.require(:billing).permit(order_items_attributes: :status)
   end
 
   def verify_order_exists

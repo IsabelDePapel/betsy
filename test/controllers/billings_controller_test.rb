@@ -21,7 +21,7 @@ describe BillingsController do
   end
 
   describe "create" do
-    it "should redirect to confirmation page if billing created" do
+    it "should redirect to confirmation page if billing created and change status to paid" do
       billing_data = {
         billing: {
           order_id: new_order_id,
@@ -39,17 +39,27 @@ describe BillingsController do
         }
       }
 
+      # add items to order
+      new_order = Order.find(new_order_id)
+      OrderItem.create!(product: products(:croissant), order: new_order, quantity: 2, status: "pending")
+      OrderItem.create!(product: products(:cupcake), order: new_order, quantity: 1, status: "pending")
+
+      new_order.order_items.each do |item|
+        item.status.must_equal "pending"
+      end
+
       start_count = Billing.count
 
       post order_billings_path( new_order_id ), params: billing_data
 
+      # confirm status changed to paid
+      new_order.order_items.each do |item|
+        item.status.must_equal "paid"
+      end
+
       Billing.count.must_equal start_count + 1
       must_respond_with :redirect
       must_redirect_to confirmation_order_path(new_order_id)
-
-    end
-
-    it "should change all order item status from pending to paid if billing created" do
 
     end
 

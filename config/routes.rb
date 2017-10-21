@@ -29,8 +29,10 @@ Rails.application.routes.draw do
   end
 
   resources :products do
-    resources :reviews, only: [:show, :new, :create]
+    resources :reviews, only: [:new, :create, :index]
   end
+
+  resources :reviews, only: [:show]
 
   resources :orders, only: [:index, :show] do
     get 'confirmation', on: :member

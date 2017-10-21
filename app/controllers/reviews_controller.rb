@@ -1,6 +1,8 @@
 class ReviewsController < ApplicationController
+  # reviews only accessed via products
 
   def show
+    
   end
 
   def new
