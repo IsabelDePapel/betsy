@@ -1,9 +1,5 @@
 class ProductsController < ApplicationController
 
-  def home
-    # stuff goes here
-  end
-
   def index
     if params[:category_id] == nil && params[:merchant_id] == nil # General product page
       @products = Product.all
