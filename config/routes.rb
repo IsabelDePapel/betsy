@@ -17,7 +17,7 @@ Rails.application.routes.draw do
       resources :order_items
     end
     #/merchants/:merchant_id/products/:id(.:format)
-    patch '/merchants/:merchant_id/products/:id/change_visibility', to: 'products#change_visibility', as: 'change_visibility_work'
+    patch '/merchants/:merchant_id/products/:id/change_visibility', to: 'products#change_visibility', as: 'change_visibility'
 
     # Products they own/are selling
     resources :products
