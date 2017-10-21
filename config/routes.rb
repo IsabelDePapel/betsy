@@ -24,8 +24,9 @@ Rails.application.routes.draw do
 
   end
 
-  resources :categories do
-    resources :products
+  ##IDEA: Let's just activate the routes we need as we need them so we can trime the list of routes down a bit as we're working. I'm starting with trimming down categories/products nested situation
+  resources :categories, only: [:show] do
+    resources :products, only: [:index]
   end
 
   resources :products do
