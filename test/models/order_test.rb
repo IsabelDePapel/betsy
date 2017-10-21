@@ -74,7 +74,16 @@ describe Order do
         item.reload
         item.status.must_equal "paid"
       end
+    end
 
+    it "won't change the status if given invalid status" do
+      items = order.order_items
+
+      order.change_status("cat")
+
+      items.each do |item|
+        item.status.wont_equal "cat"
+      end
     end
   end
 

@@ -39,6 +39,8 @@ describe BillingsController do
         }
       }
 
+      ap billing_data
+
       # add items to order
       new_order = Order.find(new_order_id)
       OrderItem.create!(product: products(:croissant), order: new_order, quantity: 2, status: "pending")
@@ -66,7 +68,7 @@ describe BillingsController do
     it "should redirect to home page if given invalid order id" do
       billing_data = {
         billing: {
-          order_id: invalid_order_id,
+
           name: "foo bar",
           email: "foo@bar.com",
           street1: "11 main st",
@@ -93,7 +95,6 @@ describe BillingsController do
     it "should return bad request if given invalid data" do
       bad_billing_data = {
         billing: {
-          order_id: valid_order_id,
           name: "name"
         }
       }
