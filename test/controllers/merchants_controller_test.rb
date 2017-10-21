@@ -2,37 +2,37 @@ require "test_helper"
 
 describe MerchantsController do
   it "should get index" do
-    get merchants_index_url
+    get merchants_index_path
     value(response).must_be :success?
   end
 
   it "should get show" do
-    get merchants_show_url
+    get merchant_show_url
     value(response).must_be :success?
   end
 
   it "should get edit" do
-    get merchants_edit_url
+    get edit_merchant_path(merchant.id)
     value(response).must_be :success?
   end
 
   it "should get delete" do
-    get merchants_delete_url
+    get merchant_delete_url
     value(response).must_be :success?
   end
 
   it "should get new" do
-    get merchants_new_url
+    get merchant_new_url
     value(response).must_be :success?
   end
 
   it "should get update" do
-    get merchants_update_url
+    get merchant_update_url
     value(response).must_be :success?
   end
 
   it "should get create" do
-    get merchants_create_url
+    get merchant_create_url
     value(response).must_be :success?
   end
 
