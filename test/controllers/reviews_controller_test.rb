@@ -143,4 +143,16 @@ describe ReviewsController do
       updated_review.text.must_equal new_text
     end
   end
+
+  describe "show" do
+    it "should return success if given a valid review id" do
+      get review_path(cupcake_review.id)
+      must_respond_with :success
+    end
+
+    it "should return not found if given a review that doesn't exist" do
+      get review_path(invalid_review_id)
+      must_respond_with :not_found
+    end
+  end
 end

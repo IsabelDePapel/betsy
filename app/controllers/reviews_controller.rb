@@ -1,12 +1,9 @@
 class ReviewsController < ApplicationController
   before_action :verify_product_exists, only: [:new, :create]
-  before_action :find_review, only: [:edit, :update]
+  before_action :find_review, only: [:edit, :update, :show]
 
-  def show
-
-  end
-
-  def new # this will have a product id
+  # NESTED ROUTES - will have a product id
+  def new
     @review = Review.new
     @review.product_id = params[:product_id]
 
@@ -24,14 +21,11 @@ class ReviewsController < ApplicationController
     end
 
     @review.user_id =user.id
-
   end
 
   def create
     # WISHLIST - only allow users to review products they've purchased (SHOULD BE prevented at db level)
     @review = Review.new(review_params)
-
-    # double check user id exists IS THIS NECESSARY???
 
     if @review.save
       flash[:status] = :success
@@ -46,7 +40,7 @@ class ReviewsController < ApplicationController
     end
   end
 
-  # these are not nested
+  # NOT NESTED ROUTES
   def edit
     # only allow user to edit if current user_id matches user_id of person who created the review
     unless @review
@@ -81,6 +75,10 @@ class ReviewsController < ApplicationController
     end
   end
 
+  def show
+    render_404 unless @review
+  end
+
   private
 
   def review_params
@@ -100,7 +98,6 @@ class ReviewsController < ApplicationController
   def find_review
     @review = Review.find_by(id: params[:id])
   end
-
   # def index
   # end
   #
