@@ -17,7 +17,7 @@ describe Review do
       review1.product = nil
       review1.valid?.must_equal false
 
-      review1.product = products(:croissant)
+      review1.product = products(:cupcake)
       review1.valid?.must_equal true
     end
 
@@ -40,6 +40,17 @@ describe Review do
         review1.rating = invalid
         review1.valid?.must_equal false, "#{invalid} is not a valid rating"
       end
+    end
+
+    # this doesn't work if user isn't logged in
+    # i.e. new user can just review whatever they want
+    it "doesn't allow a merchant to review their own products" do
+      # merchant is two
+      review1.user = users(:two)
+      review1.valid?.must_equal false
+
+      review1.user = users(:one)
+      review1.valid?.must_equal true
     end
   end
 

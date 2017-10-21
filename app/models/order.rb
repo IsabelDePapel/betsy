@@ -18,6 +18,15 @@ class Order < ApplicationRecord
     return price + tax
   end
 
+  def change_status(new_status)
+    # exit if new_status not valid
+    return if !OrderItem::STATUSES.include? new_status
+
+    # doesn't trigger validations
+    OrderItem.where(order_id: id).update_all(status: new_status, updated_at: DateTime.now)
+
+  end
+
   # TODO must have an order item
   # how do you require > 0 order items when order items depends on order creation?
 end

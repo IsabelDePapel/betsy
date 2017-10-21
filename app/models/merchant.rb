@@ -6,6 +6,21 @@ class Merchant < ApplicationRecord
   validates :email, presence: true, uniqueness: { case_sensitive: false }
   validates :user_id, uniqueness: true
 
+  def average_rating
+    return if !products # exit if no products
+
+    num_reviews = 0
+    rating = 0
+
+    products.each do |product|
+      product.reviews.each do |review|
+        num_reviews += 1
+        rating += review.rating
+      end
+    end
+
+    return (rating.to_f / num_reviews).round(1)
+  end
   # validate :merchant_cannot_have_user_of_another_merchant
   #
   # #TODO Ask about has_one relationships
