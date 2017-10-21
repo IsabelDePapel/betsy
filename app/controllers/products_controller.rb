@@ -5,24 +5,16 @@ class ProductsController < ApplicationController
   end
 
   def index
-    if params[:category_id] == nil && params[:merchant_id] == nil # General product page
+    if from_category? || from_merchant?
+      if @category
+        @products = @category.products
+      elsif @merchant
+        @products = @merchant.products
+      else #erroneous category_id or merchant_id, render 404?
+        redirect_to products_path
+      end
+    else
       @products = Product.all
-    elsif params[:category_id] != nil
-      # @products = Product.in_category(params[:category_id])
-      category = Category.find_by(id: params[:category_id])
-      if category != nil
-        @products = category.products
-      else
-        redirect_to products_path
-      end
-    elsif params[:merchant_id] != nil
-      # @products = Product.in_merchant(params[:merchant_id])
-      merchant = Merchant.find_by(id: params[:merchant_id])
-      if merchant != nil
-        @products = merchant.products
-      else
-        redirect_to products_path
-      end
     end
   end
 
@@ -92,5 +84,19 @@ class ProductsController < ApplicationController
     end
 
     redirect_to merchant_products_path
+  end
+
+  def from_category?
+    if params[:category_id]
+      @category = Category.find_by(id: params[:category_id])
+      return true
+    end
+  end
+
+  def from_merchant?
+    if params[:merchant_id]
+      @merchant = Merchant.find_by(id: params[:merchant_id])
+      return true
+    end
   end
 end
