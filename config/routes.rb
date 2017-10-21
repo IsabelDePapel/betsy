@@ -17,22 +17,26 @@ Rails.application.routes.draw do
       resources :order_items
     end
     #/merchants/:merchant_id/products/:id(.:format)
-    patch '/merchants/:merchant_id/products/:id/change_visibility', to: 'products#change_visibility', as: 'change_visibility_work'
+    patch '/merchants/:merchant_id/products/:id/change_visibility', to: 'products#change_visibility', as: 'change_visibility'
 
     # Products they own/are selling
     resources :products
 
   end
 
-  resources :categories do
-    resources :products
+  ##IDEA: Let's just activate the routes we need as we need them so we can trime the list of routes down a bit as we're working. I'm starting with trimming down categories/products nested situation
+  resources :categories, only: [:show] do
+    resources :products, only: [:index]
   end
 
   resources :products do
-    resources :reviews
+    resources :reviews, only: [:index, :new, :create]
   end
 
+  resources :reviews, only: [:show, :edit, :update]
+
   resources :orders, only: [:index, :show] do
+    get 'confirmation', on: :member
     resources :billings, only: [:new, :create]
   end
 

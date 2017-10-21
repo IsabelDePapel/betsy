@@ -1,0 +1,49 @@
+<h1>Confirmation Page!</h1>
+<p>
+  Find me under app/views/orders/confirmation.html.erb
+</p>
+
+<section class="order-list">
+  <ul>
+    <% @order.order_items.each do |item| %>
+    <li>
+      <ul>
+        <li>
+          <%= link_to item.product.name, product_path(item.product) %>
+        </li>
+        <li>
+          Quantity: <%= item.quantity %>
+        </li>
+        <li>
+            Price: <%= item.price %>
+        </li>
+        <li>
+          Status: <%= item.status %>
+        </li>
+      </ul>
+    </li>
+    <% end %>
+  </ul>
+</section>
+
+<section class="order-total">
+  <h2>Order Info</h2>
+  <ul>
+    <li>
+      Subtotal: <%= @order.price %>
+      Tax: <%= @order.tax %>
+      <strong>Total: <%=@order.total%></strong>
+    </li>
+    <li>
+      <%# FIX THE BELOW MESSY CODE %>
+      Placed: <%= @order.order_items[0].updated_at %>
+    </li>
+    <li>
+      Order Status: TODO
+    </li>
+  </ul>
+</section>
+
+<section class="billing-info">
+  <%= display_address(@order) %>
+</section>
