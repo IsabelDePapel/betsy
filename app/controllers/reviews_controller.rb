@@ -1,7 +1,6 @@
 class ReviewsController < ApplicationController
   before_action :verify_product_exists, only: [:new, :create]
   before_action :find_review, only: [:edit, :update]
-  # reviews only accessed via products
 
   def show
 
@@ -29,8 +28,10 @@ class ReviewsController < ApplicationController
   end
 
   def create
-    # WISHLIST - only allow users to review products they've purchased
+    # WISHLIST - only allow users to review products they've purchased (SHOULD BE prevented at db level)
     @review = Review.new(review_params)
+
+    # double check user id exists IS THIS NECESSARY???
 
     if @review.save
       flash[:status] = :success
@@ -48,10 +49,36 @@ class ReviewsController < ApplicationController
   # these are not nested
   def edit
     # only allow user to edit if current user_id matches user_id of person who created the review
+    unless @review
+      render_404
+      return
+    end
+
+    if @review.user_id != session[:user_id]
+      flash[:status] = :failure
+      flash[:message] = "You can only edit reviews you wrote"
+      redirect_back fallback_location: root_path
+    end
   end
 
   def update
+    unless @review
+      render_404
+      return
+    end
 
+    if @review.update_attributes(review_params)
+      flash[:status] = :success
+      flash[:message] = "Successfully updated review of #{@product.name.pluralize}"
+
+      redirect_to product_path(@product)
+    else
+      flash[:status] = :failure
+      flash[:message] = "Could not update your review."
+      flash[:details] = @review.errors.messages
+
+      render :edit, status: :bad_request
+    end
   end
 
   private
