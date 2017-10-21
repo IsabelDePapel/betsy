@@ -69,9 +69,9 @@ class ReviewsController < ApplicationController
 
     if @review.update_attributes(review_params)
       flash[:status] = :success
-      flash[:message] = "Successfully updated review of #{@product.name.pluralize}"
+      flash[:message] = "Successfully updated review of #{@review.product.name.pluralize}"
 
-      redirect_to product_path(@product)
+      redirect_to product_path(@review.product)
     else
       flash[:status] = :failure
       flash[:message] = "Could not update your review."
@@ -98,7 +98,7 @@ class ReviewsController < ApplicationController
   end
 
   def find_review
-    @review = Review.find_by(id: prarams[:id])
+    @review = Review.find_by(id: params[:id])
   end
 
   # def index

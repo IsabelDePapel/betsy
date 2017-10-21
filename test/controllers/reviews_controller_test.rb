@@ -3,6 +3,9 @@ require "test_helper"
 describe ReviewsController do
   let(:invalid_product_id) { Product.last.id + 1 }
   let(:macaroon) { products(:macaroon) }
+  let(:invalid_review_id) { Review.last.id + 1 }
+  let(:cupcake_review) { reviews(:cupcake_review) }
+
   # NESTED ROUTES /products/:id/reviews
   describe "new" do
     it "should respond with redirect if product doesn't exist" do
@@ -89,33 +92,55 @@ describe ReviewsController do
   # NON NESTED ROUTES /reviews/:id
   describe "edit" do
     it "should respond with not found if review doesn't exist" do
-
+      get edit_review_path(invalid_review_id)
+      must_respond_with :not_found
     end
 
     it "should redirect to prev page if user tries to edit another user's review" do
+      skip
 
     end
 
     it "should respond with success if given valid review id" do
-
+      get review_path(cupcake_review)
+      must_respond_with :success
     end
   end
 
   describe "update" do
     it "should respond with not found if review doesn't exist" do
-
+      patch review_path(invalid_review_id)
+      must_respond_with :not_found
     end
 
-    it "should respond with bad request if given invalid data" do
+    it "should respond with bad request and leave data unchanged if given invalid data" do
+      invalid_rating = 6
+      orig_rating = cupcake_review.rating
 
+      patch review_path(cupcake_review), params: { review: { rating: invalid_rating } }
+
+      must_respond_with :bad_request
+
+      # confirm data not changed
+      cupcake_review.rating.must_equal orig_rating
     end
 
     it "should update rating and redirect if data is valid" do
-      # rating
+      new_rating = 5
+
+      patch review_path(cupcake_review), params: { review: { rating: new_rating } }
+
+      updated_review = Review.find_by(id: cupcake_review.id)
+      updated_review.rating.must_equal new_rating
     end
 
     it "should update text if data valid" do
+      new_text = "nom nom nom"
 
+      patch review_path(cupcake_review), params: { review: { text: new_text } }
+
+      updated_review = Review.find_by(id: cupcake_review.id)
+      updated_review.text.must_equal new_text
     end
   end
 end
