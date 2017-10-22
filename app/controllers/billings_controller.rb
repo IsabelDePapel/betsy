@@ -17,7 +17,7 @@ class BillingsController < ApplicationController
 
       # change status to paid and redirect to confirmation page
       @order.change_status("paid")
-
+      session[:order_id] = nil
       redirect_to confirmation_order_path(@order)
     else
       flash.now[:status] = :failure
