@@ -114,6 +114,10 @@ class ProductsController < ApplicationController
     redirect_to products_path
   end
 
+  def remove_from_cart
+    
+  end
+
   private
   def product_params
     return params.require(:product).permit(:id, :name, :price, :description, :photo_url, :quantity, :merchant_id)
