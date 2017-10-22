@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 
   get '/login', to: 'sessions#login', as: 'login'
   post '/logout', to: 'sessions#logout', as: 'logout'
-  
+
   # User here interpreted as someone who's buying
   # Have to be logged in to access these routes
   # Display order_items of things they ordrered
@@ -32,11 +32,12 @@ Rails.application.routes.draw do
   resources :categories, only: [:show] do
     resources :products, only: [:index]
   end
-  
+
   patch '/merchants/:merchant_id/products/:id/change_visibility', to: 'products#change_visibility', as: 'change_visibility_product'
 
   resources :products do
     resources :reviews, only: [:index, :new, :create]
+    patch '/products/:product_id/add_to_cart', to: 'products#add_to_cart', as: 'add_to_cart'
   end
 
   resources :reviews, only: [:show, :edit, :update]
