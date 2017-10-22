@@ -14,6 +14,9 @@ class OrdersController < ApplicationController
   end
 
   def show
+    # case for cart
+    # case for merchant checking their orders they bought
+    # case for merchant checking orders from people who bought from them
   end
 
   def edit
@@ -31,9 +34,12 @@ class OrdersController < ApplicationController
   def create
   end
 
+
+  def cart
+    @order = Order.find_by(id: session[:order_id])
+  end
+
   private
-
-
 
   def verify_merchant_exists
     @merchant = Merchant.find_by(id: params[:merchant_id])
