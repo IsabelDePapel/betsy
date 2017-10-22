@@ -57,6 +57,9 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
 
+  # for authentication
+  gem 'dotenv-rails'
+
   # add erd gem
   gem 'rails-erd', require: false
 

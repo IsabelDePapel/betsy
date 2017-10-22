@@ -71,6 +71,10 @@ GEM
     crass (1.0.2)
     debug_inspector (0.0.3)
     docile (1.1.5)
+    dotenv (2.2.1)
+    dotenv-rails (2.2.1)
+      dotenv (= 2.2.1)
+      railties (>= 3.2, < 5.2)
     erubi (1.7.0)
     execjs (2.7.0)
     faraday (0.12.2)
@@ -251,6 +255,7 @@ DEPENDENCIES
   binding_of_caller
   byebug
   capybara (~> 2.13)
+  dotenv-rails
   foundation-rails (= 6.4.1.2)
   jbuilder (~> 2.5)
   jquery-turbolinks

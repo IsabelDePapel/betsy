@@ -10,6 +10,9 @@
 # Ignore simplecov
 coverage
 
+# Ignore app credentials
+.env
+
 # Ignore all logfiles and tempfiles.
 /log/*
 /tmp/*
