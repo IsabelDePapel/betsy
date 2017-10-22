@@ -1,4 +1,5 @@
 class MerchantsController < ApplicationController
+  # Thought process - That we should have a merchant page, which the merchant can view (aka Account page), you can also create a new merchant, edit, update, and delete.
   def index
     @merchants = Merchant.all
   end
@@ -51,36 +52,4 @@ class MerchantsController < ApplicationController
   def merchant_params
     return params.require(:merchant).permit(:merchant_id)
   end
-
-  # def change_visibility
-  #   product = Product.find_by(id: params[:id].to_i)
-  #   # if user is not logged in as the merchant who owns product
-  #   if session[:merchant_id] == nil || session[:merchant_id] != product.merchant.id
-  #     flash[:error] = "You must be logged in as product owner to change product visibility"
-  #   else
-  #     if product.visible == false
-  #       product.visible = true
-  #       flash[:success] = "Product set to visible"
-  #     else
-  #       product.visible = false
-  #       flash[:success] = "Product set to not visible"
-  #     end
-  #   end
-  #
-  #   redirect_to merchant_products_path
-  # end
-  #
-  # def from_category?
-  #   if params[:category_id]
-  #     @category = Category.find_by(id: params[:category_id])
-  #     return true
-  #   end
-  # end
-  #
-  # def from_merchant?
-  #   if params[:merchant_id]
-  #     @merchant = Merchant.find_by(id: params[:merchant_id])
-  #     return true
-  #   end
-  # end
 end
