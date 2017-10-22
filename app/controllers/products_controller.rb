@@ -87,22 +87,42 @@ class ProductsController < ApplicationController
     end
 
     # by this point, order now exists
+
     # Create an OrderItem for the Product
-    order_item = OrderItem.new()
-    order_item.product = Product.find_by(params[:id])
-    if order_item.product == nil #:product_id is NOT valid
+    product = Product.find_by(id: params[:product_id])
+    if product == nil #:product_id is NOT valid
       flash[:status] = :failure
       flash[:message] = "Can't add non-existent product to cart."
     else # product exists, :product_id is valid
+
+      # Check if any other order_item has that product
+      in_order = false
+
+      order_to_add_to = Order.find_by(id: session[:order_id])
+      order_to_add_to.order_items.each do |item|
+        # add to quantity if yes
+        if item.product == product
+          in_order = true
+          existing_order_item = OrderItem.find(item.id)
+          existing_order_item.quantity += 1
+          existing_order_item.save
+        end
+      end
+
+      # initialize quantity to 1 if no
+      if in_order == false
+        order_item = OrderItem.new()
+        order_item.quantity = 1
+        order_item.product = product
+        # Assign it an order
+        order_item.order = order_to_add_to
+        order_item.save
+      end
+
       flash[:status] = :success
       flash[:message] = "Successfully added product to cart."
     end
     # by this point, order exists
-    # Assign it an order
-    order_to_add_to = Order.find_by(id: session[:order_id])
-    order_item.order = order_to_add_to
-    order_item.save
-
     redirect_to products_path
   end
 

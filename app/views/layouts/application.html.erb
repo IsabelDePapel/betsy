@@ -18,9 +18,7 @@
         <%= link_to "View All Products", products_path, class: "button" %>
         <%= link_to "Login", root_path, class: "button" %>
         <%= link_to "Logout", root_path, class: "button" %>
-        <% if session[:order_id]  %>
-          <%= link_to "View Cart", cart_path, class: "button" %>
-        <% end  %>
+        <%= link_to "View Cart", cart_path, class: "button" %>
       </nav>
     </header>
     <%= yield %>

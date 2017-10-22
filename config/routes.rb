@@ -29,8 +29,8 @@ Rails.application.routes.draw do
   end
 
   resources :products do
-
-    post :add_to_cart, to: 'products#add_to_cart', as: 'add_to_cart'
+    #patch '/products/:product_id/add_to_cart', to: 'products#add_to_cart', as: 'add_to_cart'
+    patch :add_to_cart, to: 'products#add_to_cart', as: 'add_to_cart'
 
     resources :reviews, only: [:show, :new, :create]
 
