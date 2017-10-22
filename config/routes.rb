@@ -1,6 +1,13 @@
 Rails.application.routes.draw do
 
   root 'products#home'
+
+  # for handling authentication
+  get '/auth/:provider/callback', to: 'sessions#create', as: 'callback'
+
+  get '/login', to: 'sessions#login', as: 'login'
+  post '/logout', to: 'sessions#logout', as: 'logout'
+  
   # User here interpreted as someone who's buying
   # Have to be logged in to access these routes
   # Display order_items of things they ordrered

@@ -16,8 +16,16 @@
         <%= link_to "Home", root_path, class: "button" %>
         <%= link_to "View All Categories", root_path, class: "button" %>
         <%= link_to "View All Products", products_path, class: "button" %>
-        <%= link_to "Login", root_path, class: "button" %>
-        <%= link_to "Logout", root_path, class: "button" %>
+        <%# link_to "Login", root_path, class: "button" %>
+        <%# link_to "Logout", root_path, class: "button" %>
+
+        <% if @auth_user %>
+          <%= link_to "Hello, #{@auth_user.username}", merchant_path(@auth_user), class: "button" %>
+          <%= link_to "Sign Out", logout_path, method: :post, class: "button" %>
+        <% else %>
+          <%= link_to "Sign Up", '#', class: "button" %>
+          <%= link_to "Sign In", login_path, class: "button" %>
+        <% end %>
       </nav>
     </header>
 
@@ -27,4 +35,6 @@
       <%= yield %>
     </main>
   </body>
+
+  <%= debug(params) if Rails.env.development? %>
   </html>
