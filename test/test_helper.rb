@@ -26,24 +26,41 @@ class ActiveSupport::TestCase
   fixtures :all
   # Add more helper methods to be used by all tests here...
 
+  def setup
+    # when test mode enabled, all requests to omniauth will be short-circuited
+    # to use the mock authentication hash
+    OmniAuth.config.test_mode = true
+  end
+  
   # TEMP commenting out until initialized in Sessions Controller, etc.
-  # def setup
-  #   OmniAuth.config.test_mode = true
-  # end
-  #
-  # def mock_auth_hash(user)
-  #   return {
-  #     provider: user.provider,
-  #     uid: user.uid,
-  #     info: {
-  #       email: user.email,
-  #       username: user.name #username = Merchant's username?
-  #     }
-  #   }
-  # end
-  #
-  # def login(user)
-  #   OmniAuth.config.mock_auth[:github] = OmniAuth::AuthHash.new(mock_auth_hash(user))
-  #   get auth_callback_path(:github)
-  # end
+  def mock_auth_hash(user, provider)
+    case provider
+    when :github
+      return {
+        provider: user.provider,
+        uid: user.uid,
+        info: {
+          email: user.email,
+          nickname: user.username
+        }
+      }
+
+    when :google_oauth2
+      return {
+        provider: user.provider,
+        uid: user.uid,
+        info: {
+          email: user.email,
+          name: user.username
+        }
+      }
+    end
+  end
+
+  def login(user, provider)
+    OmniAuth.config.mock_auth[provider] = OmniAuth::AuthHash.new(mock_auth_hash(user, provider))
+
+    get callback_path(provider)
+  end
+
 end

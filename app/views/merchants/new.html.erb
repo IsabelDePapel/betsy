@@ -1,2 +1,11 @@
-<h1>Merchants#new</h1>
-<p>Find me in app/views/merchants/new.html.erb</p>
+<h1>Join Foodsie</h1>
+
+<%= form_for @merchant do |f| %>
+  <%= f.label :username %>
+  <%= f.text_field :username %>
+
+  <%= f.label :email %>
+  <%= f.email_field :email %>
+
+  <%= f.submit %>
+<% end %>

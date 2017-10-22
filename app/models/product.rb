@@ -22,13 +22,5 @@ class Product < ApplicationRecord
   def in_stock?
     return quantity > 0
   end
-  # 
-  # def self.in_category(category_id)
-  #   return Product.where("category_id = '#{category_id}'")
-  # end
-  #
-  # def self.in_merchant(merchant_id)
-  #   return Product.where("merchant_id = '#{merchant_id}'")
-  # end
 
 end

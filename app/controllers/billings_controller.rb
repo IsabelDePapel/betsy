@@ -4,21 +4,21 @@ class BillingsController < ApplicationController
 
   def new
     @billing = Billing.new
-    @billing.order_id = params[:order_id]
+    #@billing.order_id = params[:order_id]
   end
 
   def create
     @billing = Billing.new(billing_params)
+    @billing.order_id = params[:order_id]
 
     if @billing.save
       flash[:status] = :success
       flash[:message] = "Thank you for your order."
 
-      # TEMP
-      # change status from pending to paid
-      # redirects to order confirmation page
-      # in the meantime
-      redirect_to confirmation_order_path(@billing.order)
+      # change status to paid and redirect to confirmation page
+      @order.change_status("paid")
+
+      redirect_to confirmation_order_path(@order)
     else
       flash.now[:status] = :failure
       flash.now[:message] = "Unable to complete your payment"
@@ -30,7 +30,11 @@ class BillingsController < ApplicationController
   private
 
   def billing_params
-    return params.require(:billing).permit(:name, :email, :street1, :street2, :city, :state_prov, :zip, :country, :ccnum, :ccmonth, :ccyear, :cvv, :order_id)
+    return params.require(:billing).permit(:name, :email, :street1, :street2, :city, :state_prov, :zip, :country, :ccnum, :ccmonth, :ccyear, :cvv)
+  end
+
+  def order_params
+    return params.require(:billing).permit(order_items_attributes: :status)
   end
 
   def verify_order_exists

@@ -1,5 +1,6 @@
 class Billing < ApplicationRecord
   belongs_to :order
+  accepts_nested_attributes_for :order
 
   # set country to default of USA??
   validates_presence_of :name, :email, :street1, :city, :state_prov, :zip, :country, :ccnum, :ccmonth, :ccyear, :cvv
