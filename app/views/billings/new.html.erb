@@ -2,10 +2,6 @@
 
 <%= form_for @billing, url: order_billings_path do |f| %>
 
-  <%# KEEPING THE ORDER ID IN HERE FOR DEBUGGING FOR NOW %>
-  <%= f.label "this needs to be hidden" %>
-  <%= f.text_field :order_id %>
-
   <%= f.label :name %>
   <%= f.text_field :name %>
 
