@@ -31,5 +31,5 @@ params[:product_id] = <%= params[:product_id] %>
 
 <% end %>
 
-<%= link_to("Checkout", href:"#", class: "button") %>
+<%= link_to("Checkout", order_billings_path(session[:order_id]), class: "button") %>
 <!--  Should go to order/order_id/billing/new -->
