@@ -4,11 +4,15 @@ one:
   user: one
   username: thetruthisoutthere
   email: foxmulder@gmail.com
+  uid: 99999
+  provider: github
 
 two:
   user: two
   username: iwantobelieve
   email: danascully@gmail.com
+  uid: 34567890
+  provider: google_oauth2
 
 # three:
 #   user: three

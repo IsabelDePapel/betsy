@@ -1,0 +1,56 @@
+class SessionsController < ApplicationController
+
+  def login
+    # view with two buttons: one to sign in w/GH; other google
+  end
+
+  def logout
+    session[:user_id] = nil
+    reset_session
+
+    flash[:status] = :success
+    flash[:message] = "Successfully logged out"
+    redirect_to root_path
+  end
+
+  def create
+    auth_hash = request.env['omniauth.auth']
+    ap auth_hash
+
+    @merchant = Merchant.find_by(uid: auth_hash['uid'], provider: auth_hash['provider'])
+
+    if @merchant
+      # if session user_id already exists, this session is overwriting it
+      session[:user_id] = @merchant.user_id
+      flash[:status] = :success
+      flash[:message] = "#{@merchant.username} is logged in"
+
+    else
+      # check if session user id already exists
+      user = get_current_user
+      provider = auth_hash['provider']
+
+      case provider
+      when "github"
+        @merchant = Merchant.new user_id: user.id, uid: auth_hash['uid'], provider: auth_hash['provider'], username: auth_hash['info']['nickname'], email: auth_hash['info']['email']
+
+      when "google_oauth2"
+        @merchant = Merchant.new user_id: user.id, uid: auth_hash['uid'], provider: auth_hash['provider'], username: auth_hash['info']['name'], email: auth_hash['info']['email']
+      end
+
+      # only reason this wouldn't work is if omni auth didn't give a provider or db was down
+      if @merchant.save
+        session[:user_id] = user.id
+        flash[:status] = :success
+        flash[:message] = "Welcome #{@merchant.username}"
+      else
+        flash[:status] = :failure
+        flash[:message] = "Unable to save profile"
+        flash[:details] = @merchant.errors.messages
+      end
+    end
+
+    # set up a landing page for all merchants??
+    redirect_to root_path
+  end
+end

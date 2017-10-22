@@ -32,8 +32,10 @@ gem 'jbuilder', '~> 2.5'
 gem 'jquery-turbolinks'
 gem 'foundation-rails', '6.4.1.2'
 
+# authentication
 gem 'omniauth'
 gem 'omniauth-github'
+gem 'omniauth-google-oauth2'
 gem 'awesome_print'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
@@ -44,6 +46,13 @@ group :development, :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '~> 2.13'
   gem 'selenium-webdriver'
+
+  # for authentication
+  gem 'dotenv-rails'
+
+  gem 'better_errors'
+  gem 'pry-rails'
+  gem 'binding_of_caller'
 
 end
 
@@ -58,9 +67,6 @@ group :development do
   # add erd gem
   gem 'rails-erd', require: false
 
-  gem 'better_errors'
-  gem 'pry-rails'
-  gem 'binding_of_caller'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

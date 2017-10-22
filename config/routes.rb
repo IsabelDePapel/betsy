@@ -1,12 +1,19 @@
 Rails.application.routes.draw do
 
   root 'products#home'
+
+  # for handling authentication
+  get '/auth/:provider/callback', to: 'sessions#create', as: 'callback'
+
+  get '/login', to: 'sessions#login', as: 'login'
+  post '/logout', to: 'sessions#logout', as: 'logout'
+  
   # User here interpreted as someone who's buying
   # Have to be logged in to access these routes
   # Display order_items of things they ordrered
   resources :users do
     resource :orders do
-      resource :order_items, only: [:index, :show]
+      # resource :order_items, only: [:index, :show]
     end
   end
 
@@ -14,9 +21,6 @@ Rails.application.routes.draw do
   # Display order_items that have products owned by them
   resources :merchants do
     resources :orders do
-      resources :order_items
-      # Billing info of their buyers
-      resources :billings
     end
 
     # Products they own/are selling

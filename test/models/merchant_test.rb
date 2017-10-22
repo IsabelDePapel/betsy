@@ -98,5 +98,21 @@ describe Merchant do
       merchant2.valid?.must_equal false
     end
 
+    it "must reject emails with invalid format" do
+      valid_emails = %w(user@example.com foo@bar.net hello@world.edu MR_rogers.pbs@pbs.org M.ary_b3rry@bbc.co.uk)
+
+      invalid_emails = %w(user.com foo@bar hello@world,edu mrrogers@pbs..org maryberry@bbc_co.uk)
+
+      valid_emails.each do |email|
+        merchant1.email = email
+        merchant1.valid?.must_equal true
+      end
+
+      invalid_emails.each do |email|
+        merchant1.email = email
+        merchant1.valid?.must_equal false
+      end
+    end
+
   end #validations
 end
