@@ -59,6 +59,61 @@ class ProductsController < ApplicationController
     end
   end
 
+  # products/:id/add_to_cart
+  def add_to_cart
+    if session[:order_id] == nil # no order exists yet
+      user = User.find_by(id: session[:user_id])
+      if session[:user_id] == nil #no user session exists yet
+        user = User.new
+        user.save
+        session[:user_id] = user.id
+      end
+      new_order = Order.new()
+      new_order.user = user
+      new_order.save
+      session[:order_id] = new_order.id
+    end
+
+    # by this point, order now exists
+
+    # Create an OrderItem for the Product
+    product = Product.find_by(id: params[:product_id])
+    if product == nil #:product_id is NOT valid
+      flash[:status] = :failure
+      flash[:message] = "Can't add non-existent product to cart."
+    else # product exists, :product_id is valid
+
+      # Check if any other order_item has that product
+      in_order = false
+
+      order_to_add_to = Order.find_by(id: session[:order_id])
+      order_to_add_to.order_items.each do |item|
+        # add to quantity if yes
+        if item.product == product
+          in_order = true
+          existing_order_item = OrderItem.find(item.id)
+          existing_order_item.quantity += 1
+          existing_order_item.save
+        end
+      end
+
+      # initialize quantity to 1 if no
+      if in_order == false
+        order_item = OrderItem.new()
+        order_item.quantity = 1
+        order_item.product = product
+        # Assign it an order
+        order_item.order = order_to_add_to
+        order_item.save
+      end
+
+      flash[:status] = :success
+      flash[:message] = "Successfully added product to cart."
+    end
+    # by this point, order exists
+    redirect_to products_path
+  end
+
   private
   def product_params
     return params.require(:product).permit(:id, :name, :price, :description, :photo_url, :quantity, :merchant_id)
@@ -67,7 +122,7 @@ class ProductsController < ApplicationController
   def change_visibility
     product = Product.find_by(id: params[:id].to_i)
     # if user is not logged in as the merchant who owns product
-    if session[:merchant_id] == nil || session[:merchant_id] != product.merchant.id
+    if session[:user_id] == nil || session[:user_id] != product.merchant.id
       flash[:error] = "You must be logged in as product owner to change product visibility"
     else
       if product.visible == false

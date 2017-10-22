@@ -1,0 +1,35 @@
+<h1>Order#Cart</h1>
+
+<h2>Cart</h2>
+
+<p>
+DEBUG:
+session[:order_id] = <%= session[:order_id] %>
+session[:user_id] = <%= session[:user_id] %>
+params[:product_id] = <%= params[:product_id] %>
+</p>
+<hr>
+<hr>
+
+<% if @order == nil || @order.order_items.length == 0%>
+  <h3>You have nothing in your cart!</h3>
+  <p>Please add something to your cart!</p>
+  <%= link_to("See All Our Products", products_path, class: "button") %>
+<% else %>
+  <% @order.order_items.each do |item| %>
+  <p>DEBUG:
+  order_item id = <%= item.id %>
+  product id = <%= item.product.id %>
+
+  </p>
+
+  <h3><%= item.product.name %></h3>
+  <p>Amount Ordered: <%= item.quantity %></p>
+
+  <hr>
+  <% end %>
+
+<% end %>
+
+<%= link_to("Checkout", href:"#", class: "button") %>
+<!--  Should go to order/order_id/billing/new -->

@@ -1,5 +1,8 @@
 class MerchantsController < ApplicationController
   # Thought process - That we should have a merchant page, which the merchant can view (aka Account page), you can also create a new merchant, edit, update, and delete.
+
+  before_action :find_merchant
+  
   def index
     @merchants = Merchant.all
   end
@@ -13,7 +16,7 @@ class MerchantsController < ApplicationController
   end
 
   def create
-    @merchant = Merchant.new product_params
+    @merchant = Merchant.new merchant_params
     if @merchant.save
       redirect_to root_path
     else
@@ -30,7 +33,7 @@ class MerchantsController < ApplicationController
 
   def update
     @merchant = Merchant.find_by(id: params[:id].to_i)
-    redirect_to products_path unless @merchant
+    redirect_to merchants_path unless @merchant
 
     if @merchant.update_attributes merchant_params
       redirect_to root_path
@@ -49,7 +52,12 @@ class MerchantsController < ApplicationController
   end
 
   private
+
   def merchant_params
-    return params.require(:merchant).permit(:merchant_id)
+    return params.require(:merchant).permit(:username, :email, :uid, :provider, :user_id)
+  end
+
+  def find_merchant
+    @merchant = Merchant.find_by(id: params[:id])
   end
 end

@@ -7,15 +7,13 @@
   <ul>
     <% @order.order_items.each do |item| %>
     <li>
+      <%= link_to item.product.name, product_path(item.product) %>
       <ul>
-        <li>
-          <%= link_to item.product.name, product_path(item.product) %>
-        </li>
         <li>
           Quantity: <%= item.quantity %>
         </li>
         <li>
-            Price: <%= item.price %>
+            Price: <%= number_to_currency(item.price) %>
         </li>
         <li>
           Status: <%= item.status %>
@@ -30,13 +28,13 @@
   <h2>Order Info</h2>
   <ul>
     <li>
-      Subtotal: <%= @order.price %>
-      Tax: <%= @order.tax %>
-      <strong>Total: <%=@order.total%></strong>
+      Subtotal: <%= number_to_currency(@order.price) %>
+      Tax: <%= number_to_currency(@order.tax) %>
+      <strong>Total: <%= number_to_currency(@order.total) %></strong>
     </li>
     <li>
       <%# FIX THE BELOW MESSY CODE %>
-      Placed: <%= @order.order_items[0].updated_at %>
+      Placed: <%= @order.order_items[0].updated_at.strftime('%B %d, %Y') %>
     </li>
     <li>
       Order Status: TODO

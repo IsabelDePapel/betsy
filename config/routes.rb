@@ -1,12 +1,19 @@
 Rails.application.routes.draw do
 
   root 'products#home'
+
+  # for handling authentication
+  get '/auth/:provider/callback', to: 'sessions#create', as: 'callback'
+
+  get '/login', to: 'sessions#login', as: 'login'
+  post '/logout', to: 'sessions#logout', as: 'logout'
+
   # User here interpreted as someone who's buying
   # Have to be logged in to access these routes
   # Display order_items of things they ordrered
   resources :users do
     resource :orders do
-      resource :order_items, only: [:index, :show]
+      # resource :order_items, only: [:index, :show]
     end
   end
 
@@ -14,23 +21,23 @@ Rails.application.routes.draw do
   # Display order_items that have products owned by them
   resources :merchants do
     resources :orders do
-      resources :order_items
     end
-    #/merchants/:merchant_id/products/:id(.:format)
-    patch '/merchants/:merchant_id/products/:id/change_visibility', to: 'products#change_visibility', as: 'change_visibility'
 
     # Products they own/are selling
     resources :products
-
   end
+
 
   ##IDEA: Let's just activate the routes we need as we need them so we can trime the list of routes down a bit as we're working. I'm starting with trimming down categories/products nested situation
   resources :categories, only: [:show] do
     resources :products, only: [:index]
   end
 
+  patch '/merchants/:merchant_id/products/:id/change_visibility', to: 'products#change_visibility', as: 'change_visibility_product'
+
   resources :products do
     resources :reviews, only: [:index, :new, :create]
+    patch '/products/:product_id/add_to_cart', to: 'products#add_to_cart', as: 'add_to_cart'
   end
 
   resources :reviews, only: [:show, :edit, :update]
@@ -39,6 +46,8 @@ Rails.application.routes.draw do
     get 'confirmation', on: :member
     resources :billings, only: [:new, :create]
   end
+
+  get '/cart', to: "orders#cart", as: 'cart'
 
   # directs non-valid pages to 404.html
   get '*path' => redirect('/404.html')
