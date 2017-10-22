@@ -20,7 +20,6 @@ class SessionsController < ApplicationController
     @merchant = Merchant.find_by(uid: auth_hash['uid'], provider: auth_hash['provider'])
 
     if @merchant
-      # track as user???
       # if session user_id already exists, this session is overwriting it
       session[:user_id] = @merchant.user_id
       flash[:status] = :success

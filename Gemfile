@@ -47,6 +47,13 @@ group :development, :test do
   gem 'capybara', '~> 2.13'
   gem 'selenium-webdriver'
 
+  # for authentication
+  gem 'dotenv-rails'
+
+  gem 'better_errors'
+  gem 'pry-rails'
+  gem 'binding_of_caller'
+
 end
 
 group :development do
@@ -57,15 +64,9 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
 
-  # for authentication
-  gem 'dotenv-rails'
-
   # add erd gem
   gem 'rails-erd', require: false
 
-  gem 'better_errors'
-  gem 'pry-rails'
-  gem 'binding_of_caller'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
