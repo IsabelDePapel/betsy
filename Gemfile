@@ -32,8 +32,10 @@ gem 'jbuilder', '~> 2.5'
 gem 'jquery-turbolinks'
 gem 'foundation-rails', '6.4.1.2'
 
+# authentication
 gem 'omniauth'
 gem 'omniauth-github'
+gem 'omniauth-google-oauth2'
 gem 'awesome_print'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

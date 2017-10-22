@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   # Display order_items of things they ordrered
   resources :users do
     resource :orders do
-      resource :order_items, only: [:index, :show]
+      # resource :order_items, only: [:index, :show]
     end
   end
 
@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   # Display order_items that have products owned by them
   resources :merchants do
     resources :orders do
-      resources :order_items
+      # resources :order_items
     end
     #/merchants/:merchant_id/products/:id(.:format)
     patch '/merchants/:merchant_id/products/:id/change_visibility', to: 'products#change_visibility', as: 'change_visibility'
