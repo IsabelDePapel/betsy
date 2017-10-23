@@ -78,6 +78,23 @@ class Order < ApplicationRecord
     end
   end
 
-  # TODO must have an order item
-  # how do you require > 0 order items when order items depends on order creation?
+  def change_user(new_user_id)
+    self.user = User.find_by(id: new_user_id)
+    self.save
+  end
+
+  def self.find_last_cart_id(merch_user_id)
+    last_order = Order.where(user_id: merch_user_id).order(created_at: :desc)[0]
+
+    if last_order
+      if last_order.order_items[0].status == "pending"
+        return last_order.id
+      else
+        return nil
+      end
+    else
+      return nil
+    end
+
+  end
 end

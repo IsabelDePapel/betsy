@@ -57,6 +57,9 @@ describe SessionsController do
     it "should logout the user and reset the session" do
 
     end
+    it "should clear the cart from session" do
+      
+    end
   end
 
 end

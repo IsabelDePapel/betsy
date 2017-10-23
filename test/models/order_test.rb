@@ -115,4 +115,31 @@ describe Order do
     end
   end
 
+  describe "change_user(new_user_id)" do
+    it "changes the user to the user_id passed in" do
+      old_user = order.user
+      new_user = users(:two)
+      order.change_user(new_user.id)
+
+      order.user.wont_equal old_user
+    end
+  end
+
+  describe "find_last_cart(merch_user_id)" do
+    it "returns nil if the user has no orders" do
+      new_user = User.new
+      Order.find_last_cart_id(new_user.id).must_be_nil
+    end
+
+    it "returns the id of the last order if it was pending and nil if the last order wasn't pending" do
+      user4 = users(:four)
+      order4_id = Order.find_last_cart_id(user4.id)
+      order4 = Order.find(order4_id)
+      order4.must_equal orders(:four)
+
+      order4.change_status("paid")
+      Order.find_last_cart_id(user4.id).must_be_nil
+    end
+  end
+
 end

@@ -6,6 +6,7 @@ class SessionsController < ApplicationController
 
   def logout
     session[:user_id] = nil
+    session[:order_id] = nil
     reset_session
 
     flash[:status] = :success
@@ -22,6 +23,12 @@ class SessionsController < ApplicationController
     if @merchant
       # if session user_id already exists, this session is overwriting it
       session[:user_id] = @merchant.user_id
+      if session[:order_id]
+        new_cart = Order.find(session[:order_id])
+        new_cart.change_user(@merchant.user_id)
+      else
+        session[:order_id] = Order.find_last_cart_id(@merchant.user_id)
+      end
       flash[:status] = :success
       flash[:message] = "#{@merchant.username} is logged in"
 

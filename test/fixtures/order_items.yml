@@ -23,3 +23,9 @@ complete:
   quantity: 3
   product: croissant
   order: two
+
+order_four_item:
+  status: pending
+  quantity: 3
+  product: croissant
+  order: four
