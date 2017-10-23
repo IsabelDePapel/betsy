@@ -42,15 +42,6 @@ class Order < ApplicationRecord
     # confirm order_item status is paid
     order_items.each do |item|
       item.update_product_quantity
-      # if item.status == "paid"
-      #   item.product.quantity -= item.quantity
-      #
-      #   # if inventory update fails -- this shouldn't happen
-      #   if !item.product.save
-      #     order.errors.add(:order_item, message: "order couldn't save")
-      #     return false
-      #   end
-      # end
     end
 
     return {}
