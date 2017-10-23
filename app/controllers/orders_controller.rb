@@ -19,22 +19,6 @@ class OrdersController < ApplicationController
     # case for merchant checking orders from people who bought from them
   end
 
-  def edit
-  end
-
-  def delete
-  end
-
-  def new
-  end
-
-  def update
-  end
-
-  def create
-  end
-
-
   def cart
     @order = Order.find_by(id: session[:order_id])
   end

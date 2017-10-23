@@ -98,14 +98,6 @@ class ReviewsController < ApplicationController
   def find_review
     @review = Review.find_by(id: params[:id])
   end
-  # def index
-  # end
-  #
-
-  #
-  # def delete
-  # end
-  #
 
 
 end

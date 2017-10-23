@@ -31,7 +31,7 @@ params[:product_id] = <%= params[:product_id] %>
 
 <% end %>
 
-<% if session[:order_id] != nil  %>
+<% if @order != nil && @order.order_items.length > 0 %>
   <%= link_to("Checkout", new_order_billing_path(session[:order_id]), class: "button") %>
 <% end  %>
 <!--  Should go to order/order_id/billing/new -->
