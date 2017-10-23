@@ -46,21 +46,5 @@ class BillingsController < ApplicationController
       redirect_to root_path
     end
   end
-
-
-  # def index
-  # end
-  #
-  # def show
-  # end
-
-  # leaving here in case implementing in ideal version
-  # def edit
-  # end
-  #
-  # def update
-  # end
-
-  # def delete
-  # end
+  
 end
