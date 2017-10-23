@@ -16,7 +16,7 @@ params[:product_id] = <%= params[:product_id] %>
   <p>Please add something to your cart!</p>
   <%= link_to("See All Our Products", products_path, class: "button") %>
 <% else %>
-
+  <p>Order Item Count: <%= @order.order_items.count %></p>
   <% @order.order_items.each do |item| %>
   <p>DEBUG:
   order_item id = <%= item.id %>
