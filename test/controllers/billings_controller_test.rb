@@ -3,7 +3,7 @@ require "test_helper"
 describe BillingsController do
   let(:valid_order_id) { orders(:one).id }
   let(:invalid_order_id) { Order.last.id + 1}
-  let(:new_order_id) { Order.create!(user: users(:one)).id }
+  let(:new_order) { Order.create!(user: users(:one))}
 
   describe "new" do
     it "should return success if given a valid order id" do
@@ -49,7 +49,6 @@ describe BillingsController do
     it "should redirect to confirmation page if billing created and change status to paid" do
 
       # add items to order
-      new_order = Order.find(new_order_id)
       OrderItem.create!(product: products(:croissant), order: new_order, quantity: 2, status: "pending")
       OrderItem.create!(product: products(:cupcake), order: new_order, quantity: 1, status: "pending")
 
@@ -59,7 +58,7 @@ describe BillingsController do
 
       start_count = Billing.count
 
-      post order_billings_path( new_order_id ), params: billing_data
+      post order_billings_path(new_order.id), params: billing_data
 
       # confirm status changed to paid
       new_order.order_items.each do |item|
@@ -127,7 +126,7 @@ describe BillingsController do
 
       start_count = Billing.count
 
-      post order_billings_path( new_order_id ), params: bad_billing_data
+      post order_billings_path( new_order.id ), params: bad_billing_data
 
       Billing.count.must_equal start_count
       # must_respond_with :bad_request

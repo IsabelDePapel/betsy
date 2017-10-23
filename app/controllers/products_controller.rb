@@ -78,40 +78,35 @@ class ProductsController < ApplicationController
 
     # Create an OrderItem for the Product
     product = Product.find_by(id: params[:product_id])
-    if product == nil #:product_id is NOT valid
+    cart_order = Order.find_by(id: session[:order_id])
+    if cart_order.add_product_to_order(product) #:product_id is NOT valid
       flash[:status] = :failure
       flash[:message] = "Can't add non-existent product to cart."
     else # product exists, :product_id is valid
-
-      # Check if any other order_item has that product
-      in_order = false
-
-      order_to_add_to = Order.find_by(id: session[:order_id])
-      order_to_add_to.order_items.each do |item|
-        # add to quantity if yes
-        if item.product == product
-          in_order = true
-          existing_order_item = OrderItem.find(item.id)
-          existing_order_item.quantity += 1
-          existing_order_item.save
-        end
-      end
-
-      # initialize quantity to 1 if no
-      if in_order == false
-        order_item = OrderItem.new()
-        order_item.quantity = 1
-        order_item.product = product
-        # Assign it an order
-        order_item.order = order_to_add_to
-        order_item.save
-      end
-
       flash[:status] = :success
       flash[:message] = "Successfully added product to cart."
     end
     # by this point, order exists
     redirect_to products_path
+  end
+
+  def remove_from_cart
+    if session[:order_id]
+      order_to_delete_from = Order.find_by(id: session[:order_id])
+      order_item_to_delete = OrderItem.find_by(id: params[:order_item_id])
+
+      if order_to_delete_from.remove_order_item_from_order(order_item_to_delete)
+        flash[:status] = :success
+        flash[:message] = "Successfully deleted item from cart."
+      else
+        flash[:status] = :failure
+        flash[:message] = "This order item is not in the current cart."
+      end
+    else
+      flash[:status] = :failure
+      flash[:message] = "Unsuccessfully deleted item from empty cart."
+    end
+    redirect_to cart_path
   end
 
   private
