@@ -87,6 +87,31 @@ describe Order do
     end
   end
 
+  describe "update_inventory" do
+    before do
+      @before_qtys = {} # tracks qtys before update
+
+      order.order_items.each do |item|
+        @before_qtys[item.product.name] = item.product.quantity
+      end
+    end
+
+    it "will update the product inventory using order item quantity if status is paid" do
+
+      # croissant is pending; cupcake is paid
+      order.update_inventory
+
+      order.order_items.each do |item|
+        if item.status == "paid"
+          item.product.quantity.must_equal (@before_qtys[item.product.name] - item.quantity)
+        else
+          item.product.quantity.must_equal @before_qtys[item.product.name]
+        end
+      end
+    end
+
+  end
+
   describe "price" do
     it "calculates the price of all order items in the order" do
       # order has 2 croissants (3.50) and 1 cupcake (4.00)

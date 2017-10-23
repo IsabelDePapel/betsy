@@ -16,7 +16,9 @@ class BillingsController < ApplicationController
       flash[:message] = "Thank you for your order."
 
       # change status to paid and redirect to confirmation page
+      # checkout(before billing) will have already checked that item qty <= product inventory qty
       @order.change_status("paid")
+      @order.update_inventory
 
       redirect_to confirmation_order_path(@order)
     else
