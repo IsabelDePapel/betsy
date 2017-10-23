@@ -68,11 +68,10 @@ describe Order do
         item.status.wont_equal "complete"
       end
 
-      order.change_status("paid")
+      order.change_status("complete")
 
       items.each do |item|
-        item.reload
-        item.status.must_equal "paid"
+        item.reload.status.must_equal "complete"
       end
     end
 
@@ -96,10 +95,10 @@ describe Order do
       end
     end
 
-    it "will return true and update the product inventory using order item quantity if status is paid" do
+    it "will return empty hash and update the product inventory using order item quantity if status is paid" do
 
       # croissant is pending; cupcake is paid
-      order.update_inventory.must_equal true
+      order.update_inventory.must_equal Hash.new
 
       order.order_items.each do |item|
         if item.status == "paid"
@@ -110,7 +109,7 @@ describe Order do
       end
     end
 
-    it "will redirect to cart and rollback status to pending if there is not enough inventory" do
+    it "will hash with item name and inventory and rollback status to pending if not enough inventory" do
       # change croissant inventory to 1
       @before_qtys["Croissant"] = 1
 
@@ -122,11 +121,17 @@ describe Order do
           item.product.save
         end
 
-        item.status = "paid"
-        item.save
+        item.update_attribute(:status, "paid")
       end
 
-      order.update_inventory.must_equal false
+      # confirm status changed to paid
+      order.order_items.each do |item|
+        item.reload.status.must_equal "paid"
+      end
+
+      error = order.update_inventory
+      error.must_be_kind_of Hash
+      error[:name].must_equal "Croissant"
 
       order.order_items.each do |item|
         item.reload.status.must_equal "pending"

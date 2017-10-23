@@ -34,28 +34,26 @@ class Order < ApplicationRecord
       inventory = item.product.quantity
 
       if inventory < item.quantity
-        errors.add(:order_items, :quantity, message: "not enough inventory")
         change_status("pending")
-        return false
+        return {name: item.product.name, qty: item.product.quantity}
       end
     end
 
     # confirm order_item status is paid
     order_items.each do |item|
-      if item.status == "paid"
-        item.product.quantity -= item.quantity
-
-        # if inventory update fails -- this shouldn't happen
-        if !item.product.save
-          errors.add(:order_item, message: "order couldn't save")
-          return false
-        end
-      end
+      item.update_product_quantity
+      # if item.status == "paid"
+      #   item.product.quantity -= item.quantity
+      #
+      #   # if inventory update fails -- this shouldn't happen
+      #   if !item.product.save
+      #     order.errors.add(:order_item, message: "order couldn't save")
+      #     return false
+      #   end
+      # end
     end
 
-    return true
+    return {}
   end
 
-  # TODO must have an order item
-  # how do you require > 0 order items when order items depends on order creation?
 end
