@@ -27,14 +27,14 @@ class Order < ApplicationRecord
 
   end
 
-  def add_product_to_order(product)
-    if product != nil
+  def add_product_to_order(prod)
+    if prod != nil && self.is_cart?
       # Check if any other order_item has that product
       in_order = false
-
       self.order_items.each do |item|
         # add to quantity if yes
-        if item.product == product
+
+        if item.product.id == prod.id
           in_order = true
           existing_order_item = OrderItem.find(item.id)
           existing_order_item.quantity += 1
@@ -46,11 +46,14 @@ class Order < ApplicationRecord
       if in_order == false
         order_item = OrderItem.new()
         order_item.quantity = 1
-        order_item.product = product
+        order_item.product = prod
+        # order_item.order = self # does not explicitly tell order it has a new order_item BUT order_item knows it belongs to an order
+        # order_item.save
+
         # Assign it an order
-        order_item.order = self
-        order_item.save
+        self.order_items << order_item
       end
+
       return true
     else # product is invalid
       return false
@@ -58,7 +61,7 @@ class Order < ApplicationRecord
   end
 
   def remove_order_item_from_order(order_item)
-    if order_item != nil
+    if order_item != nil && self.is_cart?
       in_order = false
       self.order_items.each do |item|
         if item == order_item
@@ -78,6 +81,13 @@ class Order < ApplicationRecord
     end
   end
 
-  # TODO must have an order item
-  # how do you require > 0 order items when order items depends on order creation?
+  def is_cart?
+    self.order_items.each do |item|
+      if item.status != "pending"
+        return false
+      end
+    end
+    return true
+  end
+
 end

@@ -23,3 +23,27 @@ complete:
   quantity: 3
   product: croissant
   order: two
+
+for_add_to_cart1:
+  status: pending
+  quantity: 1
+  product: macaroon
+  order: four
+
+for_add_to_cart2:
+  status: pending
+  quantity: 1
+  product: cupcake
+  order: four
+
+paid_item1:
+  status: paid
+  quantity: 1
+  product: cupcake
+  order: five
+
+paid_item2:
+  status: paid
+  quantity: 1
+  product: cupcake
+  order: five
