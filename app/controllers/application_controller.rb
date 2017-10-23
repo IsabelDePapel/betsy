@@ -3,12 +3,10 @@ class ApplicationController < ActionController::Base
 
   before_action :find_user
 
-  def render_404
-    render file: "/public/404.html", status: 404
-  end
 
   # returns current user if already exists in session
   # else creates a new user and returns it
+  #TODO move to session if no other controller uses this method
   def get_current_user
     if @auth_user
       return User.find_by(id: session[:user_id])
@@ -17,8 +15,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  private
+  # =========
+  protected
+  def render_404
+    render file: "/public/404.html", status: 404
+  end
 
+  # =========
+  private
   def find_user
     if session[:user_id]
       @auth_user = Merchant.find_by(user_id: session[:user_id])
