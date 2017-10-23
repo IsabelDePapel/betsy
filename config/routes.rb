@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   resources :products, except: [:update] do
     resources :categories, except: [:new, :destroy]
     resources :reviews, only: [:new, :create]
+    patch :add_to_cart, to: 'products#add_to_cart', as: 'add_to_cart'
   end
   patch 'products/:id', to: 'products#update'
 
@@ -30,7 +31,7 @@ Rails.application.routes.draw do
     resources :billings, only: [:new, :create]
   end
   get '/cart', to: "orders#cart", as: 'cart'
-  get '/cart/:order_item_id/remove_from_cart', to: "orders#remove_from_cart", as: 'remove_from_cart'
+  patch '/cart/:order_item_id/remove_from_cart', to: "products#remove_from_cart", as: 'remove_from_cart'
 
   # ======= REVIEWS
   resources :reviews, only: [:show, :edit, :update, :destroy]

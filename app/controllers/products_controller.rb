@@ -115,7 +115,30 @@ class ProductsController < ApplicationController
   end
 
   def remove_from_cart
-    
+    if session[:order_id]
+      current_order = Order.find(session[:order_id])
+      in_order = false
+      current_order.order_items.each do |item|
+        if item.id == params[:order_item_id].to_i
+          in_order = true
+          item.destroy
+          puts "Supposed to delete item"
+          current_order.save
+        end
+      end
+
+      if in_order
+        flash[:status] = :success
+        flash[:message] = "Successfully deleted item from cart."
+      else
+        flash[:status] = :failure
+        flash[:message] = "This order item is not in the current cart."
+      end
+    else
+      flash[:status] = :failure
+      flash[:message] = "Unsuccessfully deleted item from empty cart."
+    end
+    redirect_to cart_path
   end
 
   private
