@@ -16,6 +16,7 @@ params[:product_id] = <%= params[:product_id] %>
   <p>Please add something to your cart!</p>
   <%= link_to("See All Our Products", products_path, class: "button") %>
 <% else %>
+
   <% @order.order_items.each do |item| %>
   <p>DEBUG:
   order_item id = <%= item.id %>
@@ -25,6 +26,8 @@ params[:product_id] = <%= params[:product_id] %>
 
   <h3><%= item.product.name %></h3>
   <p>Amount Ordered: <%= item.quantity %></p>
+
+  <%= link_to("Delete", remove_from_cart_path(item.id), method: :patch, class: "alert button") %>
 
   <hr>
   <% end %>

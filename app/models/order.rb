@@ -27,6 +27,57 @@ class Order < ApplicationRecord
 
   end
 
+  def add_product_to_order(product)
+    if product != nil
+      # Check if any other order_item has that product
+      in_order = false
+
+      self.order_items.each do |item|
+        # add to quantity if yes
+        if item.product == product
+          in_order = true
+          existing_order_item = OrderItem.find(item.id)
+          existing_order_item.quantity += 1
+          existing_order_item.save
+        end
+      end
+
+      # initialize quantity to 1 if no
+      if in_order == false
+        order_item = OrderItem.new()
+        order_item.quantity = 1
+        order_item.product = product
+        # Assign it an order
+        order_item.order = self
+        order_item.save
+      end
+      return true
+    else # product is invalid
+      return false
+    end
+  end
+
+  def remove_order_item_from_order(order_item)
+    if order_item != nil
+      in_order = false
+      self.order_items.each do |item|
+        if item == order_item
+          in_order = true
+          item.destroy
+          self.save
+        end
+      end
+
+      if in_order
+        return true
+      else  # order_item passed is valid but is not in this order
+        return false
+      end
+    else
+      return false
+    end
+  end
+
   # TODO must have an order item
   # how do you require > 0 order items when order items depends on order creation?
 end
