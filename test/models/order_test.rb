@@ -96,10 +96,10 @@ describe Order do
       end
     end
 
-    it "will update the product inventory using order item quantity if status is paid" do
+    it "will return true and update the product inventory using order item quantity if status is paid" do
 
       # croissant is pending; cupcake is paid
-      order.update_inventory
+      order.update_inventory.must_equal true
 
       order.order_items.each do |item|
         if item.status == "paid"
@@ -108,6 +108,31 @@ describe Order do
           item.product.quantity.must_equal @before_qtys[item.product.name]
         end
       end
+    end
+
+    it "will redirect to cart and rollback status to pending if there is not enough inventory" do
+      # change croissant inventory to 1
+      @before_qtys["Croissant"] = 1
+
+      # change all order item status to paid
+      order.order_items.each do |item|
+        # change croissant inventory to 1
+        if item.product.name == "Croissant"
+          item.product.quantity = 1
+          item.product.save
+        end
+
+        item.status = "paid"
+        item.save
+      end
+
+      order.update_inventory.must_equal false
+
+      order.order_items.each do |item|
+        item.reload.status.must_equal "pending"
+        item.product.quantity.must_equal @before_qtys[item.product.name]
+      end
+
     end
 
   end

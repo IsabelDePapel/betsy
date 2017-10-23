@@ -27,22 +27,33 @@ class Order < ApplicationRecord
   end
 
   # clean this up??
+  # updates and returns true if successful; else false
   def update_inventory
+    # iterates through items once to confirm all inventory there before updating
+    order_items.each do |item|
+      inventory = item.product.quantity
+
+      if inventory < item.quantity
+        errors.add(:order_items, :quantity, message: "not enough inventory")
+        change_status("pending")
+        return false
+      end
+    end
+
     # confirm order_item status is paid
     order_items.each do |item|
       if item.status == "paid"
         item.product.quantity -= item.quantity
 
-        # if inventory update fails
+        # if inventory update fails -- this shouldn't happen
         if !item.product.save
-          flash[:status] = :error
-          flash[:message] = "There was a problem with your order"
-          flash[:details] = item.product.errors.messages
-
-          redirect_to cart_path
+          errors.add(:order_item, message: "order couldn't save")
+          return false
         end
       end
     end
+
+    return true
   end
 
   # TODO must have an order item
