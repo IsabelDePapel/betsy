@@ -1,10 +1,10 @@
+require 'simplecov'
+SimpleCov.start 'rails'
 ENV["RAILS_ENV"] = "test"
 require File.expand_path("../../config/environment", __FILE__)
 require "rails/test_help"
 require "minitest/rails"
 require "minitest/reporters"  # for Colorized output
-require 'simplecov'
-SimpleCov.start 'rails'
 
 #  For colorful output!
 Minitest::Reporters.use!(
@@ -31,7 +31,7 @@ class ActiveSupport::TestCase
     # to use the mock authentication hash
     OmniAuth.config.test_mode = true
   end
-  
+
   # TEMP commenting out until initialized in Sessions Controller, etc.
   def mock_auth_hash(user, provider)
     case provider
