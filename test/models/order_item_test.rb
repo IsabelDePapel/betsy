@@ -51,6 +51,14 @@ describe OrderItem do
       end
     end
 
+    it "cannot add an order item if more than quantity" do
+      # there are 10 macaroons
+      macaroons = products(:macaroon)
+      invalid_order_item = OrderItem.new(product: macaroons, order: orders(:two), quantity: 15)
+
+      invalid_order_item.valid?.must_equal false
+      invalid_order_item.errors.must_include :order_item
+    end
   end
 
   describe "relations" do
@@ -75,14 +83,53 @@ describe OrderItem do
     end
   end
 
-  describe "item_price" do
+  describe "price" do
     it "returns the total price of an order item (qty * price)" do
       croissant = products(:croissant)
       expected_price = croissant.price * 2
 
       # pending has 2 croissants
       pending.price.must_equal expected_price
-
     end
   end
+
+  describe "update_product_quantity" do
+    let(:macaroons) { products(:macaroon) }
+    let(:new_item) { OrderItem.new(order: orders(:two), product: macaroons, quantity: 8, status: "paid") }
+
+    it "updates the product quantity if status is paid and item qty >= inventory" do
+      # new_item = OrderItem.new(order: orders(:two), product: macaroons, quantity: 8, status: "paid")
+      start_qty = macaroons.quantity
+      new_item.update_product_quantity
+
+      macaroons.quantity.must_equal (start_qty - new_item.quantity)
+    end
+
+    it "won't update quantity if status isn't paid" do
+      start_qty = macaroons.quantity
+      new_item.update_attribute(:status, "pending")
+
+      # confirm change made
+      new_item.status.must_equal "pending"
+
+      new_item.update_product_quantity
+
+      macaroons.quantity.must_equal start_qty
+    end
+
+    it "won't update quantity if not enough inventory" do
+      new_item.update_attribute(:status, "paid")
+      new_qty = 6
+      macaroons.update_attribute(:quantity, new_qty)
+
+      # confirm changes made
+      macaroons.quantity.must_equal new_qty
+      new_item.status.must_equal "paid"
+
+      new_item.update_product_quantity
+
+      macaroons.quantity.must_equal new_qty
+    end
+  end
+
 end

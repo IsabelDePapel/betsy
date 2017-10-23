@@ -21,8 +21,9 @@ class OrderItem < ApplicationRecord
   #everything has to be in a method
 
   def update_product_quantity
-    if self.status == "paid"
+    if self.status == "paid" && self.quantity <= self.product.quantity
       self.product.quantity -= self.quantity
+      self.product.save
     end
   end
 

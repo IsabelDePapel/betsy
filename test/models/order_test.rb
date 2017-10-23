@@ -68,11 +68,10 @@ describe Order do
         item.status.wont_equal "complete"
       end
 
-      order.change_status("paid")
+      order.change_status("complete")
 
       items.each do |item|
-        item.reload
-        item.status.must_equal "paid"
+        item.reload.status.must_equal "complete"
       end
     end
 
@@ -85,6 +84,62 @@ describe Order do
         item.status.wont_equal "cat"
       end
     end
+  end
+
+  describe "update_inventory" do
+    before do
+      @before_qtys = {} # tracks qtys before update
+
+      order.order_items.each do |item|
+        @before_qtys[item.product.name] = item.product.quantity
+      end
+    end
+
+    it "will return empty hash and update the product inventory using order item quantity if status is paid" do
+
+      # croissant is pending; cupcake is paid
+      order.update_inventory.must_equal Hash.new
+
+      order.order_items.each do |item|
+        if item.status == "paid"
+          item.product.quantity.must_equal (@before_qtys[item.product.name] - item.quantity)
+        else
+          item.product.quantity.must_equal @before_qtys[item.product.name]
+        end
+      end
+    end
+
+    it "will hash with item name and inventory and rollback status to pending if not enough inventory" do
+      # change croissant inventory to 1
+      @before_qtys["Croissant"] = 1
+
+      # change all order item status to paid
+      order.order_items.each do |item|
+        # change croissant inventory to 1
+        if item.product.name == "Croissant"
+          item.product.quantity = 1
+          item.product.save
+        end
+
+        item.update_attribute(:status, "paid")
+      end
+
+      # confirm status changed to paid
+      order.order_items.each do |item|
+        item.reload.status.must_equal "paid"
+      end
+
+      error = order.update_inventory
+      error.must_be_kind_of Hash
+      error[:name].must_equal "Croissant"
+
+      order.order_items.each do |item|
+        item.reload.status.must_equal "pending"
+        item.product.quantity.must_equal @before_qtys[item.product.name]
+      end
+
+    end
+
   end
 
   describe "price" do
@@ -139,6 +194,80 @@ describe Order do
 
       order4.change_status("paid")
       Order.find_last_cart_id(user4.id).must_be_nil
+    end
+  end
+      
+  describe "add_product_to_order" do
+    let(:no_order_item) { orders(:three) }
+    let(:product){ products(:croissant)}
+
+    it "returns true if it adds a product to the order if it doesn't exist in the order yet" do
+      start_oi_count = no_order_item.order_items.count
+
+      no_order_item.add_product_to_order(product).must_equal true
+      no_order_item.order_items.count.must_equal start_oi_count + 1
+    end
+
+    it "returns true if it adds to the quantity of a product that's in the order" do
+      start_oi_count = no_order_item.order_items.count
+      puts "start_oi_count: #{start_oi_count}"
+
+      no_order_item.add_product_to_order(product)
+      # no_order_item.reload # hey order item, go to the database, download latest info and update no_order_item to get the lastest attribute values
+      no_order_item.add_product_to_order(product).must_equal true
+      no_order_item.order_items.count.must_equal start_oi_count + 1
+    end
+
+    it "returns false if it user tries to add an invalid product in order" do
+      no_order_item.add_product_to_order(nil).must_equal false
+    end
+
+    it "returns false if it adds a valid product in a non-cart order" do
+      order.add_product_to_order(products(:croissant)).must_equal false
+    end
+  end
+
+  describe "remove_order_item_from_order" do
+    let(:has_order_items) { orders(:four) }
+    let(:has_paid_items) { orders(:five) }
+
+    it "returns true if it successfully removes an order item from the order" do
+      has_order_items.remove_order_item_from_order(order_items(:for_add_to_cart1)).must_equal true
+    end
+
+    it "returns false if order item passed is invalid" do
+      has_order_items.remove_order_item_from_order(order_items(:for_add_to_cart1))
+      # should return false because it was just deleted
+      has_order_items.reload
+      has_order_items.remove_order_item_from_order(order_items(:for_add_to_cart1)).must_equal false
+
+      # should return false for an order_item passed that belongs to a non-cart order
+      has_paid_items.remove_order_item_from_order(order_items(:paid_item1)).must_equal false
+
+    end
+
+    it "returns false if order item passed in is not in cart" do
+      # doesn't belong to this order
+      other_start_oi_count = orders(:two).order_items.count
+      self_start_oi_count = has_order_items.order_items.count
+
+      has_order_items.remove_order_item_from_order(order_items(:other_order_item)).must_equal false
+
+      orders(:two).order_items.count.must_equal other_start_oi_count
+      has_order_items.order_items.count.must_equal self_start_oi_count
+    end
+  end
+
+  describe "is_cart?" do
+    let(:has_order_items) { orders(:four) }
+    let(:has_paid_items) { orders(:five) }
+
+    it "returns true if every order_item in order has a status of 'pending'" do
+      has_order_items.is_cart?.must_equal true
+    end
+
+    it "returns false if there is an order_item with a status that's not 'pending'" do
+      has_paid_items.is_cart?.must_equal false
     end
   end
 
