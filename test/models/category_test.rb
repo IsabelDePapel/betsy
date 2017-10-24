@@ -33,4 +33,19 @@ describe Category do
       category.valid?.must_equal true
     end
   end
+
+  describe "existing_cat?" do
+    it "returns true if it finds a category by it's own name" do
+      valid_tag = cupcakes.name
+      Category.existing_cat?(valid_tag).must_equal true
+    end
+
+    it "returns nil if it is not given a category name" do
+      nonexistant_tags = ["jarjar binks", 8.5, 0, nil, :kiwi]
+
+      nonexistant_tags.each do |item|
+        Category.existing_cat?(item).must_be_nil
+      end
+    end
+  end
 end
