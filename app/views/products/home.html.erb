@@ -1,1 +1,33 @@
-<%= link_to image_tag "https://loremflickr.com/500/500/felt,dessert/all?", alt: 'link to', class: "product" %>
+<!-- <%= csrf_meta_tags %>
+<%= favicon_link_tag 'faviconsquarespacecupcake.png' %> -->
+<link href="https://fonts.googleapis.com/css?family=Handlee" rel="stylesheet">
+<!-- <%= stylesheet_link_tag    "application" %>
+<%= javascript_include_tag "application", 'data-turbolinks-track' => true %> -->
+
+<!-- This will go in the middle as a photo slide show with a button in the middle to click on -->
+
+<h1 class="overlay"><a href="/products">Shop All Products</a></h1>
+
+
+<div id="slideshow">
+  <div id="slide-holder">
+
+    <div class="slide">
+      <img src='../images/shitcookies.jpg' alt='shitcookies' class="homepage-banner" />
+
+    </div>
+
+    <div class="slide">
+      <img src='../images/totorobuns.jpg' alt='totorobuns' class="homepage-banner" />
+    </div>
+
+    <div class="slide">
+      <img src='../images/uc.jpg' alt='unicorncake' class="homepage-banner" />
+    </div>
+
+    <div class="slide">
+      <img src='../images/cupcakes.jpg' alt='cutecupcakes' class="homepage-banner" />
+    </div>
+
+  </div>
+</div>
