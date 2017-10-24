@@ -14,9 +14,7 @@ class MerchantsController < ApplicationController
       render_404
       return
     end
-    # if merchant not signed in user, only show limited detail page
-    # if merchant is current user, show personalized detail page
-    #if authorize_merchant
+
   end
 
   def edit
@@ -24,6 +22,8 @@ class MerchantsController < ApplicationController
       render_404
       return
     end
+
+    
   end
 
   def update

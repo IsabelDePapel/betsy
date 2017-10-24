@@ -1,7 +1,5 @@
 <h1>Seller List</h1>
 
-<h1>TODO-- CHECK IF NO RATINGS, NO SELLING SINCE</h1>
-
 <table>
   <thead>
     <tr>
@@ -26,7 +24,14 @@
         <%= link_to merchant.username, merchant_products_path(merchant.id) %>
       </td>
       <td>
-        <%= merchant.average_rating %>
+        <% if !merchant.average_rating %>
+          No Reviews
+        <% else %>
+          <%= merchant.average_rating %>
+        <% end %>
+      </td>
+      <td>
+        <%= merchant.products.count %>
       </td>
       <td>
         <%= merchant.created_at.strftime('%B %Y') %>

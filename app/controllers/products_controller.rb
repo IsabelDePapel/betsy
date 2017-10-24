@@ -158,19 +158,17 @@ class ProductsController < ApplicationController
 
     return if !authorize_merchant
 
-    if @product.visible == false
-      @product.visible = true
-      @product.save
-      flash[:status] = :success
-      flash[:message] = "Product set to visible"
+    @product.visible = @product.visible == true ? false : true
+    status = @product.visible ? "visible" : "not visible"
 
-    else
-      @product.visible = false
-      @product.visible.save
+    if @product.save
       flash[:status] = :success
-      flash[:message] = "Product set to not visible"
+      flash[:message] = "Product set to #{status}"
+    else
+      flash[:status] = :failure
+      flash[:message] = "Product set to #{status}"
     end
-    # end
+
     #redirect_to root_path
     redirect_to merchant_products_path(@auth_user.id)
   end
