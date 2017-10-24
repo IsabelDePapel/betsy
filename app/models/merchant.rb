@@ -23,7 +23,12 @@ class Merchant < ApplicationRecord
       end
     end
 
-    return (rating.to_f / num_reviews).round(1)
+    # if no reviews
+    if num_reviews == 0
+      return nil
+    else
+      return (rating.to_f / num_reviews).round(1)
+    end
   end
   # validate :merchant_cannot_have_user_of_another_merchant
   #

@@ -3,12 +3,40 @@ class MerchantsController < ApplicationController
 
   before_action :find_merchant
 
+  # this is the only public route
   def index
-    @merchants = Merchant.all
+    @merchants = Merchant.order('username ASC')
   end
 
+  # this is ONLY FOR THE AUTHORIZED MERCHANT
   def show
-    @merchant = Merchant.find_by(id: params[:id].to_i)
+    unless @merchant
+      render_404
+      return
+    end
+    # if merchant not signed in user, only show limited detail page
+    # if merchant is current user, show personalized detail page
+    #if authorize_merchant
+  end
+
+  def edit
+    unless @merchant
+      render_404
+      return
+    end
+  end
+
+  def update
+    unless @merchant
+      render_404
+      return
+    end
+
+    if @merchant.update_attributes merchant_params
+      redirect_to root_path
+    else
+      render :edit, status: :bad_request
+    end
   end
 
   # def new
@@ -24,23 +52,7 @@ class MerchantsController < ApplicationController
   #   end
   # end
 
-  # def edit
-  #   @merchant = Merchant.find_by(id: params[:id].to_i)
-  #   unless @merchant
-  #     redirect_to root_path
-  #   end
-  # end
-  #
-  # def update
-  #   @merchant = Merchant.find_by(id: params[:id].to_i)
-  #   redirect_to merchants_path unless @merchant
-  #
-  #   if @merchant.update_attributes merchant_params
-  #     redirect_to root_path
-  #   else
-  #     render :edit
-  #   end
-  # end
+
   #
   # def destroy
   #   Merchant.find_by(id: params[:id])
@@ -53,11 +65,19 @@ class MerchantsController < ApplicationController
 
   private
 
-  # def merchant_params
-  #   return params.require(:merchant).permit(:username, :email, :uid, :provider, :user_id)
-  # end
+  def merchant_params
+    return params.require(:merchant).permit(:username, :email, :uid, :provider, :user_id)
+  end
 
   def find_merchant
     @merchant = Merchant.find_by(id: params[:id])
+  end
+
+  def authorize_merchant
+    if @merchant.user_id != session[:user_id]
+      return false
+    end
+
+    return true
   end
 end
