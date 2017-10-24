@@ -166,7 +166,8 @@ class ProductsController < ApplicationController
       flash[:message] = "Product set to #{status}"
     else
       flash[:status] = :failure
-      flash[:message] = "Product set to #{status}"
+      flash[:message] = "There was a problem"
+      flash[:details] = @product.errors.messages
     end
 
     #redirect_to root_path
