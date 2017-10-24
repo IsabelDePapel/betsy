@@ -1,1 +1,7 @@
-<%= link_to image_tag "https://loremflickr.com/500/500/felt,dessert/all?", alt: 'link to', class: "product" %>
+<!-- <%= link_to image_tag "https://loremflickr.com/500/500/felt,dessert/all?", alt: 'link to', class: "product" %> -->
+
+<%= csrf_meta_tags %>
+<%= favicon_link_tag 'faviconsquarespacecupcake.png' %>
+<link href="https://fonts.googleapis.com/css?family=Handlee" rel="stylesheet">
+<%= stylesheet_link_tag    "application" %>
+<%= javascript_include_tag "application", 'data-turbolinks-track' => true %>

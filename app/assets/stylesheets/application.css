@@ -19,3 +19,9 @@
      font-family: Handlee;
      font-style: cursive;
  }
+Why is this not working for the 'latest items'
+
+
+.footer {
+  display: block;
+}
