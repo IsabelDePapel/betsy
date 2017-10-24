@@ -24,6 +24,7 @@ class Order < ApplicationRecord
 
     # doesn't trigger validations
     OrderItem.where(order_id: id).update_all(status: new_status, updated_at: DateTime.now)
+
   end
 
   # clean this up??

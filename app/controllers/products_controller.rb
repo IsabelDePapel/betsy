@@ -6,14 +6,14 @@ class ProductsController < ApplicationController
   def index
     if from_category? || from_merchant?
       if @category
-        @products = @category.products
+        @products = @category.products.order(:id)
       elsif @merchant
-        @products = @merchant.products
+        @products = @merchant.products.order(:id)
       else #erroneous category_id or merchant_id, render 404?
         redirect_to products_path
       end
     else
-      @products = Product.all
+      @products = Product.all.order(:id)
     end
   end
 
