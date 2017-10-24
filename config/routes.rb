@@ -23,6 +23,8 @@ Rails.application.routes.draw do
 
   patch 'products/:id/change_visibility', to: 'products#change_visibility', as: 'change_visibility_product'
 
+  get 'merchants/:merchant_id/products', to: 'products#index', as: 'merchant_products'
+
   # ======= ORDER ITEMS - Unnecessary to have Controller
 
   # ======= ORDERS
