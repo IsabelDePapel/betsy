@@ -11,11 +11,11 @@ Rails.application.routes.draw do
   post '/logout', to: 'sessions#logout', as: 'logout'
 
   # ======= MERCHANTS
-  resources :merchants, except: [:new, :edit, :update, :destroy] #login methods may change required routes
+  resources :merchants, only: [:index, :show]
+
 
   # ======= PRODUCTS
   resources :products, except: [:update] do
-    resources :categories, except: [:new, :destroy]
     resources :reviews, only: [:new, :create]
     patch :add_to_cart, to: 'products#add_to_cart', as: 'add_to_cart'
   end
@@ -25,6 +25,13 @@ Rails.application.routes.draw do
 
   get 'merchants/:merchant_id/products', to: 'products#index', as: 'merchant_products'
 
+  get 'categories/:category_id/products', to: 'products#index', as: 'category_products'
+
+  post 'products/:product_id/categories', to: 'categories#create'
+
+  # ======= CATEGORIES
+  resources :categories, only: [:index, :create]
+
   # ======= ORDER ITEMS - Unnecessary to have Controller
 
   # ======= ORDERS
@@ -32,8 +39,10 @@ Rails.application.routes.draw do
     get 'confirmation', on: :member
     resources :billings, only: [:new, :create]
   end
+
   get '/cart', to: "orders#cart", as: 'cart'
   patch '/cart/:order_item_id/remove_from_cart', to: "products#remove_from_cart", as: 'remove_from_cart'
+  patch '/cart/:order_item_id/update_quantity', to: "products#update_quantity_in_cart", as: 'update_quantity_in_cart'
 
   # ======= REVIEWS
   resources :reviews, only: [:show, :edit, :update, :destroy]

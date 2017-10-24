@@ -4,41 +4,103 @@
   <title>Foodsie!</title>
   <%= csrf_meta_tags %>
   <%= favicon_link_tag 'faviconsquarespacecupcake.png' %>
-  <link href="https://fonts.googleapis.com/css?family=Shadows+Into+Light" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Handlee" rel="stylesheet">
   <%= stylesheet_link_tag    "application" %>
   <%= javascript_include_tag "application", 'data-turbolinks-track' => true %>
 </head>
 
 <body>
-    <header class="page-header">
-      <h2><%= link_to "Foodsie", root_path %><small>Where you can buy all the cute food, all the time!</small></h2>
-      <nav>
-        <%= link_to "Home", root_path, class: "button" %>
-        <%= link_to "View All Categories", root_path, class: "button" %>
-        <%= link_to "View All Products", products_path, class: "button" %>
-        <%= link_to "View Cart", cart_path, class: "button" %>
-        <%# link_to "Login", root_path, class: "button" %>
-        <%# link_to "Logout", root_path, class: "button" %>
-
+  <!-- <header class="page-header row">
+    <h2 class="columns small-12">
+      <a href="/">Foodsie</a>
+      <small>Where you can buy all the cute food, all the time!</small>
+    </h2> -->
+    <nav class="columns small 12">
+      <%= link_to "Home", root_path, class: "button" %>
+      <%= link_to "View All Categories", root_path, class: "button" %>
+      <%= link_to "View All Products", products_path, class: "button" %>
+      <%= link_to "View Cart", cart_path, class: "button" %>
+      <div class="float-right">
         <% if @auth_user %>
-          <%= link_to "Hello, #{@auth_user.username}", merchant_path(@auth_user), class: "button" %>
-          <%= link_to "Sign Out", logout_path, method: :post, class: "button" %>
+        <%= link_to "Hello, #{@auth_user.username}", merchant_path(@auth_user), class: "button" %>
+        <%= link_to "Sign Out", logout_path, method: :post, class: "button" %>
         <% else %>
-          <%= link_to "Sign Up", '#', class: "button" %>
-          <%= link_to "Sign In", login_path, class: "button" %>
+        <%= link_to "Sign Up", '#', class: "button" %>
+        <%= link_to "Sign In", login_path, class: "button" %>
         <% end %>
+      </div>
+    </nav>
+  <!-- </header> -->
+  <main class="row">
+    <section class="row spotlight"></section>
+    <hr class="root-hr">
+  </main>
+  <hr class="root-hr">
+  <footer class="footer row columns large-2 small-12">
+    <p id="copyright">
+      © 2017 - Foodsie.
+    </p>
+  </footer>
+</body>
+</html>
 
 
-      </nav>
-    </header>
+  <!-- cupcakes
+  cakes
+  cookies
+  misc pastry
+  sushi -->
 
-    <!-- LEAVE THIS IN: displays flash messages -->
-    <%= render partial: "/layouts/flash" %>
-    <main>
-      <%= yield %>
-    </main>
-  </body>
 
-  <!-- TEMP for debugging -->
-  <%= debug(params) if Rails.env.development? %>
-  </html>
+
+
+
+
+
+
+<!-- </body>
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Foodsie!</title>
+<%= csrf_meta_tags %>
+<%= favicon_link_tag 'faviconsquarespacecupcake.png' %>
+<link href="https://fonts.googleapis.com/css?family=Handlee" rel="stylesheet">
+<%= stylesheet_link_tag    "application" %>
+<%= javascript_include_tag "application", 'data-turbolinks-track' => true %>
+</head>
+
+<body>
+<header class="page-header">
+<h2><%= link_to "Foodsie", root_path %><small>Where you can buy all the cute food, all the time!</small></h2>
+<nav>
+<%= link_to "Home", root_path, class: "button" %>
+<%= link_to "View All Categories", root_path, class: "button" %>
+<%= link_to "View All Products", products_path, class: "button" %>
+<%= link_to "View Cart", cart_path, class: "button" %>
+<%# link_to "Login", root_path, class: "button" %>
+<%# link_to "Logout", root_path, class: "button" %>
+
+<% if @auth_user %>
+<%= link_to "Hello, #{@auth_user.username}", merchant_path(@auth_user), class: "button" %>
+<%= link_to "Sign Out", logout_path, method: :post, class: "button" %>
+<% else %>
+<%= link_to "Sign Up", '#', class: "button" %>
+<%= link_to "Sign In", login_path, class: "button" %>
+<% end %>
+
+
+</nav>
+</header> -->
+
+<!-- LEAVE THIS IN: displays flash messages -->
+<%= render partial: "/layouts/flash" %>
+<main>
+  <%= yield %>
+</main>
+</body>
+<!--
+<!-- TEMP for debugging -->
+<%= debug(params) if Rails.env.development? %>
+</html>

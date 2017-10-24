@@ -1,23 +1,22 @@
 class ProductsController < ApplicationController
-  before_action :authenticate_user, except: [:home, :index, :show, :add_to_cart, :remove_from_cart]
+  before_action :authenticate_user, except: [:home, :index, :show, :add_to_cart, :remove_from_cart, :update_quantity_in_cart]
   before_action :find_product, except: [:new, :create, :index]
 
   def home
-
   end
 
   def index
     # TODO refactor when have categories (routes denested)
     if from_category? || from_merchant?
       if @category
-        @products = @category.products
+        @products = @category.products.order(:id)
       elsif @merchant
-        @products = @merchant.products
+        @products = @merchant.products.order(:id)
       else #erroneous category_id or merchant_id, render 404?
         redirect_to products_path
       end
     else
-      @products = Product.all
+      @products = Product.all.order(:id)
     end
   end
 
@@ -142,6 +141,20 @@ class ProductsController < ApplicationController
       flash[:status] = :failure
       flash[:message] = "Unsuccessfully deleted item from empty cart."
     end
+    redirect_to cart_path
+  end
+
+  def update_quantity_in_cart
+    order_item = OrderItem.find(params[:order_item_id].to_i)
+    if order_item
+      order_item.update_attribute(:quantity, params["quantity"])
+      flash[:status] = :success
+      flash[:message] = "Successfully updated quantity in cart"
+    else
+      flash[:status] = :failure
+      flash[:message] = "Couldn't update quantity in cart"
+    end
+    order_item.save
     redirect_to cart_path
   end
 

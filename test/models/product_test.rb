@@ -99,6 +99,7 @@ describe Product do
     end
   end
 
+
   describe "average_rating" do
     it "returns the average rating of a product" do
       # croissant review of 5
@@ -116,6 +117,14 @@ describe Product do
       Review.destroy_all
 
       product.average_rating.must_be_nil
+
+      
+  describe "add_category" do
+    it "adds a category to a product" do
+      start_cat = product.categories.length
+      product.add_category("cupcakes")
+
+      product.categories.length.must_equal start_cat + 1
     end
   end
 end

@@ -5,6 +5,7 @@ class Product < ApplicationRecord
   has_many :reviews, dependent: :nullify
 
   has_and_belongs_to_many :categories
+  accepts_nested_attributes_for :categories
 
   validates :name, presence: true
   validates :name, uniqueness: true
@@ -36,6 +37,11 @@ class Product < ApplicationRecord
 
   def num_sold
     return OrderItem.where(product_id: Product.find_by(name: name).id).count
+  end
+
+  # presumes that cat is a category (tested before calling)
+  def add_category(cat)
+    categories << Category.find_by(name: cat)
   end
 
 end

@@ -17,7 +17,7 @@ class BillingsController < ApplicationController
 
       # change status to paid and redirect to confirmation page
       @order.change_status("paid")
-
+      @order.reload
       # returns hash of item name, inventory as key, val if not in stock
       errors = @order.update_inventory
 

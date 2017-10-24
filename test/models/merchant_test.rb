@@ -147,4 +147,20 @@ describe Merchant do
     end
 
   end
+
+  describe "total_revenue" do
+    it "returns the total amount of order_items that are paid and complete" do
+      item_cost = products(:croissant).price
+      merchant1.total_revenue.must_equal (item_cost * 3)
+
+      new_item = OrderItem.create(order: orders(:two), product: products(:croissant), quantity: 1)
+
+      merchant1.total_revenue.must_equal (item_cost * 3)
+
+      new_item.status = "paid"
+      new_item.save
+
+      merchant1.total_revenue.must_equal (item_cost * 4)
+    end
+  end
 end
