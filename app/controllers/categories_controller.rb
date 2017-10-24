@@ -5,30 +5,25 @@ class CategoriesController < ApplicationController
     #TODO Add product in category count for view
   end
 
-  def create #option only comes from a specific product detail page
+  def create #TODO Move me to products.rb!!
     find_product
-    cat_list = category_params(/\W+/) #break apart list
+    #break apart list
+    cat_list = category_params[:category][:name].split(/\W+/)
     #check array for if cat exists
-    puts cat_list
 
     cat_list.each do |item|
-      if existing_cat?(item)
-        @product.categories << Category.find_by(name: item) #method should be in model (Product model)
+      if Category.existing_cat?(item)
+        @product.add_category(item)
       else
         new_cat = Category.new(name: item)
         if new_cat.save
-          @product.categories << new_cat
+          @product.add_category(new_cat)
         else
-          #??
+          flash[:status] = :failure
+          flash[:message] = "#{new_cat.capitalize} could not be added as a category"
         end
       end
     end
-    # @category = Category.new category_params
-    # if @category.save
-    #   redirect_to root_path
-    # else
-    #   render :new
-    # end
   end
 
   private

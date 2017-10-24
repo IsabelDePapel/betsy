@@ -15,12 +15,12 @@ describe CategoriesController do
     end
   end
 
-  describe "create" do
-    it "should get create" do
+  describe "create" do #TODO Move me to products.rb!!
+    it "" do
       skip
       category_data = {
         category: {
-          name: "a, list,,of,   tags, with multiple words,"
+          name: "A, lIst,,of,   tags, with MULTIPLE words,"
         }
       }
       #post categories_create, params category_data
