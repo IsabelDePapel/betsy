@@ -1,0 +1,39 @@
+<%# partial for displaying merchant order items %>
+
+<% if items %>
+  <%= items.count %>
+  <% @type = items[0].status %>
+  <section class="<%= @type %>">
+    <h2><%= @type.capitalize %> </h2>
+
+    <table class="table <%= @type %>">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Date Ordered</th>
+          <th>Status</th>
+          <th>Quantity</th>
+          <th>Subtotal</th>
+          <th>Change Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% items.each do |item| %>
+        <tr>
+          <td><%= link_to item.product.name, product_path(item.product) %></td>
+          <td><%= item.created_at.strftime('%b %-d, %Y') %></td>
+          <td><%= item.status %></td>
+          <td><%= item.quantity %></td>
+          <td><%= item.price %></td>
+          <td><%= link_to "change status path", '#' %></td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </section>
+<% else %>
+<p>
+  NIL
+</p>
+<% end %>

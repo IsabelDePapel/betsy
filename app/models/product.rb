@@ -34,4 +34,8 @@ class Product < ApplicationRecord
     end
   end
 
+  def num_sold
+    return OrderItem.where(product_id: Product.find_by(name: name).id).count
+  end
+
 end

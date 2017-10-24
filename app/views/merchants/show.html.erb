@@ -1,2 +1,51 @@
-<h1>Merchants#show</h1>
-<p>Find me in app/views/merchants/show.html.erb</p>
+<h1><%= "#{@merchant.username}'s Profile" %></h1>
+
+<section class="info">
+  <h2>Your Info</h2>
+  <ul>
+    <li>
+      Username: <%= @merchant.username %>
+    </li>
+    <li>
+      email: <%= @merchant.email %>
+    </li>
+  </ul>
+</section>
+
+<section class="products">
+  <h2>Your Products</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Product Name</th>
+        <th>Inventory</th>
+        <th>Price</th>
+        <th>Number Sold</th>
+        <th>Visible</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @products.each do |product| %>
+      <tr>
+        <td><%= product.name %></td>
+        <td>
+          <%= product.quantity == 0 ? "Out of Stock!" : product.quantity %>
+        </td>
+        <td><%= number_to_currency(product.price) %></td>
+        <td><%= product.num_sold %></td>
+        <td><%= product.visible ? "Visible" : "Hidden" %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+</section>
+
+<section class="orders">
+  <h2>Your Orders</h2>
+
+  <%= render partial: 'items', locals: { items: @paid } %>
+  <%= render partial: 'items', locals: { items: @complete } %>
+  <%= render partial: 'items', object: @canceled %>
+</section>
