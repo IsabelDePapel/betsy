@@ -15,13 +15,15 @@ Rails.application.routes.draw do
 
   # ======= PRODUCTS
   resources :products, except: [:update] do
-    resources :categories, except: [:new, :destroy]
     resources :reviews, only: [:new, :create]
     patch :add_to_cart, to: 'products#add_to_cart', as: 'add_to_cart'
   end
   patch 'products/:id', to: 'products#update'
 
   patch 'products/:id/change_visibility', to: 'products#change_visibility', as: 'change_visibility_product'
+
+  # ======= CATEGORIES
+  resources :categories, only: [:index, :show, :create]
 
   # ======= ORDER ITEMS - Unnecessary to have Controller
 
