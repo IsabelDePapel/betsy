@@ -6,18 +6,21 @@ class ProductsController < ApplicationController
 
   end
 
+  def home
+  end
+
   def index
     # TODO refactor when have categories (routes denested)
     if from_category? || from_merchant?
       if @category
-        @products = @category.products
+        @products = @category.products.order(:id)
       elsif @merchant
-        @products = @merchant.products
+        @products = @merchant.products.order(:id)
       else #erroneous category_id or merchant_id, render 404?
         redirect_to products_path
       end
     else
-      @products = Product.all
+      @products = Product.all.order(:id)
     end
   end
 
@@ -145,7 +148,20 @@ class ProductsController < ApplicationController
     redirect_to cart_path
   end
 
-  def change_visibility
+  def update_quantity_in_cart
+    order_item = OrderItem.find(params[:order_item_id].to_i)
+    if order_item
+      order_item.update_attribute(:quantity, params["quantity"])
+      flash[:status] = :success
+      flash[:message] = "Successfully updated quantity in cart"
+    else
+      flash[:status] = :failure
+      flash[:message] = "Couldn't update quantity in cart"
+    end
+    order_item.save
+    redirect_to cart_path
+
+   def change_visibility
     # product = Product.find_by(id: params[:id].to_i)
     # if user is not logged in as the merchant who owns product
     # if session[:user_id] == nil || session[:user_id] != product.merchant.id
