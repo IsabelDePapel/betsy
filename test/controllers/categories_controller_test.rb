@@ -15,16 +15,18 @@ describe CategoriesController do
     end
   end
 
-  it "should get show" do
-    skip
-    get categories_show_url
-    value(response).must_be :success?
-  end
+  describe "create" do
+    it "should get create" do
+      skip
+      category_data = {
+        category: {
+          name: "a, list,,of,   tags, with multiple words,"
+        }
+      }
+      #post categories_create, params category_data
 
-  it "should get create" do
-    skip
-    get categories_create_url
-    value(response).must_be :success?
-  end
 
+    end
+
+  end
 end
