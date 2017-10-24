@@ -16,12 +16,12 @@ class SessionsController < ApplicationController
 
   def create
     auth_hash = request.env['omniauth.auth']
-    ap auth_hash
+    #ap auth_hash
 
     @merchant = Merchant.find_by(uid: auth_hash['uid'], provider: auth_hash['provider'])
 
     if @merchant
-      # if session user_id already exists, this session is overwriting it
+      # if session user_id already exists, this session is overwriting it TODO: write controller tests when we know how to have a session
       session[:user_id] = @merchant.user_id
       if session[:order_id]
         new_cart = Order.find(session[:order_id])

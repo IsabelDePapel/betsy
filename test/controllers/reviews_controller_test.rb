@@ -26,10 +26,30 @@ describe ReviewsController do
       User.count.must_equal start_count + 1
     end
 
-    it "should respond with redirect if merchant tries to review their own products" do
-      skip
-      # can only implement when have oauth configured
+    it "should use existing user if user exists" do
+      start_count = User.count
 
+      # log in user
+      auth_user = merchants(:two) # one is selling macaroons
+      login(auth_user, :google_oauth2)
+
+      get new_product_review_path(macaroon)
+
+      User.count.must_equal start_count
+      Review.last.user_id.must_equal auth_user.user_id
+    end
+
+    it "should respond with redirect if merchant tries to review their own products" do
+      start_count = User.count
+
+      auth_user = merchants(:one)
+      login(auth_user, :github)
+
+      get new_product_review_path(macaroon)
+
+      User.count.must_equal start_count
+      must_respond_with :redirect
+      must_redirect_to root_path
     end
 
     it "should respond with success if given valid data" do

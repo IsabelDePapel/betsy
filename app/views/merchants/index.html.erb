@@ -1,2 +1,37 @@
-<h1>Merchants#index</h1>
-<p>Find me in app/views/merchants/index.html.erb</p>
+<h1>Seller List</h1>
+
+<h1>TODO-- CHECK IF NO RATINGS, NO SELLING SINCE</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>
+        Seller Name
+      </th>
+      <th>
+        Average Rating
+      </th>
+      <th>
+        Number of Products
+      </th>
+      <th>
+        Foodsie Member Since
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <% @merchants.each do |merchant| %>
+      <td>
+        <%= link_to merchant.username, merchant_products_path(merchant.id) %>
+      </td>
+      <td>
+        <%= merchant.average_rating %>
+      </td>
+      <td>
+        <%= merchant.created_at.strftime('%B %Y') %>
+      </td>
+      <% end %>
+    </tr>
+  </tbody>
+</table>

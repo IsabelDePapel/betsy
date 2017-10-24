@@ -109,15 +109,8 @@ class Order < ApplicationRecord
   def self.find_last_cart_id(merch_user_id)
     last_order = Order.where(user_id: merch_user_id).order(created_at: :desc)[0]
 
-    if last_order
-      if last_order.order_items[0].status == "pending"
-        return last_order.id
-      else
-        return nil
-      end
-    else
-      return nil
-    end
+    return nil unless last_order
+    last_order.is_cart? ? (return last_order.id) : (return nil)
 
   end
 
