@@ -95,7 +95,18 @@ html {
   padding: 0;
 }
 
+@media only screen and (orientation: landscape) {
+  .homepage-banner {
+    width: 100%;
+  }
+}
 
+@media only screen and (orientation: portrait) {
+  .homepage-banner {
+    height: 100%;
+    width: auto;
+  }
+}
 
 #slideshow {
 	width: 100vw;
@@ -110,7 +121,7 @@ html {
 .slide {
   display: inline-block;
 	width: 100vw;
-	height: auto;
+	height: 100vh;
 	float: left;
 	position: relative;
 }
