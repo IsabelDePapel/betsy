@@ -15,9 +15,12 @@
  *= require foundation_and_overrides
 
  */
+
+
+
  * {
-     font-family: Handlee;
-     font-style: cursive;
+     font-family: Handlee !important;
+     font-style: cursive !important;
  }
 Why is this not working for the 'latest items'
 
