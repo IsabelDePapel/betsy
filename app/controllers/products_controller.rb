@@ -40,7 +40,12 @@ class ProductsController < ApplicationController
       return
     end
 
-
+    if @product.merchant.user_id != session[:user_id]
+      flash[:status] = :failure
+      flash[:message] = "You can only edit your own products"
+      redirect_to products_path
+      return
+    end
 
   end
 
@@ -159,7 +164,13 @@ class ProductsController < ApplicationController
     @product = Product.find_by(id: params[:id])
   end
 
-
+  def authorize_merchant
+    if @product.merchant.user_id != session[:user_id]
+      flash[:status] = :failure
+      flash[:message] = "You can only make changes to your own products"
+      redirect_to products_path
+    end
+  end
 
   def from_category?
     if params[:category_id]

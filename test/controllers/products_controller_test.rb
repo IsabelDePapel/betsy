@@ -83,7 +83,7 @@ describe ProductsController do
     end
 
     describe "remove from cart" do
-      puts "TODO"
+
     end
 
     # guest user not authorized for anything else related to products - it all redirects BACK
@@ -124,8 +124,12 @@ describe ProductsController do
 
     describe "update (unauthorized)" do
       it "responds with redirect if guest tries to update a product that exists with valid data" do
+        before_product = product
+
         patch product_path product, params: product_data
+
         must_respond_with :redirect
+        product.must_equal before_product
       end
 
       it "responds with redirect if guest tries to update a product with invalid data" do
@@ -141,8 +145,12 @@ describe ProductsController do
 
     describe "destroy (unauthorized)" do
       it "responds with redirect if guest tries to delete a product" do
+        start_count = Product.count
+
         delete product_path(product)
+
         must_respond_with :redirect
+        Product.count.must_equal start_count
       end
 
       it "responds with redirect if guest tries to delete a product that doesn't exist" do
@@ -153,8 +161,12 @@ describe ProductsController do
 
     describe "change visibility" do
       it "responds with redirect if guest tries to hide/unhide a product" do
+        current_vis = product.visible
+
         patch change_visibility_product_path(product)
+
         must_respond_with :redirect
+        product.visible.must_equal current_vis
       end
 
       it "responds with redirect if guest tries to hide/unhide a product that doesn't exist" do
@@ -166,6 +178,8 @@ describe ProductsController do
   end # end of guest user tests
 
   describe "logged in" do
+    let(:other_product) { products(:cupcake) } # non-auth product
+
     before do
       # log in
       @auth_user = merchants(:one)
@@ -176,7 +190,6 @@ describe ProductsController do
       it "returns success" do
         # confirm logged in
         session[:user_id].must_equal @auth_user.user_id
-
         get products_path
         must_respond_with :success
       end
@@ -203,26 +216,71 @@ describe ProductsController do
 
     describe "create" do
       it "creates product and redirects to products page when given valid data" do
-        post product_path params: product_data
+        post products_path params: product_data
         must_respond_with :redirect
         must_redirect_to products_path
       end
 
       it "returns bad request when given invalid data" do
-        post product_path params: { product: { name: "" } }
+        post products_path params: { product: { name: "" } }
         must_respond_with :bad_request
       end
     end
 
     describe "edit" do
-      it "returns success when given valid product id" do
-        get product_path(product)
-        must_respond_with 
+      it "returns success when given valid product id that belongs to the merchant" do
+        get edit_product_path(product)
+        must_respond_with :success
+      end
+
+      it "redirects to product page when given product id belonging to another merchant" do
+        get edit_product_path(other_product)
+        must_respond_with :redirect
+        must_redirect_to products_path
       end
 
       it "returns not found when given invalid product id" do
-
+        get edit_product_path(fake_product_id)
+        must_respond_with :not_found
       end
+    end
+
+    describe "update" do
+      it "returns success and updates when given valid data and product belongs to merchant" do
+        start_count = Product.count
+
+        patch product_path product, params: product_data
+
+        must_respond_with :redirect
+        must_redirect_to products_path
+        Product.count.must_equal start_count
+
+        product_data[:product].each do |attribute, val|
+          product.reload[attribute].must_equal val, "#{attribute} should equal #{val}"
+        end
+      end
+
+      it "returns bad request when given invalid data" do
+        orig_name = product.name
+
+        patch product_path product, params: { product: { name: "" } }
+
+        must_respond_with :bad_request
+        product.reload.name.must_equal orig_name
+      end
+
+      it "redirects to product page when it tries to update a product belonging to another merchant" do
+        skip
+        patch product_path product, params: product_data
+
+        must_respond_with :redirect
+        must_redirect_to products_path
+
+        product_data[:product].each do |attribute, val|
+          product.reload[attribute].wont_equal val, "#{attribute} should not equal #{val}"
+        end
+      end
+
     end
   end
 
