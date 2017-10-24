@@ -3,7 +3,6 @@ class ApplicationController < ActionController::Base
 
   before_action :find_user
 
-
   # returns current user if already exists in session
   # else creates a new user and returns it
   #TODO move to session if no other controller uses this method
@@ -12,6 +11,15 @@ class ApplicationController < ActionController::Base
       return User.find_by(id: session[:user_id])
     else
       return User.create
+    end
+  end
+
+  def authenticate_user
+    if !@auth_user
+      flash[:status] = :failure
+      flash[:message] = "You must be logged in to do this"
+
+      redirect_back fallback_location: root_path
     end
   end
 
@@ -29,10 +37,5 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def authenticate_user
-    if !@auth_user
-      flash[:status] = :failure
-      flash[:message] = "You must be logged in to do this"
-    end
-  end
+
 end

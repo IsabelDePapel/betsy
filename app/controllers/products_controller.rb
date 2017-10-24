@@ -1,4 +1,5 @@
 class ProductsController < ApplicationController
+  before_action :authenticate_user, except: [:index, :show]
   before_action :find_product, except: [:new, :create, :index]
 
   def index
@@ -27,9 +28,9 @@ class ProductsController < ApplicationController
   def create
     @product = Product.new product_params
     if @product.save
-      redirect_to root_path
+      redirect_to products_path
     else
-      render :new
+      render :new, status: :bad_request
     end
   end
 
@@ -39,7 +40,7 @@ class ProductsController < ApplicationController
       return
     end
 
-  
+
 
   end
 
@@ -93,7 +94,6 @@ class ProductsController < ApplicationController
       new_order.save
       session[:order_id] = new_order.id
     end
-
     # by this point, order now exists
 
     # Create an OrderItem for the Product
@@ -129,7 +129,28 @@ class ProductsController < ApplicationController
     redirect_to cart_path
   end
 
+  def change_visibility
+    # product = Product.find_by(id: params[:id].to_i)
+    # if user is not logged in as the merchant who owns product
+    # if session[:user_id] == nil || session[:user_id] != product.merchant.id
+    #   flash[:error] = "You must be logged in as product owner to change product visibility"
+    # else
+    if product.visible == false
+      product.visible = true
+      flash[:status] = :success
+      flash[:message] = "Product set to visible"
+    else
+      product.visible = false
+      flash[:status] = :success
+      flash[:message] = "Product set to not visible"
+    end
+    # end
+
+    redirect_to merchant_products_path
+  end
+
   private
+
   def product_params
     return params.require(:product).permit(:id, :name, :price, :description, :photo_url, :quantity, :merchant_id)
   end
@@ -138,23 +159,7 @@ class ProductsController < ApplicationController
     @product = Product.find_by(id: params[:id])
   end
 
-  def change_visibility
-    product = Product.find_by(id: params[:id].to_i)
-    # if user is not logged in as the merchant who owns product
-    if session[:user_id] == nil || session[:user_id] != product.merchant.id
-      flash[:error] = "You must be logged in as product owner to change product visibility"
-    else
-      if product.visible == false
-        product.visible = true
-        flash[:success] = "Product set to visible"
-      else
-        product.visible = false
-        flash[:success] = "Product set to not visible"
-      end
-    end
 
-    redirect_to merchant_products_path
-  end
 
   def from_category?
     if params[:category_id]
