@@ -13,9 +13,9 @@ Rails.application.routes.draw do
   # ======= MERCHANTS
   resources :merchants, except: [:new, :edit, :update, :destroy] #login methods may change required routes
 
+
   # ======= PRODUCTS
   resources :products, except: [:update] do
-    resources :categories, except: [:new, :destroy]
     resources :reviews, only: [:new, :create]
     patch :add_to_cart, to: 'products#add_to_cart', as: 'add_to_cart'
   end
@@ -24,6 +24,13 @@ Rails.application.routes.draw do
   patch 'products/:id/change_visibility', to: 'products#change_visibility', as: 'change_visibility_product'
 
   get 'merchants/:merchant_id/products', to: 'products#index', as: 'merchant_products'
+
+  get 'categories/:category_id/products', to: 'products#index', as: 'category_products'
+
+  post 'products/:product_id/categories', to: 'categories#create'
+
+  # ======= CATEGORIES
+  resources :categories, only: [:index, :create]
 
   # ======= ORDER ITEMS - Unnecessary to have Controller
 
