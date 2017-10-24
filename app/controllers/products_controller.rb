@@ -1,5 +1,8 @@
 class ProductsController < ApplicationController
 
+  def home
+  end
+
   def index
     if from_category? || from_merchant?
       if @category
@@ -106,6 +109,20 @@ class ProductsController < ApplicationController
       flash[:status] = :failure
       flash[:message] = "Unsuccessfully deleted item from empty cart."
     end
+    redirect_to cart_path
+  end
+
+  def update_quantity_in_cart
+    order_item = OrderItem.find(params[:order_item_id].to_i)
+    if order_item
+      order_item.update_attribute(:quantity, params["quantity"])
+      flash[:status] = :success
+      flash[:message] = "Successfully updated quantity in cart"
+    else
+      flash[:status] = :failure
+      flash[:message] = "Couldn't update quantity in cart"
+    end
+    order_item.save
     redirect_to cart_path
   end
 
