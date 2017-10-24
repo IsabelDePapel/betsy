@@ -102,6 +102,19 @@ class Order < ApplicationRecord
     end
   end
 
+  def change_user(new_user_id)
+    self.user = User.find_by(id: new_user_id)
+    self.save
+  end
+
+  def self.find_last_cart_id(merch_user_id)
+    last_order = Order.where(user_id: merch_user_id).order(created_at: :desc)[0]
+
+    return nil unless last_order
+    last_order.is_cart? ? (return last_order.id) : (return nil)
+
+  end
+
   def is_cart?
     self.order_items.each do |item|
       if item.status != "pending"

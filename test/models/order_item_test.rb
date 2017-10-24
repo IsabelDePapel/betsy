@@ -57,6 +57,7 @@ describe OrderItem do
       invalid_order_item = OrderItem.new(product: macaroons, order: orders(:two), quantity: 15)
 
       invalid_order_item.valid?.must_equal false
+      invalid_order_item.errors.must_include :order_item
     end
   end
 
@@ -82,7 +83,7 @@ describe OrderItem do
     end
   end
 
-  describe "item_price" do
+  describe "price" do
     it "returns the total price of an order item (qty * price)" do
       croissant = products(:croissant)
       expected_price = croissant.price * 2

@@ -115,4 +115,36 @@ describe Merchant do
     end
 
   end #validations
+
+  describe "average_rating" do
+    let(:seller) { Merchant.find_by(id: users(:one).id) }
+
+    it "must return the average rating of a merchant based on product reviews" do
+      # with only one review
+      seller.average_rating.must_equal reviews(:croissant_review).rating.to_f
+
+      # add review and confirm recalculates average
+      new_review_data = {
+        review: {
+          user_id: users(:two).id,
+          product_id: products(:macaroon).id,
+          rating: 1,
+          text: "test"
+        }
+      }
+      Review.create!(new_review_data[:review])
+
+      reviews = Review.select("*").joins(:product).where("products.merchant_id = ?", seller.id)
+
+      expected_avg = ((reviews.sum { |review| review.rating }) / reviews.length.to_f).round(2)
+
+      seller.reload.average_rating.must_equal expected_avg
+    end
+
+    it "must return nil if there are no reviews" do
+      Review.destroy_all
+      seller.average_rating.must_be_nil
+    end
+
+  end
 end

@@ -5,7 +5,6 @@ class BillingsController < ApplicationController
 
   def new
     @billing = Billing.new
-    #@billing.order_id = params[:order_id]
   end
 
   def create
@@ -20,7 +19,6 @@ class BillingsController < ApplicationController
       @order.change_status("paid")
       @order.reload
       # returns hash of item name, inventory as key, val if not in stock
-      # puts binding.pry
       errors = @order.update_inventory
 
       if !errors.empty?

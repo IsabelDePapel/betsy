@@ -32,5 +32,31 @@ describe Category do
       category.name = "something"
       category.valid?.must_equal true
     end
+
+    it "must be unique (case-insensitive) and save as lowercase" do
+      category.name = "McDonald"
+      category.save.must_equal true
+      category.name.must_equal "mcdonald"
+
+      another_cat = Category.new(name: "mcDonald")
+
+      another_cat.save.must_equal false
+    end
+  end
+
+  describe "existing_cat?" do
+    it "returns true if it finds a category by it's own name" do
+      valid_tag = cupcakes.name
+      Category.existing_cat?(valid_tag).must_equal true
+      Category.existing_cat?("CupCAKES").must_equal true
+    end
+
+    it "returns false if it is not an existing category" do
+      nonexistant_tags = ["jarjar binks", "fruit"]
+
+      nonexistant_tags.each do |item|
+        Category.existing_cat?(item).must_equal false
+      end
+    end
   end
 end

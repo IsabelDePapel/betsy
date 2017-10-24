@@ -1,9 +1,16 @@
 class ProductsController < ApplicationController
+  before_action :authenticate_user, except: [:home, :index, :show, :add_to_cart, :remove_from_cart]
+  before_action :find_product, except: [:new, :create, :index]
+
+  def home
+
+  end
 
   def home
   end
 
   def index
+    # TODO refactor when have categories (routes denested)
     if from_category? || from_merchant?
       if @category
         @products = @category.products.order(:id)
@@ -18,7 +25,7 @@ class ProductsController < ApplicationController
   end
 
   def show
-    @product = Product.find_by(id: params[:id].to_i)
+    render_404 unless @product
   end
 
   def new
@@ -28,38 +35,68 @@ class ProductsController < ApplicationController
   def create
     @product = Product.new product_params
     if @product.save
-      redirect_to root_path
+      redirect_to products_path
     else
-      render :new
+      render :new, status: :bad_request
     end
   end
 
   def edit
-    @product = Product.find_by(id: params[:id].to_i)
-
     unless @product
-      redirect_to root_path
+      render_404
+      return
     end
+
+    return if !authorize_merchant
+    # if @product.merchant.user_id != session[:user_id]
+    #   flash[:status] = :failure
+    #   flash[:message] = "You can only edit your own products"
+    #   redirect_to products_path
+    #   return
+    # end
+
   end
 
   def update
-    @product = Product.find_by(id: params[:id].to_i)
-    redirect_to products_path unless @product
+    unless @product
+      render_404
+      return
+    end
+
+    return if !authorize_merchant
 
     if @product.update_attributes product_params
+      flash[:status] = :success
+      flash[:message] = "#{@product.name.capitalize} successfully edited!"
       redirect_to products_path
     else
-      render :edit
+      flash[:status] = :failure
+      flash[:message] = "There was a problem editing the product"
+      flash[:details] = @product.errors.messages
+      render :edit, status: :bad_request
     end
   end
 
   def destroy
-    Product.find_by(id: params[:id])
-    @product = Product.find_by
-    if @product == nil
-      redirect_to root_path
-    else @product.destroy
+    unless @product
+      render_404
+      return
     end
+
+    return if !authorize_merchant
+
+    @product.destroy
+
+    if @product.destroyed?
+      flash[:status] = :success
+      flash[:message] = "#{@product.name.capitalize} successfully deleted."
+    else
+      flash[:status] = :failure
+      flash[:message] = "Unable to delete #{@product.name}"
+      flash[:details] = @product.errors.messages
+    end
+
+    redirect_to products_path
   end
 
   # products/:id/add_to_cart
@@ -76,7 +113,6 @@ class ProductsController < ApplicationController
       new_order.save
       session[:order_id] = new_order.id
     end
-
     # by this point, order now exists
 
     # Create an OrderItem for the Product
@@ -124,29 +160,56 @@ class ProductsController < ApplicationController
     end
     order_item.save
     redirect_to cart_path
+
+   def change_visibility
+    # product = Product.find_by(id: params[:id].to_i)
+    # if user is not logged in as the merchant who owns product
+    # if session[:user_id] == nil || session[:user_id] != product.merchant.id
+    #   flash[:error] = "You must be logged in as product owner to change product visibility"
+    # else
+    unless @product
+      render_404
+      return
+    end
+
+    return if !authorize_merchant
+
+    if @product.visible == false
+      @product.visible = true
+      @product.save
+      flash[:status] = :success
+      flash[:message] = "Product set to visible"
+
+    else
+      @product.visible = false
+      @product.visible.save
+      flash[:status] = :success
+      flash[:message] = "Product set to not visible"
+    end
+    # end
+    #redirect_to root_path
+    redirect_to merchant_products_path(@auth_user.id)
   end
 
   private
+
   def product_params
-    return params.require(:product).permit(:id, :name, :price, :description, :photo_url, :quantity, :merchant_id)
+    return params.require(:product).permit(:id, :name, :price, :description, :photo_url, :quantity, :merchant_id, :visible)
   end
 
-  def change_visibility
-    product = Product.find_by(id: params[:id].to_i)
-    # if user is not logged in as the merchant who owns product
-    if session[:user_id] == nil || session[:user_id] != product.merchant.id
-      flash[:error] = "You must be logged in as product owner to change product visibility"
-    else
-      if product.visible == false
-        product.visible = true
-        flash[:success] = "Product set to visible"
-      else
-        product.visible = false
-        flash[:success] = "Product set to not visible"
-      end
+  def find_product
+    @product = Product.find_by(id: params[:id])
+  end
+
+  def authorize_merchant
+    if @product.merchant.user_id != session[:user_id]
+      flash[:status] = :failure
+      flash[:message] = "You can only make changes to your own products"
+      redirect_to products_path
+      return false
     end
 
-    redirect_to merchant_products_path
+    return true
   end
 
   def from_category?

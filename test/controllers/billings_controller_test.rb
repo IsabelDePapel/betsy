@@ -47,7 +47,6 @@ describe BillingsController do
     } }
 
     it "should redirect to confirmation page if billing created and change status to paid" do
-
       # add items to order
       OrderItem.create!(product: products(:croissant), order: new_order, quantity: 2, status: "pending")
       OrderItem.create!(product: products(:cupcake), order: new_order, quantity: 1, status: "pending")
@@ -67,11 +66,11 @@ describe BillingsController do
 
       Billing.count.must_equal start_count + 1
       must_respond_with :redirect
-      must_redirect_to confirmation_order_path(new_order_id)
+      must_redirect_to confirmation_order_path(new_order)
     end
 
     it "should redirect to cart path, not create billing, and keep status as pending if not enough inventory" do
-      new_order = Order.find(new_order_id)
+      # new_order = Order.find(new_order_id)
       OrderItem.create!(product: products(:croissant), order: new_order, quantity: 2, status: "pending")
       OrderItem.create!(product: products(:cupcake), order: new_order, quantity: 1, status: "pending")
 
@@ -93,7 +92,7 @@ describe BillingsController do
 
       start_count = Billing.count
 
-      post order_billings_path( new_order_id ), params: billing_data
+      post order_billings_path( new_order ), params: billing_data
 
       # confirm status still pending
       new_order.order_items.each do |item|
@@ -118,6 +117,10 @@ describe BillingsController do
     end
 
     it "should return bad request if given invalid data" do
+      # create order items for the order
+      OrderItem.create!(product: products(:croissant), order: new_order, quantity: 2)
+      OrderItem.create!(product: products(:cupcake), order: new_order, quantity: 1)
+
       bad_billing_data = {
         billing: {
           name: "name"
@@ -126,12 +129,10 @@ describe BillingsController do
 
       start_count = Billing.count
 
-      post order_billings_path( new_order.id ), params: bad_billing_data
+      post order_billings_path( new_order ), params: bad_billing_data
 
       Billing.count.must_equal start_count
-      # must_respond_with :bad_request
-      must_respond_with :redirect
-      must_redirect_to products_path
+      must_respond_with :bad_request
     end
 
   end

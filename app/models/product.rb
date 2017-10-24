@@ -23,4 +23,8 @@ class Product < ApplicationRecord
     return quantity > 0
   end
 
+  # presumes that cat is a category (tested before calling)
+  def add_category(cat)
+    categories << Category.find_by(name: cat)
+  end
 end
