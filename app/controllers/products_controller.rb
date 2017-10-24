@@ -1,6 +1,10 @@
 class ProductsController < ApplicationController
-  before_action :authenticate_user, except: [:index, :show]
+  before_action :authenticate_user, except: [:home, :index, :show, :add_to_cart, :remove_from_cart]
   before_action :find_product, except: [:new, :create, :index]
+
+  def home
+
+  end
 
   def index
     # TODO refactor when have categories (routes denested)
@@ -147,27 +151,34 @@ class ProductsController < ApplicationController
     # if session[:user_id] == nil || session[:user_id] != product.merchant.id
     #   flash[:error] = "You must be logged in as product owner to change product visibility"
     # else
+    unless @product
+      render_404
+      return
+    end
 
     return if !authorize_merchant
-    
-    if product.visible == false
-      product.visible = true
+
+    if @product.visible == false
+      @product.visible = true
+      @product.save
       flash[:status] = :success
       flash[:message] = "Product set to visible"
+
     else
-      product.visible = false
+      @product.visible = false
+      @product.visible.save
       flash[:status] = :success
       flash[:message] = "Product set to not visible"
     end
     # end
-
-    redirect_to merchant_products_path
+    #redirect_to root_path
+    redirect_to merchant_products_path(@auth_user.id)
   end
 
   private
 
   def product_params
-    return params.require(:product).permit(:id, :name, :price, :description, :photo_url, :quantity, :merchant_id)
+    return params.require(:product).permit(:id, :name, :price, :description, :photo_url, :quantity, :merchant_id, :visible)
   end
 
   def find_product
