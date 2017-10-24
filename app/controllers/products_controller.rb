@@ -1,6 +1,8 @@
 class ProductsController < ApplicationController
+  before_action :find_product, except: [:new, :create, :index]
 
   def index
+    # TODO refactor when have categories (routes denested)
     if from_category? || from_merchant?
       if @category
         @products = @category.products
@@ -15,7 +17,7 @@ class ProductsController < ApplicationController
   end
 
   def show
-    @product = Product.find_by(id: params[:id].to_i)
+    render_404 unless @product
   end
 
   def new
@@ -32,30 +34,48 @@ class ProductsController < ApplicationController
   end
 
   def edit
-    @product = Product.find_by(id: params[:id].to_i)
-
     unless @product
-      redirect_to root_path
+      render_404
+      return
     end
+
+  
+
   end
 
   def update
-    @product = Product.find_by(id: params[:id].to_i)
-    redirect_to products_path unless @product
+    unless @product
+      render_404
+      return
+    end
 
     if @product.update_attributes product_params
+      flash[:status] = :success
+      flash[:message] = "#{@product.name.capitalize} successfully edited!"
       redirect_to products_path
     else
-      render :edit
+      flash[:status] = :failure
+      flash[:message] = "There was a problem editing the product"
+      flash[:details] = @product.errors.messages
+      render :edit, status: :bad_request
     end
   end
 
   def destroy
-    Product.find_by(id: params[:id])
-    @product = Product.find_by
-    if @product == nil
-      redirect_to root_path
-    else @product.destroy
+    unless @product
+      render_404
+      return
+    end
+
+    @product.destroy
+
+    if @product.destroyed?
+      flash[:status] = :success
+      flash[:message] = "#{@product.name.capitalize} successfully deleted."
+    else
+      flash[:status] = :failure
+      flash[:message] = "Unable to delete #{@product.name}"
+      flash[:details] = @product.errors.messages
     end
   end
 
@@ -112,6 +132,10 @@ class ProductsController < ApplicationController
   private
   def product_params
     return params.require(:product).permit(:id, :name, :price, :description, :photo_url, :quantity, :merchant_id)
+  end
+
+  def find_product
+    @product = Product.find_by(id: params[:id])
   end
 
   def change_visibility

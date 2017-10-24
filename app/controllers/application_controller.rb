@@ -28,4 +28,11 @@ class ApplicationController < ActionController::Base
       @auth_user = Merchant.find_by(user_id: session[:user_id])
     end
   end
+
+  def authenticate_user
+    if !@auth_user
+      flash[:status] = :failure
+      flash[:message] = "You must be logged in to do this"
+    end
+  end
 end
