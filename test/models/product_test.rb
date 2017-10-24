@@ -98,4 +98,24 @@ describe Product do
       product.in_stock?.must_equal false
     end
   end
+
+  describe "average_rating" do
+    it "returns the average rating of a product" do
+      # croissant review of 5
+      new_rating = 2
+      Review.create!(user: User.create, product: product, rating: new_rating, text: "more croissants")
+      num_reviews = Review.where(product: product).count
+
+      expected_rating = ((new_rating + reviews(:croissant_review).rating) / num_reviews.to_f).round(1)
+
+      product.average_rating.must_equal expected_rating
+
+    end
+
+    it "returns nil if there are no reviews" do
+      Review.destroy_all
+
+      product.average_rating.must_be_nil
+    end
+  end
 end
