@@ -1,10 +1,6 @@
 class ProductsController < ApplicationController
-  before_action :authenticate_user, except: [:home, :index, :show, :add_to_cart, :remove_from_cart]
+  before_action :authenticate_user, except: [:home, :index, :show, :add_to_cart, :remove_from_cart, :update_quantity_in_cart]
   before_action :find_product, except: [:new, :create, :index]
-
-  def home
-
-  end
 
   def home
   end
@@ -160,8 +156,9 @@ class ProductsController < ApplicationController
     end
     order_item.save
     redirect_to cart_path
+  end
 
-   def change_visibility
+  def change_visibility
     # product = Product.find_by(id: params[:id].to_i)
     # if user is not logged in as the merchant who owns product
     # if session[:user_id] == nil || session[:user_id] != product.merchant.id
