@@ -33,6 +33,7 @@ class BillingsController < ApplicationController
       end
 
       @billing.save
+      session[:order_id] = nil
       redirect_to confirmation_order_path(@order)
 
     else
@@ -89,5 +90,5 @@ class BillingsController < ApplicationController
 
   # def delete
   # end
-  
+
 end
