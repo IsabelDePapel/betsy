@@ -24,8 +24,24 @@ class Product < ApplicationRecord
     return quantity > 0
   end
 
+  def average_rating
+    num_reviews = reviews.count
+
+    # avoid division by zero if no reviews
+    if num_reviews == 0
+      return nil
+    else
+      return (reviews.sum{ |review| review.rating } / num_reviews.to_f).round(1)
+    end
+  end
+
+  def num_sold
+    return OrderItem.where(product_id: Product.find_by(name: name).id).count
+  end
+
   # presumes that cat is a category (tested before calling)
   def add_category(cat)
     categories << Category.find_by(name: cat)
   end
+
 end

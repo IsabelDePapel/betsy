@@ -1,7 +1,8 @@
 class MerchantsController < ApplicationController
   # Thought process - That we should have a merchant page, which the merchant can view (aka Account page), you can also create a new merchant, edit, update, and delete.
 
-  before_action :find_merchant
+  #before_action :authenticate_user, only: [:show, :edit, :update]
+  before_action :find_merchant, except: :index
 
   # this is the only public route
   def index
@@ -14,30 +15,40 @@ class MerchantsController < ApplicationController
       render_404
       return
     end
-    # if merchant not signed in user, only show limited detail page
-    # if merchant is current user, show personalized detail page
-    #if authorize_merchant
+
+    #return if !authorize_merchant
+    # if merchant_id is same as logged in
+    @products = @merchant.products
+    # orders
+    @paid = @merchant.order_items.where(status: "paid")
+    @complete = @merchant.order_items.where(status: "complete")
+    @canceled = @merchant.order_items.where(status: "canceled")
   end
 
-  def edit
-    unless @merchant
-      render_404
-      return
-    end
-  end
-
-  def update
-    unless @merchant
-      render_404
-      return
-    end
-
-    if @merchant.update_attributes merchant_params
-      redirect_to root_path
-    else
-      render :edit, status: :bad_request
-    end
-  end
+  # def edit
+  #   unless @merchant
+  #     render_404
+  #     return
+  #   end
+  #
+  #   return if !authorize_merchant
+  #
+  # end
+  #
+  # def update
+  #   unless @merchant
+  #     render_404
+  #     return
+  #   end
+  #
+  #   return if !authorize_merchant
+  #
+  #   if @merchant.update_attributes merchant_params
+  #     redirect_to merchant_path(@merchant)
+  #   else
+  #     render :edit, status: :bad_request
+  #   end
+  # end
 
   # def new
   #   @merchant = Merchant.new
@@ -75,6 +86,12 @@ class MerchantsController < ApplicationController
 
   def authorize_merchant
     if @merchant.user_id != session[:user_id]
+      puts "NOT AUTHORIZED"
+      flash[:status] = :failure
+      flash[:message] = "You're not authorized to do this"
+
+      redirect_to merchants_path
+
       return false
     end
 
