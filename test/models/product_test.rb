@@ -98,4 +98,13 @@ describe Product do
       product.in_stock?.must_equal false
     end
   end
+
+  describe "add_category" do
+    it "adds a category to a product" do
+      start_cat = product.categories.length
+      product.add_category("cupcakes")
+
+      product.categories.length.must_equal start_cat + 1
+    end
+  end
 end

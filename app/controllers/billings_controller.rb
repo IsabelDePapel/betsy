@@ -1,24 +1,39 @@
 class BillingsController < ApplicationController
   # billing only exists when nested under order
   before_action :verify_order_exists, only: [:new, :create]
+  before_action :verify_order_has_order_items, only: [:new, :create]
 
   def new
     @billing = Billing.new
-    #@billing.order_id = params[:order_id]
   end
 
   def create
     @billing = Billing.new(billing_params)
     @billing.order_id = params[:order_id]
 
-    if @billing.save
+    if @billing.valid?
       flash[:status] = :success
       flash[:message] = "Thank you for your order."
 
       # change status to paid and redirect to confirmation page
       @order.change_status("paid")
+      @order.reload
+      # returns hash of item name, inventory as key, val if not in stock
+      errors = @order.update_inventory
+
+      if !errors.empty?
+        flash[:status] = :failure
+        flash[:message] = "Unable to complete order. Please edit or remove item from cart"
+        flash[:details] = "#{errors[:name]}: only #{errors[:qty]} left in stock"
+
+        redirect_to cart_path
+        return
+      end
+
+      @billing.save
       session[:order_id] = nil
       redirect_to confirmation_order_path(@order)
+
     else
       flash.now[:status] = :failure
       flash.now[:message] = "Unable to complete your payment"
@@ -46,5 +61,32 @@ class BillingsController < ApplicationController
       redirect_to root_path
     end
   end
-  
+
+  def verify_order_has_order_items
+
+    if @order.order_items == nil || @order.order_items.count == 0
+      flash[:status] = :failure
+      flash[:message] = "There are no items in your cart. Please add products to your cart before checking out."
+
+      redirect_to products_path
+    end
+  end
+
+
+  # def index
+  # end
+  #
+  # def show
+  # end
+
+  # leaving here in case implementing in ideal version
+  # def edit
+  # end
+  #
+  # def update
+  # end
+
+  # def delete
+  # end
+
 end

@@ -1,21 +1,27 @@
 class ProductsController < ApplicationController
+  before_action :authenticate_user, except: [:home, :index, :show, :add_to_cart, :remove_from_cart, :update_quantity_in_cart]
+  before_action :find_product, except: [:new, :create, :index]
+
+  def home
+  end
 
   def index
+    # TODO refactor when have categories (routes denested)
     if from_category? || from_merchant?
       if @category
-        @products = @category.products
+        @products = @category.products.order(:id)
       elsif @merchant
-        @products = @merchant.products
+        @products = @merchant.products.order(:id)
       else #erroneous category_id or merchant_id, render 404?
         redirect_to products_path
       end
     else
-      @products = Product.all
+      @products = Product.all.order(:id)
     end
   end
 
   def show
-    @product = Product.find_by(id: params[:id].to_i)
+    render_404 unless @product
   end
 
   def new
@@ -25,38 +31,68 @@ class ProductsController < ApplicationController
   def create
     @product = Product.new product_params
     if @product.save
-      redirect_to root_path
+      redirect_to products_path
     else
-      render :new
+      render :new, status: :bad_request
     end
   end
 
   def edit
-    @product = Product.find_by(id: params[:id].to_i)
-
     unless @product
-      redirect_to root_path
+      render_404
+      return
     end
+
+    return if !authorize_merchant
+    # if @product.merchant.user_id != session[:user_id]
+    #   flash[:status] = :failure
+    #   flash[:message] = "You can only edit your own products"
+    #   redirect_to products_path
+    #   return
+    # end
+
   end
 
   def update
-    @product = Product.find_by(id: params[:id].to_i)
-    redirect_to products_path unless @product
+    unless @product
+      render_404
+      return
+    end
+
+    return if !authorize_merchant
 
     if @product.update_attributes product_params
+      flash[:status] = :success
+      flash[:message] = "#{@product.name.capitalize} successfully edited!"
       redirect_to products_path
     else
-      render :edit
+      flash[:status] = :failure
+      flash[:message] = "There was a problem editing the product"
+      flash[:details] = @product.errors.messages
+      render :edit, status: :bad_request
     end
   end
 
   def destroy
-    Product.find_by(id: params[:id])
-    @product = Product.find_by
-    if @product == nil
-      redirect_to root_path
-    else @product.destroy
+    unless @product
+      render_404
+      return
     end
+
+    return if !authorize_merchant
+
+    @product.destroy
+
+    if @product.destroyed?
+      flash[:status] = :success
+      flash[:message] = "#{@product.name.capitalize} successfully deleted."
+    else
+      flash[:status] = :failure
+      flash[:message] = "Unable to delete #{@product.name}"
+      flash[:details] = @product.errors.messages
+    end
+
+    redirect_to products_path
   end
 
   # products/:id/add_to_cart
@@ -73,40 +109,15 @@ class ProductsController < ApplicationController
       new_order.save
       session[:order_id] = new_order.id
     end
-
     # by this point, order now exists
 
     # Create an OrderItem for the Product
     product = Product.find_by(id: params[:product_id])
-    if product == nil #:product_id is NOT valid
+    cart_order = Order.find_by(id: session[:order_id])
+    if !cart_order.add_product_to_order(product) #:product_id is NOT valid
       flash[:status] = :failure
       flash[:message] = "Can't add non-existent product to cart."
     else # product exists, :product_id is valid
-
-      # Check if any other order_item has that product
-      in_order = false
-
-      order_to_add_to = Order.find_by(id: session[:order_id])
-      order_to_add_to.order_items.each do |item|
-        # add to quantity if yes
-        if item.product == product
-          in_order = true
-          existing_order_item = OrderItem.find(item.id)
-          existing_order_item.quantity += 1
-          existing_order_item.save
-        end
-      end
-
-      # initialize quantity to 1 if no
-      if in_order == false
-        order_item = OrderItem.new()
-        order_item.quantity = 1
-        order_item.product = product
-        # Assign it an order
-        order_item.order = order_to_add_to
-        order_item.save
-      end
-
       flash[:status] = :success
       flash[:message] = "Successfully added product to cart."
     end
@@ -115,30 +126,87 @@ class ProductsController < ApplicationController
   end
 
   def remove_from_cart
-    
+    if session[:order_id]
+      order_to_delete_from = Order.find_by(id: session[:order_id])
+      order_item_to_delete = OrderItem.find_by(id: params[:order_item_id])
+
+      if order_to_delete_from.remove_order_item_from_order(order_item_to_delete)
+        flash[:status] = :success
+        flash[:message] = "Successfully deleted item from cart."
+      else
+        flash[:status] = :failure
+        flash[:message] = "This order item is not in the current cart."
+      end
+    else
+      flash[:status] = :failure
+      flash[:message] = "Unsuccessfully deleted item from empty cart."
+    end
+    redirect_to cart_path
   end
 
-  private
-  def product_params
-    return params.require(:product).permit(:id, :name, :price, :description, :photo_url, :quantity, :merchant_id)
+  def update_quantity_in_cart
+    order_item = OrderItem.find(params[:order_item_id].to_i)
+    if order_item
+      order_item.update_attribute(:quantity, params["quantity"])
+      flash[:status] = :success
+      flash[:message] = "Successfully updated quantity in cart"
+    else
+      flash[:status] = :failure
+      flash[:message] = "Couldn't update quantity in cart"
+    end
+    order_item.save
+    redirect_to cart_path
   end
 
   def change_visibility
-    product = Product.find_by(id: params[:id].to_i)
+    # product = Product.find_by(id: params[:id].to_i)
     # if user is not logged in as the merchant who owns product
-    if session[:user_id] == nil || session[:user_id] != product.merchant.id
-      flash[:error] = "You must be logged in as product owner to change product visibility"
-    else
-      if product.visible == false
-        product.visible = true
-        flash[:success] = "Product set to visible"
-      else
-        product.visible = false
-        flash[:success] = "Product set to not visible"
-      end
+    # if session[:user_id] == nil || session[:user_id] != product.merchant.id
+    #   flash[:error] = "You must be logged in as product owner to change product visibility"
+    # else
+    unless @product
+      render_404
+      return
     end
 
-    redirect_to merchant_products_path
+    return if !authorize_merchant
+
+    if @product.visible == false
+      @product.visible = true
+      @product.save
+      flash[:status] = :success
+      flash[:message] = "Product set to visible"
+
+    else
+      @product.visible = false
+      @product.visible.save
+      flash[:status] = :success
+      flash[:message] = "Product set to not visible"
+    end
+    # end
+    #redirect_to root_path
+    redirect_to merchant_products_path(@auth_user.id)
+  end
+
+  private
+
+  def product_params
+    return params.require(:product).permit(:id, :name, :price, :description, :photo_url, :quantity, :merchant_id, :visible)
+  end
+
+  def find_product
+    @product = Product.find_by(id: params[:id])
+  end
+
+  def authorize_merchant
+    if @product.merchant.user_id != session[:user_id]
+      flash[:status] = :failure
+      flash[:message] = "You can only make changes to your own products"
+      redirect_to products_path
+      return false
+    end
+
+    return true
   end
 
   def from_category?

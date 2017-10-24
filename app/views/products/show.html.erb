@@ -1,3 +1,4 @@
+<article>
 <ul>
 <% if @product %>
 <h3><%= @product.name %></h3>
@@ -9,5 +10,9 @@
 <% end %>
 </ul>
 
-<%= link_to "Add To Cart", product_add_to_cart_path(@product.id), method: :patch, class: "button" %>
+<% if @product.quantity > 0 %>
+  <%= link_to "Add To Cart", product_add_to_cart_path(@product.id), method: :patch, class: "button" %>
+<% else  %>
+  <button type="button" class="button secondary" disabled>Sold Out</button>
+<% end %>
 </article>

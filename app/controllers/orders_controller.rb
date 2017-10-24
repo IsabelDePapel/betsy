@@ -21,6 +21,9 @@ class OrdersController < ApplicationController
 
   def cart
     @order = Order.find_by(id: session[:order_id])
+    if @order
+      @order_items = @order.order_items.order(:id)
+    end
   end
 
   private
