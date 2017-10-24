@@ -1,6 +1,7 @@
 class Merchant < ApplicationRecord
   belongs_to :user
   has_many :products, dependent: :nullify
+  has_many :order_items, through: :products
 
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
 
