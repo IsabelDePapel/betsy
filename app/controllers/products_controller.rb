@@ -40,12 +40,13 @@ class ProductsController < ApplicationController
       return
     end
 
-    if @product.merchant.user_id != session[:user_id]
-      flash[:status] = :failure
-      flash[:message] = "You can only edit your own products"
-      redirect_to products_path
-      return
-    end
+    return if !authorize_merchant
+    # if @product.merchant.user_id != session[:user_id]
+    #   flash[:status] = :failure
+    #   flash[:message] = "You can only edit your own products"
+    #   redirect_to products_path
+    #   return
+    # end
 
   end
 
@@ -54,6 +55,8 @@ class ProductsController < ApplicationController
       render_404
       return
     end
+
+    return if !authorize_merchant
 
     if @product.update_attributes product_params
       flash[:status] = :success
@@ -73,6 +76,8 @@ class ProductsController < ApplicationController
       return
     end
 
+    return if !authorize_merchant
+
     @product.destroy
 
     if @product.destroyed?
@@ -83,6 +88,8 @@ class ProductsController < ApplicationController
       flash[:message] = "Unable to delete #{@product.name}"
       flash[:details] = @product.errors.messages
     end
+
+    redirect_to products_path
   end
 
   # products/:id/add_to_cart
@@ -140,6 +147,9 @@ class ProductsController < ApplicationController
     # if session[:user_id] == nil || session[:user_id] != product.merchant.id
     #   flash[:error] = "You must be logged in as product owner to change product visibility"
     # else
+
+    return if !authorize_merchant
+    
     if product.visible == false
       product.visible = true
       flash[:status] = :success
@@ -169,7 +179,10 @@ class ProductsController < ApplicationController
       flash[:status] = :failure
       flash[:message] = "You can only make changes to your own products"
       redirect_to products_path
+      return false
     end
+
+    return true
   end
 
   def from_category?
