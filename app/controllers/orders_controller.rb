@@ -34,7 +34,7 @@ class OrdersController < ApplicationController
     unless @merchant
       flash[:status] = :failure
       flash[:message] = "User does not exist"
-      redirect_to merchants_path
+      return redirect_to merchants_path
     end
   end
 end # end of controller class
