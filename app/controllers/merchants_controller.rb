@@ -20,7 +20,7 @@ class MerchantsController < ApplicationController
     # if merchant_id is same as logged in
     @products = @merchant.products
     # orders
-    @incomplete = @merchant.order_items.where(status: "paid")
+    @paid = @merchant.order_items.where(status: "paid")
     @complete = @merchant.order_items.where(status: "complete")
     @canceled = @merchant.order_items.where(status: "canceled")
   end
