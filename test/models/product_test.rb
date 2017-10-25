@@ -117,8 +117,9 @@ describe Product do
       Review.destroy_all
 
       product.average_rating.must_be_nil
-
-      
+    end
+  end
+  
   describe "add_category" do
     it "adds a category to a product" do
       start_cat = product.categories.length

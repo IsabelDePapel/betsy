@@ -28,13 +28,14 @@
     <tbody>
       <% @products.each do |product| %>
       <tr>
-        <td><%= product.name %></td>
+        <td><%= link_to product.name, product_path(product) %></td>
         <td>
           <%= product.quantity == 0 ? "Out of Stock!" : product.quantity %>
         </td>
         <td><%= number_to_currency(product.price) %></td>
         <td><%= product.num_sold %></td>
-        <td><%= product.visible ? "Visible" : "Hidden" %></td>
+        <% @visibility = product.visible ? "Visible" : "Hidden" %>
+        <td><%= link_to @visibility, change_visibility_product_path(product), method: :patch %></td>
       </tr>
       <% end %>
     </tbody>

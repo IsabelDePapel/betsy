@@ -1,6 +1,7 @@
 class ProductsController < ApplicationController
   before_action :authenticate_user, except: [:home, :index, :show, :add_to_cart, :remove_from_cart, :update_quantity_in_cart]
   before_action :find_product, except: [:new, :create, :index]
+  # before_action :authorize_merchant, only: [:edit, :update, :destroy, :change_visibility]
 
   def home
   end
@@ -44,12 +45,6 @@ class ProductsController < ApplicationController
     end
 
     return if !authorize_merchant
-    # if @product.merchant.user_id != session[:user_id]
-    #   flash[:status] = :failure
-    #   flash[:message] = "You can only edit your own products"
-    #   redirect_to products_path
-    #   return
-    # end
 
   end
 
@@ -183,7 +178,6 @@ class ProductsController < ApplicationController
       flash[:details] = @product.errors.messages
     end
 
-    #redirect_to root_path
     redirect_to merchant_products_path(@auth_user.id)
   end
 
