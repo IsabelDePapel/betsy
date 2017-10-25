@@ -1,6 +1,6 @@
 <%# partial for displaying merchant order items %>
 
-<% if items %>
+<% if items && items != [] %>
   <%= items.count %>
   <% @type = items[0].status %>
   <section class="<%= @type %>">
@@ -29,6 +29,10 @@
           <td><%= link_to "change status path", '#' %></td>
         </tr>
         <% end %>
+        <tr>
+          <td><strong><%= message %></strong></td>
+          <td><%= @merchant.revenue(state) %></td>
+        </tr>
       </tbody>
     </table>
   </section>

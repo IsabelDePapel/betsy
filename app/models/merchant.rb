@@ -32,10 +32,14 @@ class Merchant < ApplicationRecord
     end
   end
 
+  def revenue(stat)
+    items_billed = self.order_items.where(status: stat)
+    revenue = items_billed.sum { |order_item| order_item.price }
+    return revenue
+  end
+
   def total_revenue
-    items_billed = self.order_items.where(status: ["paid", "complete"])
-    # binding.pry
-    total = items_billed.sum { |order_item| order_item.price }
+    total = self.revenue("paid") + self.revenue("complete")
     return total
   end
 end
