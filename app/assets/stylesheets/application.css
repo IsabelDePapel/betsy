@@ -130,7 +130,7 @@ html {
   position: fixed;
   /* TEMP HIDING HOME IMAGES WHILE IN DEV BC NEED FLASH IMAGES TO SHOW UP */
   top: 100vw;
-  /* top: 0vw; */
+   /*top: 0vw;*/
   left: 0vw;
 
 }
