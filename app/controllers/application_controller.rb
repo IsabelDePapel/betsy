@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
       flash[:status] = :failure
       flash[:message] = "You must be logged in to do this"
 
-      redirect_back fallback_location: root_path
+      redirect_back fallback_location: products_path
     end
   end
 

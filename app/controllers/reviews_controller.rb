@@ -16,8 +16,7 @@ class ReviewsController < ApplicationController
       flash[:status] = :failure
       flash[:message] = "You're not allowed to review your own products"
 
-      redirect_to root_path
-      return
+      return redirect_to products_path
     end
 
     @review.user_id =user.id
@@ -43,23 +42,23 @@ class ReviewsController < ApplicationController
   # NOT NESTED ROUTES
   def edit
     # only allow user to edit if current user_id matches user_id of person who created the review
-    unless @review
-      render_404
-      return
-    end
+    # unless @review
+    #   render_404
+    #   return
+    # end
 
     if @review.user_id != session[:user_id]
       flash[:status] = :failure
       flash[:message] = "You can only edit reviews you wrote"
-      redirect_back fallback_location: root_path
+      redirect_back fallback_location: products_path
     end
   end
 
   def update
-    unless @review
-      render_404
-      return
-    end
+    # unless @review
+    #   render_404
+    #   return
+    # end
 
     if @review.update_attributes(review_params)
       flash[:status] = :success
@@ -76,7 +75,7 @@ class ReviewsController < ApplicationController
   end
 
   def show
-    render_404 unless @review
+    # render_404 unless @review
   end
 
   private
@@ -91,12 +90,13 @@ class ReviewsController < ApplicationController
     unless @product
       flash[:status] = :failure
       flash[:message] = "Product does not exist"
-      redirect_to root_path
+      return redirect_to products_path
     end
   end
 
   def find_review
     @review = Review.find_by(id: params[:id])
+    return render_404 unless @review
   end
 
 

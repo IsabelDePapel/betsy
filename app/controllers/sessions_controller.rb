@@ -11,7 +11,7 @@ class SessionsController < ApplicationController
 
     flash[:status] = :success
     flash[:message] = "Successfully logged out"
-    redirect_to root_path
+    return redirect_to products_path
   end
 
   def create
@@ -59,6 +59,5 @@ class SessionsController < ApplicationController
 
     # set up a landing page for all merchants??
     redirect_to products_path
-    #redirect_to root_path
   end
 end

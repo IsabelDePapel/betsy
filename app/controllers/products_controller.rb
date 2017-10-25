@@ -1,6 +1,7 @@
 class ProductsController < ApplicationController
   before_action :authenticate_user, except: [:home, :index, :show, :add_to_cart, :remove_from_cart, :update_quantity_in_cart]
   before_action :find_product, except: [:new, :create, :index]
+  before_action :authorize_merchant, only: [:edit, :update, :destroy, :change_visibility]
 
   def home
   end
@@ -21,7 +22,7 @@ class ProductsController < ApplicationController
   end
 
   def show
-    render_404 unless @product
+    #render_404 unless @product
   end
 
   def new
@@ -38,28 +39,22 @@ class ProductsController < ApplicationController
   end
 
   def edit
-    unless @product
-      render_404
-      return
-    end
-
-    return if !authorize_merchant
-    # if @product.merchant.user_id != session[:user_id]
-    #   flash[:status] = :failure
-    #   flash[:message] = "You can only edit your own products"
-    #   redirect_to products_path
+    # unless @product
+    #   render_404
     #   return
     # end
+
+    # return if !authorize_merchant
 
   end
 
   def update
-    unless @product
-      render_404
-      return
-    end
+    # unless @product
+    #   render_404
+    #   return
+    # end
 
-    return if !authorize_merchant
+    # return if !authorize_merchant
 
     if @product.update_attributes product_params
       flash[:status] = :success
@@ -74,12 +69,12 @@ class ProductsController < ApplicationController
   end
 
   def destroy
-    unless @product
-      render_404
-      return
-    end
+    # unless @product
+    #   render_404
+    #   return
+    # end
 
-    return if !authorize_merchant
+    # return if !authorize_merchant
 
     @product.destroy
 
@@ -164,12 +159,12 @@ class ProductsController < ApplicationController
     # if session[:user_id] == nil || session[:user_id] != product.merchant.id
     #   flash[:error] = "You must be logged in as product owner to change product visibility"
     # else
-    unless @product
-      render_404
-      return
-    end
+    # unless @product
+    #   render_404
+    #   return
+    # end
 
-    return if !authorize_merchant
+    # return if !authorize_merchant
 
     @product.visible = @product.visible == true ? false : true
     status = @product.visible ? "visible" : "not visible"
@@ -183,7 +178,6 @@ class ProductsController < ApplicationController
       flash[:details] = @product.errors.messages
     end
 
-    #redirect_to root_path
     redirect_to merchant_products_path(@auth_user.id)
   end
 
@@ -195,17 +189,18 @@ class ProductsController < ApplicationController
 
   def find_product
     @product = Product.find_by(id: params[:id])
+    return render_404 unless @product
   end
 
   def authorize_merchant
     if @product.merchant.user_id != session[:user_id]
       flash[:status] = :failure
       flash[:message] = "You can only make changes to your own products"
-      redirect_to products_path
-      return false
+      return redirect_to products_path
+      # return false
     end
 
-    return true
+    # return true
   end
 
   def from_category?

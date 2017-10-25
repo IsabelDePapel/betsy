@@ -12,7 +12,7 @@ describe ReviewsController do
       get new_product_review_path(invalid_product_id)
 
       must_respond_with :redirect
-      must_redirect_to root_path
+      must_redirect_to products_path
     end
 
     # COME BACK TO THIS WHEN HAVE OAUTH AND CAN TEST USER EXISTS
@@ -49,7 +49,7 @@ describe ReviewsController do
 
       User.count.must_equal start_count
       must_respond_with :redirect
-      must_redirect_to root_path
+      must_redirect_to products_path
     end
 
     it "should respond with success if given valid data" do
@@ -74,7 +74,7 @@ describe ReviewsController do
       post product_reviews_path(invalid_product_id), params: review_data
 
       must_respond_with :redirect
-      must_redirect_to root_path
+      must_redirect_to products_path
       Review.count.must_equal start_count
     end
 

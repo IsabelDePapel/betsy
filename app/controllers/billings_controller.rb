@@ -26,8 +26,7 @@ class BillingsController < ApplicationController
         flash[:message] = "Unable to complete order. Please edit or remove item from cart"
         flash[:details] = "#{errors[:name]}: only #{errors[:qty]} left in stock"
 
-        redirect_to cart_path
-        return
+        return redirect_to cart_path
       end
 
       @billing.save
@@ -58,7 +57,7 @@ class BillingsController < ApplicationController
     unless @order
       flash[:status] = :failure
       flash[:message] = "Order does not exist"
-      redirect_to root_path
+      return redirect_to products_path
     end
   end
 
@@ -68,7 +67,7 @@ class BillingsController < ApplicationController
       flash[:status] = :failure
       flash[:message] = "There are no items in your cart. Please add products to your cart before checking out."
 
-      redirect_to products_path
+      return redirect_to products_path
     end
   end
 
