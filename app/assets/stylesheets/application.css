@@ -30,9 +30,24 @@
 }
 
 /************************************/
-/* Body Styling          */
+/* Flash Messages          */
 /************************************/
 
+section.failure, section.success {
+  margin: 1vw 0;
+}
+
+section.failure {
+  color: red;
+}
+
+section.success {
+  color: green;
+}
+
+/************************************/
+/* Body Styling          */
+/************************************/
 
 li.navlinks {
   width: 12vw;
@@ -113,7 +128,9 @@ html {
 	height: auto;
 	overflow: hidden;
   position: fixed;
-  top: 0vw;
+  /* TEMP HIDING HOME IMAGES WHILE IN DEV BC NEED FLASH IMAGES TO SHOW UP */
+  top: 100vw;
+  /* top: 0vw; */
   left: 0vw;
 
 }
@@ -147,13 +164,25 @@ html {
 
 }
 
+/* get rid of margins so nav bar will extend across top */
+body > header.row {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* set nav width to 100vw */
+body > header.row > nav {
+  width: 100vw;
+}
+
 nav {
   background-color: #000;
   color: #FFF;
   // height: 11vw;
   margin: 0;
   // padding: 2vw;
-  position: fixed;
+  /* changing this so that flash messages and body content get pushed below nav bar */
+  /*position: fixed;*/
   opacity: .8;
   text-align: left;
   width: 100vw;

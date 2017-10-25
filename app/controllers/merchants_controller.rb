@@ -1,7 +1,7 @@
 class MerchantsController < ApplicationController
   # Thought process - That we should have a merchant page, which the merchant can view (aka Account page), you can also create a new merchant, edit, update, and delete.
 
-  #before_action :authenticate_user, only: [:show, :edit, :update]
+  before_action :authenticate_user, only: [:show, :edit, :update]
   before_action :find_merchant, except: :index
 
   # this is the only public route
@@ -16,7 +16,7 @@ class MerchantsController < ApplicationController
       return
     end
 
-    #return if !authorize_merchant
+    return if !authorize_merchant
     # if merchant_id is same as logged in
     @products = @merchant.products
     # orders

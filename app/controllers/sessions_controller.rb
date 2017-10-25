@@ -58,6 +58,7 @@ class SessionsController < ApplicationController
     end
 
     # set up a landing page for all merchants??
-    redirect_to root_path
+    redirect_to products_path
+    #redirect_to root_path
   end
 end

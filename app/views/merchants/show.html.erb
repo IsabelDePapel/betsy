@@ -34,7 +34,8 @@
         </td>
         <td><%= number_to_currency(product.price) %></td>
         <td><%= product.num_sold %></td>
-        <td><%= product.visible ? "Visible" : "Hidden" %></td>
+        <% @visibility = product.visible ? "Visible" : "Hidden" %>
+        <td><%= link_to @visibility, change_visibility_product_path(product), method: :patch %></td>
       </tr>
       <% end %>
     </tbody>
