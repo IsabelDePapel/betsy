@@ -19,7 +19,7 @@ describe SessionsController do
       login(auth_user, :github)
 
       must_respond_with :redirect
-      must_redirect_to root_path
+      must_redirect_to products_path
       Merchant.count.must_equal start_count
       session[:user_id].must_equal auth_user.user_id
     end
@@ -31,7 +31,7 @@ describe SessionsController do
       login(auth_user, :google_oauth2)
 
       must_respond_with :redirect
-      must_redirect_to root_path
+      must_redirect_to products_path
       Merchant.count.must_equal start_count
       session[:user_id].must_equal auth_user.user_id
     end
@@ -48,7 +48,7 @@ describe SessionsController do
 
       Merchant.count.must_equal start_count + 1
       must_respond_with :redirect
-      must_redirect_to root_path
+      must_redirect_to products_path
       session[:user_id].must_equal user.id
     end
   end
@@ -58,7 +58,7 @@ describe SessionsController do
 
     end
     it "should clear the cart from session" do
-      
+
     end
   end
 

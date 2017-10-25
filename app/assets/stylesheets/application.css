@@ -30,9 +30,24 @@
 }
 
 /************************************/
-/* Body Styling          */
+/* Flash Messages          */
 /************************************/
 
+section.failure, section.success {
+  margin: 1vw 0;
+}
+
+section.failure {
+  color: red;
+}
+
+section.success {
+  color: green;
+}
+
+/************************************/
+/* Body Styling          */
+/************************************/
 
 li.navlinks {
   width: 12vw;
@@ -80,7 +95,6 @@ td {
 }
 
 td {
-  font: normal normal 1.1vw/1.25 'Josefin Sans', sans-serif;
   color: #000;
   text-transform: uppercase;
 }
@@ -95,14 +109,27 @@ html {
   padding: 0;
 }
 
+@media only screen and (orientation: landscape) {
+  .homepage-banner {
+    width: 100%;
+  }
+}
 
+@media only screen and (orientation: portrait) {
+  .homepage-banner {
+    height: 100%;
+    width: auto;
+  }
+}
 
 #slideshow {
 	width: 100vw;
 	height: auto;
 	overflow: hidden;
   position: fixed;
-  top: 0vw;
+  /* TEMP HIDING HOME IMAGES WHILE IN DEV BC NEED FLASH IMAGES TO SHOW UP */
+  top: 100vw;
+   /*top: 0vw;*/
   left: 0vw;
 
 }
@@ -110,7 +137,7 @@ html {
 .slide {
   display: inline-block;
 	width: 100vw;
-	height: auto;
+	height: 100vh;
 	float: left;
 	position: relative;
 }
@@ -136,12 +163,25 @@ html {
 
 }
 
+/* get rid of margins so nav bar will extend across top */
+body > header.row {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* set nav width to 100vw */
+body > header.row > nav {
+  width: 100vw;
+}
+
 nav {
   background-color: #000;
   color: #FFF;
   // height: 11vw;
   margin: 0;
   // padding: 2vw;
+  /* changing this so that flash messages and body content get pushed below nav bar */
+  /*position: fixed;*/
   position: fixed;
   opacity: .8;
   text-align: left;
@@ -228,4 +268,21 @@ h1.format-forms  {
 .big-button{
   margin-left: 41%;
   text-align: center;
+}
+
+h1.overlay a{
+  position: fixed;
+  margin: auto;
+  color: black;
+  z-index: 1;
+  padding: 3vw;
+  text-transform: uppercase;
+  font-size: 30px;
+  border: 6px solid black;
+  width: 40vw;
+  margin: 20vw 0 0 30vw;
+}
+
+h1.overlay a:hover {
+  background-color: rgba(255, 255, 255, .2);
 }

@@ -16,7 +16,7 @@ describe BillingsController do
       get new_order_billing_path(invalid_order_id)
 
       must_respond_with :redirect
-      must_redirect_to root_path
+      must_redirect_to products_path
     end
 
     it "should redirect to products page if order has no order items" do
@@ -113,7 +113,7 @@ describe BillingsController do
 
       Billing.count.must_equal start_count
       must_respond_with :redirect
-      must_redirect_to root_path
+      must_redirect_to products_path
     end
 
     it "should return bad request if given invalid data" do

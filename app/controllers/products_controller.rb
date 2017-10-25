@@ -1,6 +1,7 @@
 class ProductsController < ApplicationController
   before_action :authenticate_user, except: [:home, :index, :show, :add_to_cart, :remove_from_cart, :update_quantity_in_cart]
   before_action :find_product, except: [:new, :create, :index]
+  # before_action :authorize_merchant, only: [:edit, :update, :destroy, :change_visibility]
 
   def home
   end
@@ -63,6 +64,7 @@ class ProductsController < ApplicationController
       return
     end
 
+
     if !authorize_merchant
       return
     else
@@ -73,6 +75,7 @@ class ProductsController < ApplicationController
       end
       params[:categories_string] = category_str_array.join(", ")
     end
+
   end
 
   def update
@@ -190,17 +193,16 @@ class ProductsController < ApplicationController
 
     return if !authorize_merchant
 
-    if @product.visible == false
-      @product.visible = true
-      @product.save
-      flash[:status] = :success
-      flash[:message] = "Product set to visible"
+    @product.visible = @product.visible == true ? false : true
+    status = @product.visible ? "visible" : "not visible"
 
-    else
-      @product.visible = false
-      @product.visible.save
+    if @product.save
       flash[:status] = :success
-      flash[:message] = "Product set to not visible"
+      flash[:message] = "Product set to #{status}"
+    else
+      flash[:status] = :failure
+      flash[:message] = "There was a problem"
+      flash[:details] = @product.errors.messages
     end
     redirect_to merchant_products_path(@auth_user.id)
   end

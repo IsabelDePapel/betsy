@@ -1,6 +1,7 @@
 class Merchant < ApplicationRecord
   belongs_to :user
   has_many :products, dependent: :nullify
+  has_many :order_items, through: :products
 
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
 
@@ -30,15 +31,15 @@ class Merchant < ApplicationRecord
       return (rating.to_f / num_reviews).round(1)
     end
   end
-  # validate :merchant_cannot_have_user_of_another_merchant
-  #
-  # #TODO Ask about has_one relationships
-  # def merchant_cannot_have_user_of_another_merchant
-  #   other_merchants = Merchant.where.not(id: self.id)
-  #   other_merchants.each do |merchant|
-  #     if merchant.user == self.user
-  #       errors.add(:user, "user can't belong to more than one merchant")
-  #     end
-  #   end
-  # end
+
+  def revenue(stat)
+    items_billed = self.order_items.where(status: stat)
+    revenue = items_billed.sum { |order_item| order_item.price }
+    return revenue
+  end
+
+  def total_revenue
+    total = self.revenue("paid") + self.revenue("complete")
+    return total
+  end
 end
