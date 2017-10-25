@@ -29,12 +29,43 @@ class ProductsController < ApplicationController
   end
 
   def create
-    @product = Product.new product_params
-    if @product.save
-      redirect_to products_path
+    if params[:product][:visible] == "0"
+      params[:product][:visible] = false
     else
-      render :new, status: :bad_request
+      params[:product][:visible] = true
     end
+
+    category_array = params[:categories_string].split(",").map(&:strip)
+    # TODO: has to check if category already exists before creating a new Category
+
+    @product = Product.new product_params
+    if @auth_user
+      @product.merchant = @auth_user
+      if @product.save
+        category_array.each do |category|
+          # not working because find_by isn't case insensitive
+          # existing_category = Category.find_by(name: category)
+
+          if Category.existing_cat?(category)
+            @product.categories << Category.find_by(name: category)
+          else
+            @product.categories << Category.create(name: category)
+          end
+        end
+        flash[:status] = :success
+        flash[:message] = "#{@product.name.capitalize} successfully saved into database!"
+        redirect_to products_path
+      else
+        flash[:status] = :failure
+        flash[:message] = "#{@product.name.capitalize} unsuccessfully saved into database!"
+        render :new, status: :bad_request
+      end
+    else
+      flash[:status] = :failure
+      flash[:message] = "Can't create product without an authorized user logged in."
+      redirect_to products_path
+    end
+
   end
 
   def edit
@@ -191,7 +222,7 @@ class ProductsController < ApplicationController
   private
 
   def product_params
-    return params.require(:product).permit(:id, :name, :price, :description, :photo_url, :quantity, :merchant_id, :visible)
+    return params.require(:product).permit(:name, :price, :description, :photo_url, :quantity, :visible)
   end
 
   def find_product
