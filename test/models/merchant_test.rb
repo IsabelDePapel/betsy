@@ -153,7 +153,7 @@ describe Merchant do
       item_cost = products(:croissant).price
       merchant1.revenue("complete").must_equal (item_cost * 3)
 
-      new_item = OrderItem.create(order: orders(:two), product: products(:croissant), quantity: 1, status: "complete")
+      OrderItem.create(order: orders(:two), product: products(:croissant), quantity: 1, status: "complete")
 
       merchant1.revenue("complete").must_equal (item_cost * 4)
     end
