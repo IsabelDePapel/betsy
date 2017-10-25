@@ -42,10 +42,10 @@ class ReviewsController < ApplicationController
   # NOT NESTED ROUTES
   def edit
     # only allow user to edit if current user_id matches user_id of person who created the review
-    # unless @review
-    #   render_404
-    #   return
-    # end
+    unless @review
+      render_404
+      return
+    end
 
     if @review.user_id != session[:user_id]
       flash[:status] = :failure
@@ -55,10 +55,10 @@ class ReviewsController < ApplicationController
   end
 
   def update
-    # unless @review
-    #   render_404
-    #   return
-    # end
+    unless @review
+      render_404
+      return
+    end
 
     if @review.update_attributes(review_params)
       flash[:status] = :success
@@ -75,7 +75,7 @@ class ReviewsController < ApplicationController
   end
 
   def show
-    # render_404 unless @review
+    render_404 unless @review
   end
 
   private
@@ -96,7 +96,6 @@ class ReviewsController < ApplicationController
 
   def find_review
     @review = Review.find_by(id: params[:id])
-    return render_404 unless @review
   end
 
 

@@ -3,7 +3,7 @@ class MerchantsController < ApplicationController
 
   before_action :authenticate_user, only: [:show, :edit, :update]
   before_action :find_merchant, except: :index
-  before_action :authorize_merchant, only: [:show]
+  # before_action :authorize_merchant, only: [:show]
 
   # this is the only public route
   def index
@@ -12,12 +12,12 @@ class MerchantsController < ApplicationController
 
   # this is ONLY FOR THE AUTHORIZED MERCHANT
   def show
-    # unless @merchant
-    #   render_404
-    #   return
-    # end
+    unless @merchant
+      render_404
+      return
+    end
 
-    # return if !authorize_merchant
+    return if !authorize_merchant
     # if merchant_id is same as logged in
     @products = @merchant.products
     # orders
@@ -35,7 +35,6 @@ class MerchantsController < ApplicationController
 
   def find_merchant
     @merchant = Merchant.find_by(id: params[:id])
-    return render_404 unless @merchant
   end
 
   def authorize_merchant
@@ -44,11 +43,11 @@ class MerchantsController < ApplicationController
       flash[:status] = :failure
       flash[:message] = "You're not authorized to do this"
 
-      return redirect_to merchants_path
+      redirect_to merchants_path
 
-      # return false
+      return false
     end
 
-    # return true
+    return true
   end
 end
