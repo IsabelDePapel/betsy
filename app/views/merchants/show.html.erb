@@ -46,7 +46,12 @@
 <section class="orders">
   <h2>Your Orders</h2>
 
-  <%= render partial: 'items', locals: { items: @paid } %>
-  <%= render partial: 'items', locals: { items: @complete } %>
-  <%= render partial: 'items', object: @canceled %>
+  <%= render partial: 'items', locals: { items: @paid, state: "paid", message: "Revenue from order items to be shipped" } %>
+  <%= render partial: 'items', locals: { items: @complete, state: "complete", message: "Revenue from shipped items" } %>
+  <%= render partial: 'items', locals: { items: @canceled, state: "canceled",  message: "Lost revenue from canceled items" } %>
+</section>
+
+<section class="total-revenue">
+  <h2>Your Total Revenue</h2>
+  <p><%= @merchant.total_revenue %></p>
 </section>

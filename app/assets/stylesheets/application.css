@@ -95,7 +95,6 @@ td {
 }
 
 td {
-  font: normal normal 1.1vw/1.25 'Josefin Sans', sans-serif;
   color: #000;
   text-transform: uppercase;
 }
@@ -183,6 +182,7 @@ nav {
   // padding: 2vw;
   /* changing this so that flash messages and body content get pushed below nav bar */
   /*position: fixed;*/
+  position: fixed;
   opacity: .8;
   text-align: left;
   width: 100vw;
@@ -268,4 +268,21 @@ h1.format-forms  {
 .big-button{
   margin-left: 41%;
   text-align: center;
+}
+
+h1.overlay a{
+  position: fixed;
+  margin: auto;
+  color: black;
+  z-index: 1;
+  padding: 3vw;
+  text-transform: uppercase;
+  font-size: 30px;
+  border: 6px solid black;
+  width: 40vw;
+  margin: 20vw 0 0 30vw;
+}
+
+h1.overlay a:hover {
+  background-color: rgba(255, 255, 255, .2);
 }
