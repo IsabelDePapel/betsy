@@ -30,18 +30,22 @@ class ProductsController < ApplicationController
   end
 
   def create
-    if params[:product][:visible] == "0"
-      params[:product][:visible] = false
-    else
-      params[:product][:visible] = true
-    end
+    # if params[:product][:visible] == "0"
+    #   params[:product][:visible] = false
+    # else
+    #   params[:product][:visible] = true
+    # end
 
     @product = Product.new product_params
-    if @auth_user
+    # if @auth_user
       @product.merchant = @auth_user
+      # binding.pry
       if @product.save
+        # binding.pry
+        puts "SAVING"
         populate_categories(params[:categories_string], @product)
-
+        puts "POPULATED CATS"
+        # binding.pry
         flash[:status] = :success
         flash[:message] = "#{@product.name.capitalize} successfully saved into database!"
         redirect_to products_path
@@ -50,11 +54,11 @@ class ProductsController < ApplicationController
         flash[:message] = "#{@product.name.capitalize} unsuccessfully saved into database!"
         render :new, status: :bad_request
       end
-    else
-      flash[:status] = :failure
-      flash[:message] = "Can't create product without an authorized user logged in."
-      redirect_to products_path
-    end
+    # else
+    #   flash[:status] = :failure
+    #   flash[:message] = "Can't create product without an authorized user logged in."
+    #   redirect_to products_path
+    # end
 
   end
 
@@ -243,6 +247,7 @@ class ProductsController < ApplicationController
   end
 
   def populate_categories(category_string, product)
+    binding.pry
     category_array = category_string.split(",").map(&:strip)
     category_array.each do |category|
       if Category.existing_cat?(category)

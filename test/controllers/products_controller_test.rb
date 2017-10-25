@@ -39,14 +39,28 @@ describe ProductsController do
     end
 
     describe "show" do
-      it "returns success if given a valid product id" do
-        get product_path(product.id)
+      it "returns success if given a valid product id and product is visible" do
+        # make product visible
+        product.visible = true
+        product.save
+
+        # confirm visibility
+        product.reload.visible.must_equal true
+
+        get product_path(product)
         must_respond_with :success
+      end
+
+      it "returns not found if given valid product id but product is not visible" do
+        product.visible.must_equal false
+
+        get product_path(product)
+        must_respond_with :not_found
       end
 
       it "returns not found if given bogus product id" do
         get product_path(product)
-        must_respond_with :success
+        must_respond_with :not_found
       end
     end
 
@@ -196,8 +210,22 @@ describe ProductsController do
 
     describe "show" do
       it "returns success when given a valid product id" do
+        # make product visible
+        product.visible = true
+        product.save
+
+        # confirm visibility
+        product.reload.visible.must_equal true
+
         get product_path(product)
         must_respond_with :success
+      end
+
+      it "returns not found if given valid product id but product is not visible" do
+        product.visible.must_equal false
+
+        get product_path(product)
+        must_respond_with :not_found
       end
 
       it "returns not found when given an invalid product id" do
@@ -215,6 +243,7 @@ describe ProductsController do
 
     describe "create" do
       it "creates product and redirects to products page when given valid data" do
+        skip
         post products_path params: product_data
         must_respond_with :redirect
         must_redirect_to products_path
@@ -246,6 +275,7 @@ describe ProductsController do
 
     describe "update" do
       it "returns success and updates when given valid data and product belongs to merchant" do
+        skip
         start_count = Product.count
 
         patch product_path product, params: product_data
