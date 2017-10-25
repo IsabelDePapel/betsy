@@ -9,19 +9,19 @@ class ProductsController < ApplicationController
     # TODO refactor when have categories (routes denested)
     if from_category? || from_merchant?
       if @category
-        @products = @category.products.order(:id)
+        @products = @category.products.where("visible = 'true'").order(:name)
       elsif @merchant
-        @products = @merchant.products.order(:id)
+        @products = @merchant.products.where("visible = 'true'").order(:name)
       else #erroneous category_id or merchant_id, render 404?
         redirect_to products_path
       end
     else
-      @products = Product.all.order(:id)
+      @products = Product.all.where("visible = 'true'").order(:name)
     end
   end
 
   def show
-    render_404 unless @product
+    render_404 unless @product && @product.visible == true
   end
 
   def new
@@ -35,23 +35,12 @@ class ProductsController < ApplicationController
       params[:product][:visible] = true
     end
 
-    category_array = params[:categories_string].split(",").map(&:strip)
-    # TODO: has to check if category already exists before creating a new Category
-
     @product = Product.new product_params
     if @auth_user
       @product.merchant = @auth_user
       if @product.save
-        category_array.each do |category|
-          # not working because find_by isn't case insensitive
-          # existing_category = Category.find_by(name: category)
+        populate_categories(params[:categories_string], @product)
 
-          if Category.existing_cat?(category)
-            @product.categories << Category.find_by(name: category)
-          else
-            @product.categories << Category.create(name: category)
-          end
-        end
         flash[:status] = :success
         flash[:message] = "#{@product.name.capitalize} successfully saved into database!"
         redirect_to products_path
@@ -74,14 +63,16 @@ class ProductsController < ApplicationController
       return
     end
 
-    return if !authorize_merchant
-    # if @product.merchant.user_id != session[:user_id]
-    #   flash[:status] = :failure
-    #   flash[:message] = "You can only edit your own products"
-    #   redirect_to products_path
-    #   return
-    # end
-
+    if !authorize_merchant
+      return
+    else
+      # Prepopulate category textfield with a string of all the categories
+      category_str_array = []
+      @product.categories.each do |category|
+        category_str_array << category.name
+      end
+      params[:categories_string] = category_str_array.join(", ")
+    end
   end
 
   def update
@@ -93,6 +84,8 @@ class ProductsController < ApplicationController
     return if !authorize_merchant
 
     if @product.update_attributes product_params
+      @product.categories = []
+      populate_categories(params[:categories_string], @product)
       flash[:status] = :success
       flash[:message] = "#{@product.name.capitalize} successfully edited!"
       redirect_to products_path
@@ -190,11 +183,6 @@ class ProductsController < ApplicationController
   end
 
   def change_visibility
-    # product = Product.find_by(id: params[:id].to_i)
-    # if user is not logged in as the merchant who owns product
-    # if session[:user_id] == nil || session[:user_id] != product.merchant.id
-    #   flash[:error] = "You must be logged in as product owner to change product visibility"
-    # else
     unless @product
       render_404
       return
@@ -214,8 +202,6 @@ class ProductsController < ApplicationController
       flash[:status] = :success
       flash[:message] = "Product set to not visible"
     end
-    # end
-    #redirect_to root_path
     redirect_to merchant_products_path(@auth_user.id)
   end
 
@@ -251,6 +237,17 @@ class ProductsController < ApplicationController
     if params[:merchant_id]
       @merchant = Merchant.find_by(id: params[:merchant_id])
       return true
+    end
+  end
+
+  def populate_categories(category_string, product)
+    category_array = category_string.split(",").map(&:strip)
+    category_array.each do |category|
+      if Category.existing_cat?(category)
+        product.categories << Category.find_by(name: category)
+      else
+        product.categories << Category.create(name: category)
+      end
     end
   end
 end
