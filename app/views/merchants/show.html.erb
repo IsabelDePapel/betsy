@@ -28,7 +28,7 @@
     <tbody>
       <% @products.each do |product| %>
       <tr>
-        <td><%= product.name %></td>
+        <td><%= link_to product.name, product_path(product) %></td>
         <td>
           <%= product.quantity == 0 ? "Out of Stock!" : product.quantity %>
         </td>

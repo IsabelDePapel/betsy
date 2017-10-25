@@ -16,7 +16,7 @@ class MerchantsController < ApplicationController
       return
     end
 
-    return if !authorize_merchant
+    # return if !authorize_merchant
     # if merchant_id is same as logged in
     @products = @merchant.products
     # orders
@@ -90,11 +90,11 @@ class MerchantsController < ApplicationController
       flash[:status] = :failure
       flash[:message] = "You're not authorized to do this"
 
-      redirect_to merchants_path
+      return redirect_to merchants_path
 
-      return false
+      # return false
     end
 
-    return true
+    # return true
   end
 end

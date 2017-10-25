@@ -1,6 +1,6 @@
 <%# partial for displaying merchant order items %>
 
-<% if items %>
+<% if items && items != [] %>
   <% @type = items[0].status %>
   <section class="<%= @type %>">
     <h2><%= @type.capitalize %> </h2>
