@@ -26,4 +26,8 @@ module ApplicationHelper
   def return_visible_products(category)
     return category.products.where("visible = 'true'")
   end
+
+  def potato
+    return "https://vignette1.wikia.nocookie.net/adventuretimewithfinnandjake/images/9/93/Potato-potato.jpg/revision/latest?cb=20120411031630"
+  end
 end
