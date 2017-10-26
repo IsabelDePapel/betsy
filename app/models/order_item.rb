@@ -20,10 +20,19 @@ class OrderItem < ApplicationRecord
 
   #everything has to be in a method
 
-  def update_product_quantity
-    if self.status == "paid" && self.quantity <= self.product.quantity
-      self.product.quantity -= self.quantity
-      self.product.save
+  def update_product_quantity(canceled = false)
+    # add order item qty to inventory if order canceled
+    if canceled
+      if self.status == "canceled"
+        self.product.quantity += self.quantity
+        self.product.save
+      end
+    # if order paid and enough inventory, subtract order item qty from inventory
+    else
+      if self.status == "paid" && self.quantity <= self.product.quantity
+        self.product.quantity -= self.quantity
+        self.product.save
+      end
     end
   end
 

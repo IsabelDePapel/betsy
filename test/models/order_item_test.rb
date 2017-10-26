@@ -97,39 +97,62 @@ describe OrderItem do
     let(:macaroons) { products(:macaroon) }
     let(:new_item) { OrderItem.new(order: orders(:two), product: macaroons, quantity: 8, status: "paid") }
 
-    it "updates the product quantity if status is paid and item qty >= inventory" do
-      # new_item = OrderItem.new(order: orders(:two), product: macaroons, quantity: 8, status: "paid")
-      start_qty = macaroons.quantity
-      new_item.update_product_quantity
+    describe "if order item is CANCELED" do
+      it "adds order item qty back to inventory" do
+        croissant = products(:croissant)
+        start_count = croissant.quantity
 
-      macaroons.quantity.must_equal (start_qty - new_item.quantity)
+        # cancel order
+        canceled = order_items(:pending)
+        canceled.status = "canceled"
+        canceled.save
+
+        # confirm canceled
+        canceled.reload.status.must_equal "canceled"
+
+        canceled.update_product_quantity(canceled: true)
+
+        croissant.reload.quantity.must_equal start_count + canceled.quantity
+      end
     end
 
-    it "won't update quantity if status isn't paid" do
-      start_qty = macaroons.quantity
-      new_item.update_attribute(:status, "pending")
+    describe "if order item is NOT canceled" do
 
-      # confirm change made
-      new_item.status.must_equal "pending"
+      it "updates the product quantity if status is paid and item qty >= inventory" do
+        # new_item = OrderItem.new(order: orders(:two), product: macaroons, quantity: 8, status: "paid")
+        start_qty = macaroons.quantity
+        new_item.update_product_quantity
 
-      new_item.update_product_quantity
+        macaroons.quantity.must_equal (start_qty - new_item.quantity)
+      end
 
-      macaroons.quantity.must_equal start_qty
+      it "won't update quantity if status isn't paid" do
+        start_qty = macaroons.quantity
+        new_item.update_attribute(:status, "pending")
+
+        # confirm change made
+        new_item.status.must_equal "pending"
+
+        new_item.update_product_quantity
+
+        macaroons.quantity.must_equal start_qty
+      end
+
+      it "won't update quantity if not enough inventory" do
+        new_item.update_attribute(:status, "paid")
+        new_qty = 6
+        macaroons.update_attribute(:quantity, new_qty)
+
+        # confirm changes made
+        macaroons.quantity.must_equal new_qty
+        new_item.status.must_equal "paid"
+
+        new_item.update_product_quantity
+
+        macaroons.quantity.must_equal new_qty
+      end
     end
 
-    it "won't update quantity if not enough inventory" do
-      new_item.update_attribute(:status, "paid")
-      new_qty = 6
-      macaroons.update_attribute(:quantity, new_qty)
-
-      # confirm changes made
-      macaroons.quantity.must_equal new_qty
-      new_item.status.must_equal "paid"
-
-      new_item.update_product_quantity
-
-      macaroons.quantity.must_equal new_qty
-    end
   end
 
 end

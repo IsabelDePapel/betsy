@@ -18,7 +18,6 @@ class OrderItemsController < ApplicationController
     end
 
     if @merchant.id != @auth_user.id
-      puts "NOT AUTHORIZED"
       flash[:status] = :failure
       flash[:message] = "You can only make changes to your own products"
       return redirect_to merchant_path(@auth_user)
@@ -29,6 +28,13 @@ class OrderItemsController < ApplicationController
     if @order_item.save
       flash[:status] = :success
       flash[:message] = "Status successfully changed to #{@order_item.status}"
+
+      # update inventory if order was canceled
+      if @order_item.status == "canceled"
+        @order_item.update_product_quantity(canceled: true)
+        flash[:details] == "Inventory increased by #{@order_item.quantity}"
+      end
+
     else
       flash[:status] = :failure
       flash[:message] = "Unable to change status"
