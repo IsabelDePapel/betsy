@@ -28,7 +28,8 @@ class Order < ApplicationRecord
   end
 
   # clean this up??
-  # updates and returns true if successful; else false
+  # updates and returns empty hash if successful; else errors hash
+  # (couldn't add errors using rails)
   def update_inventory
     # iterates through items once to confirm all inventory there before updating
     order_items.each do |item|
@@ -40,15 +41,15 @@ class Order < ApplicationRecord
       end
     end
 
-    # confirm order_item status is paid
+    # iterates again to update
     order_items.each do |item|
       item.update_product_quantity
     end
 
-    return {}
+    return {} # if no errors to return
   end
 
-  def add_product_to_order(prod)
+  def add_product_to_order(prod, amount_ordered)
     if prod != nil && self.is_cart?
       # Check if any other order_item has that product
       in_order = false
@@ -58,7 +59,7 @@ class Order < ApplicationRecord
         if item.product.id == prod.id
           in_order = true
           existing_order_item = OrderItem.find(item.id)
-          existing_order_item.quantity += 1
+          existing_order_item.quantity = amount_ordered
           existing_order_item.save
         end
       end
@@ -66,7 +67,7 @@ class Order < ApplicationRecord
       # initialize quantity to 1 if no
       if in_order == false
         order_item = OrderItem.new()
-        order_item.quantity = 1
+        order_item.quantity = amount_ordered
         order_item.product = prod
         # order_item.order = self # does not explicitly tell order it has a new order_item BUT order_item knows it belongs to an order
         # order_item.save

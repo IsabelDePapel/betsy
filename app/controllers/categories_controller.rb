@@ -2,7 +2,6 @@ class CategoriesController < ApplicationController
 
   def index
     @categories = Category.order(:name)
-    #TODO Add product in category count for view
   end
 
   def create #TODO Move me to products.rb!!

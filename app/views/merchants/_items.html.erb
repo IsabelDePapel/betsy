@@ -27,12 +27,17 @@
           <td><%= item.status %></td>
           <td><%= item.quantity %></td>
           <td><%= number_to_currency(item.price) %></td>
-          <td><%= link_to "change status path", '#' %></td>
+          <td>
+            <%= form_tag(change_status_path(item.id), method: :patch) do %>
+              <%= select_tag :status, options_for_select(["pending", "paid", "complete", "canceled"], item.status) %>
+              <%= submit_tag "Change Status" %>
+            <% end %>
+          </td>
         </tr>
         <% end %>
         <tr>
           <td><strong><%= message %></strong></td>
-          <td><%= @merchant.revenue(state) %></td>
+          <td><%= number_to_currency(@merchant.revenue(state)) %></td>
         </tr>
       </tbody>
     </table>

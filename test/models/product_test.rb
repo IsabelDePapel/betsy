@@ -131,4 +131,19 @@ describe Product do
       product.categories.wont_include @cupcakes
     end
   end
+
+  describe "num_sold" do
+    it "returns the total number sold of a given product" do
+      # get total croissants sold
+      total_croissants = 0
+
+      OrderItem.all.each do |item|
+        if item.product == product
+          total_croissants += item.quantity
+        end
+      end
+
+      product.num_sold.must_equal total_croissants
+    end
+  end
 end

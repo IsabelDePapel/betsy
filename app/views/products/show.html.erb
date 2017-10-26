@@ -1,18 +1,48 @@
-<article>
-<ul>
-<% if @product %>
-<h3><%= @product.name %></h3>
-<%= link_to image_tag "https://loremflickr.com/500/500/felt,dessert/all?", alt: 'link to', class: "product" %>
-<p>Description: <%= @product.description %></p>
-<p>Price: <%= readable_price(@product.price) %></p>
-<p>Quantity Available: <%= @product.quantity %></p>
-<p>Seller: <%= link_to (@product.merchant.username), products_path %></p>
-<% end %>
-</ul>
+<section class="row">
+  <div class="large-6 columns">
+    <h3><%= @product.name %></h3>
+    <p>Description: <%= @product.description %></p>
+    <p>Price: <%= readable_price(@product.price) %></p>
+    <p>Quantity Available: <%= @product.quantity %></p>
+    <p>Seller: <%= link_to (@product.merchant.username), products_path %></p>
+    <p class="categories-buttons">
+      Categories:
+      <% @product.categories.each do |category| %>
+      <%= link_to category.name, category_products_path(category.id) %>
+      <% end %>
+    </p>
 
-<% if @product.quantity > 0 %>
-  <%= link_to "Add To Cart", product_add_to_cart_path(@product.id), method: :patch, class: "button" %>
-<% else  %>
-  <button type="button" class="button secondary" disabled>Sold Out</button>
-<% end %>
-</article>
+    <% if @product.quantity > 0 %>
+    <%= form_tag(product_add_to_cart_path(@product.id), method: :patch) do %>
+    <%= label_tag :quantity %>
+    <%= select_tag :quantity, options_for_select(1..@product.quantity)%>
+    <%= submit_tag 'Add To Cart', class: "button" %>
+    <% end %>
+    <% else  %>
+    <button type="button" class="button secondary" disabled>Sold Out</button>
+    <% end %>
+  </div>
+
+  <div class="large-6 columns">
+    <% if @product.photo_url %>
+      <%= link_to image_tag @product.photo_url, alt: 'link to', class: "product" %>
+    <% end %>
+  </div>
+</section>
+
+<section id="reviews" class="row">
+  <h2>Reviews</h2>
+  <%= link_to "Add Review", new_product_review_path(@product.id), class: "button" %>
+  <% if @product.reviews.length == 0 %>
+    <h3>Currently no reviews for this product.</h3>
+  <% else %>
+    <% @product.reviews.each do |review| %>
+      <div class="large-12 columns">
+        <p>Rating: <%= review.rating %></p>
+        <p>By: <%= get_name(review.user) %> at <%= readable_date(review.updated_at) %></p>
+        <p><%= review.text %></p>
+        <hr>
+      </div>
+    <% end %>
+  <% end %>
+</section>

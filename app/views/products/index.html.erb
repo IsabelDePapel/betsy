@@ -1,18 +1,33 @@
-<h1>Foodsie Products</h1>
-<ul>
+<section id="index-product-list" class="row">
+  <div class="large-12 columns">
+    <h1>Foodsie Products</h1>
+  </div>
+
   <% @products.each do |product| %>
 
+  <div class="large-4 medium-6 small-12 columns end" id="product-container">
+    <article class="product">
+      <% if product.photo_url %>
+        <%= image_tag product.photo_url, alt: product.name, class: "thumbnail product-photo", align: "right"  %>
+      <% end %>
+      <h2><%= link_to(product.name, product_path(product.id)) %></h2>
+      <p>Description: <%= product.description %></p>
+      <p>Price: <%= readable_price(product.price) %></p>
+      <p>Quantity Available: <%= product.quantity %></p>
+      <p>Seller: <%= product.merchant.username %></p>
+      <p class="categories-buttons">
+        Categories:
+        <% product.categories.each do |category| %>
+        <%= link_to category.name, category_products_path(category.id) %>
+        <% end %>
+      </p>
 
-  <li><%= link_to(product.name, product_path(product.id)) %></li>
-  <li>Description: <%= product.description %></li>
-  <li>Price: <%= readable_price(product.price) %></li>
-  <li>Quantity Available: <%= product.quantity %></li>
-  <li>Seller: <%= product.merchant.username %></li>
-  <li>
-    Categories:
-    <% product.categories.each do |category| %>
-      <span class="button"><%= category.name %></span>
-    <% end %>
-  </li>
+
+    </article>
+  </div>
+
   <% end %>
-</ul>
+
+
+
+</section>

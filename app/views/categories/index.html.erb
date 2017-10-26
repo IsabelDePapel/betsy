@@ -1,2 +1,15 @@
-<h1>Categories#index</h1>
-<p>Find me in app/views/categories/index.html.erb</p>
+<section id="index-category-list" class="row">
+  <div class="large-12 columns">
+    <h1>All Categories Available</h1>
+  </div>
+  <% @categories.each do |category| %>
+    <% if return_visible_products(category).length > 0 %>
+      <div class="large-4 medium-6 small-12 columns column-block end">
+        <article class="category">
+          <h2><%= category.name %></h2>
+          <%= link_to "View #{return_visible_products(category).length} Product(s)", category_products_path(category.id), class: "button" %>
+        </article>
+      </div>
+    <% end  %>
+  <% end %>
+</section>

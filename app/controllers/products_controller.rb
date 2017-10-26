@@ -22,7 +22,18 @@ class ProductsController < ApplicationController
   end
 
   def show
-    render_404 unless @product && @product.visible == true
+    x = 4
+    byebug
+    if @product == nil
+      render_404
+      return
+    end
+
+    if @product.merchant.user_id != session[:user_id] && @product.visible == false
+      flash[:status] = :failure
+      flash[:message] = "This product’s unavailable."
+      return redirect_to products_path
+    end
   end
 
   def new
@@ -140,7 +151,7 @@ class ProductsController < ApplicationController
     # Create an OrderItem for the Product
     product = Product.find_by(id: params[:product_id])
     cart_order = Order.find_by(id: session[:order_id])
-    if !cart_order.add_product_to_order(product) #:product_id is NOT valid
+    if !cart_order.add_product_to_order(product, params["quantity"]) #:product_id is NOT valid
       flash[:status] = :failure
       flash[:message] = "Can't add non-existent product to cart."
     else # product exists, :product_id is valid
@@ -171,7 +182,7 @@ class ProductsController < ApplicationController
   end
 
   def update_quantity_in_cart
-    order_item = OrderItem.find(params[:order_item_id].to_i)
+    order_item = OrderItem.find_by(id: params[:order_item_id].to_i)
     if order_item
       order_item.update_attribute(:quantity, params["quantity"])
       flash[:status] = :success
@@ -203,7 +214,7 @@ class ProductsController < ApplicationController
       flash[:message] = "There was a problem"
       flash[:details] = @product.errors.messages
     end
-    redirect_to merchant_products_path(@auth_user.id)
+    redirect_to merchant_path(@auth_user.id)
   end
 
   private
@@ -219,7 +230,7 @@ class ProductsController < ApplicationController
   def authorize_merchant
     if @product.merchant.user_id != session[:user_id]
       flash[:status] = :failure
-      flash[:message] = "You can only make changes to your own products"
+      flash[:message] = "This product is unavailable"
       redirect_to products_path
       return false
     end

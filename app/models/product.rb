@@ -36,7 +36,7 @@ class Product < ApplicationRecord
   end
 
   def num_sold
-    return OrderItem.where(product_id: Product.find_by(name: name).id).count
+    return OrderItem.where(product_id: Product.find_by(name: name).id).sum { |item| item.quantity }
   end
 
   # presumes that cat is a category (tested before calling)
