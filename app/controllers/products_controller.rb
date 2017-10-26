@@ -22,7 +22,7 @@ class ProductsController < ApplicationController
   end
 
   def show
-    x = 4
+    # x = 4
     # byebug
     if @product == nil
       render_404

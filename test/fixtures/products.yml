@@ -4,7 +4,7 @@ croissant:
   name: Croissant
   price: 3.50
   description: Soft butter croissant
-  photo_url: MyString
+  photo_url: ""
   quantity: 10
   visible: false
   merchant: one
@@ -13,7 +13,7 @@ cupcake:
   name: Chocolate Peanut Butter Cupcake
   price: 4.00
   description: Gooey chocolate cupcake
-  photo_url: MyString
+  photo_url: ""
   quantity: 5
   visible: false
   merchant: two
@@ -22,7 +22,7 @@ macaroon:
   name: Yuzu Flavored macaroons
   price: 4.20
   description: Imported from Nippon
-  photo_url: MyString
+  photo_url: ""
   quantity: 10
   visible: true
   merchant: one
