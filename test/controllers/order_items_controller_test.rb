@@ -64,6 +64,13 @@ describe OrderItemsController do
         must_respond_with :not_found
       end
 
+      # is there a way to test this?? How can you make sure the merchant doesn't exist???
+      it "returns not found if merchant doesn't exist" do
+        skip
+        patch change_status_path paid, status: "canceled"
+        must_respond_with :not_found
+      end
+
       it "responds with redirect if item belongs to another merchant" do
         orig_status = other_item.status
         other_item.product.merchant_id.wont_equal @auth_user.id

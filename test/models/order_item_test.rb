@@ -155,4 +155,125 @@ describe OrderItem do
 
   end
 
+
+  describe "cancel_order" do
+    let(:pending) { order_items(:pending) }
+
+    it "cancels the order and updates inventory" do
+      start_count = pending.product.quantity
+
+      pending.cancel_order.must_equal true
+
+      pending.reload.status.must_equal "canceled"
+
+      pending.product.quantity.must_equal start_count + pending.quantity
+    end
+
+    it "does nothing if order status is already canceled" do
+      start_count = pending.product.quantity
+
+      pending.status = "canceled"
+      pending.save
+
+      pending.cancel_order.must_be_nil
+
+      pending.reload.status.must_equal "canceled"
+      pending.product.quantity.must_equal start_count
+    end
+  end
+
+  describe "uncancel order" do
+    before do
+      @canceled = order_items(:pending)
+      @canceled.status = "canceled"
+      @canceled.save
+    end
+
+    it "uncancels order and updates inventory" do
+      start_count = @canceled.product.quantity
+      new_status = "paid"
+
+      @canceled.reload.status.must_equal "canceled"
+
+      @canceled.uncancel_order(new_status).must_equal true
+
+      @canceled.reload.status.must_equal new_status
+      @canceled.product.quantity.must_equal start_count - @canceled.quantity
+    end
+
+    it "returns false if there isn't enough inventory to uncancel" do
+      @canceled.product.quantity = 0
+      @canceled.product.save
+      @canceled.product.reload.quantity.must_equal 0
+
+      new_status = "paid"
+
+      @canceled.uncancel_order(new_status).must_equal false
+
+      @canceled.product.quantity.must_equal 0
+    end
+
+    it "returns false if new_status isn't a valid status" do
+      invalid_statuses = ["cat", nil, "", 8, "not done"]
+
+      invalid_statuses.each do |status|
+        @canceled.uncancel_order(status).must_equal false
+        @canceled.reload.status.must_equal "canceled"
+      end
+    end
+
+    it "does nothing if new status is same as old status" do
+      new_status = "canceled"
+      start_count = @canceled.product.quantity
+
+      @canceled.uncancel_order(new_status).must_be_nil
+      @canceled.product.quantity.must_equal start_count
+    end
+
+    it "changes status and leaves inventory alone if current status is not canceled" do
+      start_count = @canceled.product.quantity
+      @canceled.status = "paid"
+      @canceled.save
+
+      @canceled.reload.status.must_equal "paid"
+
+      new_status = "complete"
+
+      @canceled.uncancel_order(new_status).must_equal true
+      @canceled.product.quantity.must_equal start_count
+    end
+  end
+
+  describe "change_status" do
+    let(:pending) { order_items(:pending) }
+
+    it "changes the status of an order and updates inventory as appropriate" do
+      start_count = pending.product.quantity
+
+      pending.change_status("canceled").must_equal true
+
+      pending.reload.status.must_equal "canceled"
+      pending.product.quantity.must_equal start_count + pending.quantity
+    end
+
+    it "returns nil if new status is the same as current status" do
+      start_count = pending.product.quantity
+
+      pending.change_status("pending").must_be_nil
+
+      pending.product.quantity.must_equal start_count
+    end
+
+    it "returns false if changes can't be made" do
+      pending.status = "canceled"
+      pending.save
+
+      pending.product.quantity = 0
+      pending.product.save
+
+      pending.change_status("paid").must_equal false
+      pending.product.quantity.must_equal 0
+    end
+  end
+
 end

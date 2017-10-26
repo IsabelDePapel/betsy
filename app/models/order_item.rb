@@ -19,6 +19,45 @@ class OrderItem < ApplicationRecord
   end
 
   #everything has to be in a method
+  # returns nil if unchanged, true if canceled, else false
+  def cancel_order
+    # change status and add item qty back to inventory
+    if self.status != "canceled"
+      self.status = "canceled"
+      self.product.quantity += self.quantity
+      self.product.save
+
+      return self.save
+    end
+
+    return nil
+  end
+
+  def uncancel_order(new_status)
+    # check if enough inventory to uncancel, then change status and update inventory
+    return nil if self.status == new_status
+
+    if self.status == "canceled" && new_status != "canceled"
+      if self.quantity <= self.product.quantity
+        self.status = new_status
+        self.product.quantity -= self.quantity
+        self.product.save
+      end
+    else
+      self.status = new_status
+    end
+
+    return self.save
+  end
+
+  # changes status and updates inventory as appropriate
+  def change_status(new_status)
+    if new_status == "canceled"
+      return cancel_order
+    else
+      return uncancel_order(new_status)
+    end
+  end
 
   def update_product_quantity(canceled = false)
     # add order item qty to inventory if order canceled

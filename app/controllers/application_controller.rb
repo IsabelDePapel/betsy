@@ -6,8 +6,10 @@ class ApplicationController < ActionController::Base
   # returns current user if already exists in session
   # else creates a new user and returns it
   #TODO move to session if no other controller uses this method
-  def get_current_user
+
+  def current_user
     if @auth_user
+      byebug
       return User.find_by(id: session[:user_id])
     else
       return User.create
