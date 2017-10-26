@@ -79,7 +79,7 @@ class ReviewsController < ApplicationController
       flash[:message] = "Could not update your review."
       flash[:details] = @review.errors.messages
 
-      render :edit
+      render :edit, status: :bad_request
     end
   end
 
