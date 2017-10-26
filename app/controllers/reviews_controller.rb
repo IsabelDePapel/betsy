@@ -22,6 +22,8 @@ class ReviewsController < ApplicationController
     else
       flash[:status] = :failure
       flash[:message] = "Can't leave a review for a product that doesn't exist"
+      return redirect_to products_path
+
     end
   end
 
