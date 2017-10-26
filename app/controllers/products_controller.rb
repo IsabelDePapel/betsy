@@ -22,7 +22,6 @@ class ProductsController < ApplicationController
   end
 
   def show
-
     if @product == nil
       render_404
       return
@@ -33,7 +32,6 @@ class ProductsController < ApplicationController
       flash[:message] = "This product’s unavailable."
       redirect_to products_path
     end
-
   end
 
   def new
@@ -151,7 +149,7 @@ class ProductsController < ApplicationController
     # Create an OrderItem for the Product
     product = Product.find_by(id: params[:product_id])
     cart_order = Order.find_by(id: session[:order_id])
-    if !cart_order.add_product_to_order(product) #:product_id is NOT valid
+    if !cart_order.add_product_to_order(product, params["quantity"]) #:product_id is NOT valid
       flash[:status] = :failure
       flash[:message] = "Can't add non-existent product to cart."
     else # product exists, :product_id is valid
