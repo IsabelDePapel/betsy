@@ -11,7 +11,9 @@ describe ProductsController do
       price: 1,
       quantity: 5,
       merchant_id: merchants(:one).id
-    }
+    },
+    categories_string:
+      "cupcakes, scones"
   } }
 
   describe "not logged in" do
@@ -257,6 +259,8 @@ describe ProductsController do
 
     describe "create" do
       it "creates product and redirects to products page when given valid data" do
+
+
         post products_path params: product_data
         must_respond_with :redirect
         must_redirect_to products_path
