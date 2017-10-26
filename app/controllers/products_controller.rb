@@ -22,6 +22,8 @@ class ProductsController < ApplicationController
   end
 
   def show
+    x = 4
+    byebug
     if @product == nil
       render_404
       return
@@ -30,7 +32,7 @@ class ProductsController < ApplicationController
     if @product.merchant.user_id != session[:user_id] && @product.visible == false
       flash[:status] = :failure
       flash[:message] = "This product’s unavailable."
-      redirect_to products_path
+      return redirect_to products_path
     end
   end
 
