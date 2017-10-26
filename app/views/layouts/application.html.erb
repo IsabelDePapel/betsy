@@ -8,6 +8,8 @@
     <%= stylesheet_link_tag    "application" %>
     <%= javascript_include_tag "application", 'data-turbolinks-track' => true %>
   </head>
+  
+<!-- This portion is solid, please leave it alone. -->
 
 <body>
   <!-- Navigation bar/links -->
@@ -30,7 +32,7 @@
 
   <!-- LEAVE THIS IN: displays flash messages -->
   <%= render partial: "/layouts/flash" %>
-  
+
   <main class="row>
     <%= yield %>
   </main>
@@ -48,4 +50,7 @@
 </body>
 </html>
 
+  <!-- <section class="row debug">
+  <%= debug(params) if Rails.env.development? %>
+</section> -->
 
