@@ -22,6 +22,7 @@ class ProductsController < ApplicationController
   end
 
   def show
+    return unless authorize_merchant && @product.visible == true
     render_404 unless @product && @product.visible == true
   end
 
@@ -220,7 +221,7 @@ class ProductsController < ApplicationController
   def authorize_merchant
     if @product.merchant.user_id != session[:user_id]
       flash[:status] = :failure
-      flash[:message] = "You can only make changes to your own products"
+      flash[:message] = "This product is unavailable"
       redirect_to products_path
       return false
     end

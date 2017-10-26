@@ -1,7 +1,16 @@
-// Place all the styles related to the Categories controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
-* {
-    font-family: Handlee;
-    font-style: cursive;
+#index-category-list .category{
+  border-radius: 5px;
+  border: 1px #ccc solid;
+  margin-right: 10px;
+  text-align: center;
+  overflow: auto;
+}
+
+#index-category-list .category h2{
+  margin: 30px 0px;
+  font-size: 4rem;
+}
+
+#index-category-list{
+  margin: auto;
 }
