@@ -22,8 +22,18 @@ class ProductsController < ApplicationController
   end
 
   def show
-    return unless authorize_merchant && @product.visible == true
-    render_404 unless @product && @product.visible == true
+
+    if @product == nil
+      render_404
+      return
+    end
+
+    if @product.merchant.user_id != session[:user_id] && @product.visible == false
+      flash[:status] = :failure
+      flash[:message] = "This product’s unavailable."
+      redirect_to products_path
+    end
+
   end
 
   def new

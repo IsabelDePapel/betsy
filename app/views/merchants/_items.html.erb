@@ -32,9 +32,6 @@
               <%= select_tag :status, options_for_select(["pending", "paid", "complete", "canceled"], item.status) %>
               <%= submit_tag "Change Status" %>
             <% end %>
-            <%# link_to "change status path", '#' %>
-            <%# select_tag "status", options_from_collection_for_select(["pending", "paid", "complete", "canceled"], item.status) %>
-            <%# link_to "Update Status", change_status_path %>
           </td>
         </tr>
         <% end %>

@@ -13,7 +13,10 @@
 </section>
 
 <section class="products">
-  <h2>Your Products</h2>
+  <div class="products heading">
+    <h2>Your Products</h2>
+    <%= link_to "Add a Product", new_product_path, class: "button" %>
+  </div>
 
   <table>
     <thead>

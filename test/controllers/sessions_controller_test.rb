@@ -38,15 +38,18 @@ describe SessionsController do
 
     # right now, can only be tested when creates a new user and then new merchant
     # can't test whether session already exists (and user already created)
-    it "creates an account for a new user and redirects to home page" do
+    it "creates an account for a new user and redirects to products page" do
       skip
-      start_count = Merchant.count
-      user = get_current_user # thsi method isn't accessible here
+      num_merchants = Merchant.count
+      num_users = User.count
+
+      user = get_current_user
       new_merch = Merchant.new user_id: user.id, provider: "github", username: "moe", uid: 99, email: "moe@eom.net"
 
       login(new_merch, :github) # this will save the new user just created
 
       Merchant.count.must_equal start_count + 1
+      User.count.must_equal start_count + 1
       must_respond_with :redirect
       must_redirect_to products_path
       session[:user_id].must_equal user.id
@@ -54,12 +57,20 @@ describe SessionsController do
   end
 
   describe "logout" do
-    it "should logout the user and reset the session" do
-
+    before do
+      login(merchants(:two), :google_oauth2)
     end
-    it "should clear the cart from session" do
 
+    it "should logout the user and reset the session" do
+      post logout_path
+      session[:user_id].must_be_nil
+    end
+
+    it "should clear the cart from session" do
+      post logout_path
+      session[:order_id].must_be_nil
     end
   end
+
 
 end

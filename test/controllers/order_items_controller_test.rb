@@ -42,7 +42,7 @@ describe OrderItemsController do
       it "changes the status if the item belongs to the merchant" do
         session[:user_id].must_equal @auth_user.id
 
-        new_status = "canceled"
+        new_status = "complete"
 
         patch change_status_path paid, status: new_status
 
@@ -50,11 +50,25 @@ describe OrderItemsController do
         must_respond_with :redirect
       end
 
+      it "updates inventory if status is changed to canceled" do
+        start_count = paid.product.quantity
+
+        patch change_status_path paid, status: "canceled"
+
+        paid.reload.status.must_equal "canceled"
+        paid.product.quantity.must_equal start_count + paid.quantity
+      end
+
       it "returns not found if item doesn't exist" do
         patch change_status_path fake_item_id, status: "complete"
-
         must_respond_with :not_found
+      end
 
+      # is there a way to test this?? How can you make sure the merchant doesn't exist???
+      it "returns not found if merchant doesn't exist" do
+        skip
+        patch change_status_path paid, status: "canceled"
+        must_respond_with :not_found
       end
 
       it "responds with redirect if item belongs to another merchant" do

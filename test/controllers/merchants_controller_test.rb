@@ -119,35 +119,6 @@ describe MerchantsController do
         must_respond_with :not_found
       end
     end
-
-    # describe "change_item_status" do
-    #   it "should change item status if item belongs to merchant" do
-    #     new_status = "canceled"
-    #
-    #     patch change_status_path paid, status: new_status
-    #
-    #     # must_respond_with :redirect
-    #     # must_redirect_to merchant_path(@auth_user)
-    #     # OrderItem.find_by(id: complete.id).status.must_equal new_status
-    #     paid.reload.status.must_equal new_status
-    #   end
-    #
-    #   it "should redirect to merchants page if item belongs to another merchant" do
-    #     orig_status = other_item.status
-    #
-    #     patch change_status_path other_item, status: "canceled"
-    #
-    #     # must_respond_with :redirect
-    #     # must_redirect_to merchants_path
-    #     other_item.reload.status.must_equal orig_status
-    #   end
-    #
-    #   it "should respond with not found if item doesn't exist" do
-    #     patch change_status_path fake_item_id, status: "complete"
-    #
-    #     must_respond_with :not_found
-    #   end
-    # end
   end
 
 end
