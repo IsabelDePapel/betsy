@@ -37,5 +37,18 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def authorize_merchant
+    if @merchant.user_id != session[:user_id]
+      puts "NOT AUTHORIZED"
+      flash[:status] = :failure
+      flash[:message] = "You're not authorized to do this"
+
+      redirect_to merchants_path
+
+      return false
+    end
+
+    return true
+  end
 
 end
