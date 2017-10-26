@@ -7,14 +7,14 @@ class ProductsController < ApplicationController
   end
 
   def index
-    # TODO refactor when have categories (routes denested)
     if from_category? || from_merchant?
       if @category
         @products = @category.products.where("visible = 'true'").order(:name)
       elsif @merchant
         @products = @merchant.products.where("visible = 'true'").order(:name)
-      else #erroneous category_id or merchant_id, render 404?
-        redirect_to products_path
+      else
+        render_404
+        return
       end
     else
       @products = Product.all.where("visible = 'true'").order(:name)
@@ -40,7 +40,7 @@ class ProductsController < ApplicationController
     if @auth_user
       @product.merchant = @auth_user
       if @product.save
-        populate_categories(params[:categories_string], @product)
+        @product.populate_categories(params[:categories_string])
 
         flash[:status] = :success
         flash[:message] = "#{@product.name.capitalize} successfully saved into database!"
@@ -87,8 +87,7 @@ class ProductsController < ApplicationController
     return if !authorize_merchant
 
     if @product.update_attributes product_params
-      @product.categories = []
-      populate_categories(params[:categories_string], @product)
+      @product.populate_categories(params[:categories_string])
       flash[:status] = :success
       flash[:message] = "#{@product.name.capitalize} successfully edited!"
       redirect_to products_path
@@ -242,14 +241,4 @@ class ProductsController < ApplicationController
     end
   end
 
-  def populate_categories(category_string, product)
-    category_array = category_string.split(",").map(&:strip)
-    category_array.each do |category|
-      if Category.existing_cat?(category)
-        product.categories << Category.find_by(name: category)
-      else
-        product.categories << Category.create(name: category)
-      end
-    end
-  end
 end

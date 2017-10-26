@@ -44,4 +44,16 @@ class Product < ApplicationRecord
     categories << Category.find_by(name: cat)
   end
 
+  def populate_categories(category_string)
+    category_array = category_string.gsub(/^\W*/,"").gsub(/\W*$/,"").split(/\W*,\W+/)
+    self.categories = []
+    category_array.each do |category|
+      if Category.existing_cat?(category)
+        add_category(category)
+      else
+        Category.create(name: category)
+        add_category(category)
+      end
+    end
+  end
 end
