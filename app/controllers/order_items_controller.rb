@@ -2,10 +2,8 @@ class OrderItemsController < ApplicationController
   before_action :authenticate_user
 
   def change_status
-    # ap @auth_user
     @order_item = OrderItem.find_by(id: params[:id])
-    # byebug
-    # @merchant = Merchant.find_by(id: @order_item.product.id)
+
     unless @order_item
       render_404
       return
@@ -19,7 +17,6 @@ class OrderItemsController < ApplicationController
       return
     end
 
-    # ap @merchant
     if @merchant.id != @auth_user.id
       puts "NOT AUTHORIZED"
       flash[:status] = :failure
