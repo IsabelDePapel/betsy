@@ -39,14 +39,30 @@ describe ProductsController do
     end
 
     describe "show" do
-      it "returns success if given a valid product id" do
-        get product_path(product.id)
+      it "returns success if given a valid product id and product is visible" do
+        product.visible = true
+        product.save
+
+        # confirm visibility
+        product.reload.visible.must_equal true
+
+        get product_path(product)
         must_respond_with :success
       end
 
       it "returns not found if given bogus product id" do
         get product_path(product)
-        must_respond_with :success
+        must_respond_with :not_found
+      end
+
+      it "returns not found if product is not visible" do
+        product.visible = false
+        product.save
+
+        # confirm visibility
+        product.reload.visible.must_equal false
+        get product_path(product)
+        must_respond_with :not_found
       end
     end
 
@@ -195,9 +211,35 @@ describe ProductsController do
     end
 
     describe "show" do
-      it "returns success when given a valid product id" do
+      it "returns success when given a valid product id and product is visible" do
+        product.visible = true
+        product.save
+
+        # confirm vis
+        product.reload.visible.must_equal true
+
         get product_path(product)
         must_respond_with :success
+      end
+
+      it "returns success when given a product the merchant owns even if NOT currently visible" do
+        product.visible = false
+        product.save
+
+        product.reload.visible.must_equal false
+
+        get product_path(product)
+        must_respond_with :success
+      end
+
+      it "returns not found when given another merchant's product that is NOT visible" do
+        other_product.visible = false
+        other_product.save
+
+        other_product.reload.visible.must_equal false
+
+        get product_path(other_product)
+        must_respond_with :not_found
       end
 
       it "returns not found when given an invalid product id" do

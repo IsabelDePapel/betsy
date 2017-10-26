@@ -22,8 +22,29 @@ class ProductsController < ApplicationController
   end
 
   def show
-    return unless authorize_merchant && @product.visible == true
-    render_404 unless @product && @product.visible == true
+    # I think this only lets the merchant view the products they own? I can only view products I'm selling
+    # return unless authorize_merchant && @product.visible == true
+    # render_404 unless @product && @product.visible == true
+
+    unless @product
+      render_404
+      return
+    end
+
+    # if user isn't logged in, hide all invis products
+    unless @auth_user
+      if @product.visible == false
+        render_404
+        return
+      end
+    else
+      # if logged in user isn't the product merchant hide invis products
+      if @product.merchant_id != @auth_user.id && @product.visible == false
+        render_404
+        return
+      end
+    end
+
   end
 
   def new
