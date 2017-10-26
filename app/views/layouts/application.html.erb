@@ -35,6 +35,9 @@
 
   <%= yield %>
 
+  <section class="row debug">
+    <%= debug(params) if Rails.env.development? %>
+  </section>
   <hr class="root-hr">
   <footer>
     <div class="footer">
@@ -44,7 +47,3 @@
     </footer>
 </body>
 </html>
-
-  <!-- <section class="row debug">
-  <%= debug(params) if Rails.env.development? %>
-</section> -->
