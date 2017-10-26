@@ -22,27 +22,16 @@ class ProductsController < ApplicationController
   end
 
   def show
-    # I think this only lets the merchant view the products they own? I can only view products I'm selling
-    # return unless authorize_merchant && @product.visible == true
-    # render_404 unless @product && @product.visible == true
 
-    unless @product
+    if @product == nil
       render_404
       return
     end
 
-    # if user isn't logged in, hide all invis products
-    unless @auth_user
-      if @product.visible == false
-        render_404
-        return
-      end
-    else
-      # if logged in user isn't the product merchant hide invis products
-      if @product.merchant_id != @auth_user.id && @product.visible == false
-        render_404
-        return
-      end
+    if @product.merchant.user_id != session[:user_id] && @product.visible == false
+      flash[:status] = :failure
+      flash[:message] = "This product’s unavailable."
+      redirect_to products_path
     end
 
   end
