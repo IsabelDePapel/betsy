@@ -21,7 +21,7 @@
       <tbody>
         <% items.each do |item| %>
         <tr>
-          <td><%= link_to item.order_id, confirmation_order_path(item.order_id) %></td>
+          <td><%= link_to item.order_id, merchant_order_path(merchant_id: @merchant.id, order_id: item.order_id) %></td>
           <td><%= link_to item.product.name, product_path(item.product) %></td>
           <td><%= item.created_at.strftime('%b %-d, %Y') %></td>
           <td><%= item.status %></td>
