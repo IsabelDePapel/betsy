@@ -109,7 +109,7 @@ describe Order do
       end
     end
 
-    it "will hash with item name and inventory and rollback status to pending if not enough inventory" do
+    it "will return a hash with item name and inventory and rollback status to pending if not enough inventory" do
       # change croissant inventory to 1
       @before_qtys["Croissant"] = 1
 
@@ -196,7 +196,7 @@ describe Order do
       Order.find_last_cart_id(user4.id).must_be_nil
     end
   end
-      
+
   describe "add_product_to_order" do
     let(:no_order_item) { orders(:three) }
     let(:product){ products(:croissant)}

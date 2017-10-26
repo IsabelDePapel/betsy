@@ -28,7 +28,8 @@ class Order < ApplicationRecord
   end
 
   # clean this up??
-  # updates and returns true if successful; else false
+  # updates and returns empty hash if successful; else errors hash
+  # (couldn't add errors using rails)
   def update_inventory
     # iterates through items once to confirm all inventory there before updating
     order_items.each do |item|
@@ -40,12 +41,12 @@ class Order < ApplicationRecord
       end
     end
 
-    # confirm order_item status is paid
+    # iterates again to update
     order_items.each do |item|
       item.update_product_quantity
     end
 
-    return {}
+    return {} # if no errors to return
   end
 
   def add_product_to_order(prod, amount_ordered)

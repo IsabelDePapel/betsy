@@ -13,11 +13,15 @@
 </section>
 
 <section class="products">
-  <h2>Your Products</h2>
+  <div class="products heading">
+    <h2>Your Products</h2>
+    <%= link_to "Add a Product", new_product_path, class: "button" %>
+  </div>
 
   <table>
     <thead>
       <tr>
+        <th>Product Number</th>
         <th>Product Name</th>
         <th>Inventory</th>
         <th>Price</th>
@@ -26,17 +30,20 @@
       </tr>
     </thead>
     <tbody>
-      <% @products.each do |product| %>
-      <tr>
-        <td><%= link_to product.name, product_path(product) %></td>
-        <td>
-          <%= product.quantity == 0 ? "Out of Stock!" : product.quantity %>
-        </td>
-        <td><%= number_to_currency(product.price) %></td>
-        <td><%= product.num_sold %></td>
-        <% @visibility = product.visible ? "Visible" : "Hidden" %>
-        <td><%= link_to @visibility, change_visibility_product_path(product), method: :patch %></td>
-      </tr>
+      <% if @products %>
+        <% @products.each do |product| %>
+        <tr>
+          <td><%= link_to product.id, edit_product_path(product) %></td>
+          <td><%= link_to product.name, product_path(product) %></td>
+          <td>
+            <%= product.quantity == 0 ? "Out of Stock!" : product.quantity %>
+          </td>
+          <td><%= number_to_currency(product.price) %></td>
+          <td><%= product.num_sold %></td>
+          <% @visibility = product.visible ? "Visible" : "Hidden" %>
+          <td><%= link_to @visibility, change_visibility_product_path(product), method: :patch %></td>
+        </tr>
+        <% end %>
       <% end %>
     </tbody>
   </table>
@@ -53,5 +60,5 @@
 
 <section class="total-revenue">
   <h2>Your Total Revenue</h2>
-  <p><%= @merchant.total_revenue %></p>
+  <p><%= number_to_currency(@merchant.total_revenue) %></p>
 </section>

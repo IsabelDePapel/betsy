@@ -1,27 +1,27 @@
 /*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
- * vendor/assets/stylesheets directory can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the bottom of the
- * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
- * files in this directory. Styles in this file should be added after the last require_* statement.
- * It is generally better to create a new file per style scope.
- *
- *= require_tree .
- *= require_self
- *= require foundation_and_overrides
+* This is a manifest file that'll be compiled into application.css, which will include all the files
+* listed below.
+*
+* Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+* vendor/assets/stylesheets directory can be referenced here using a relative path.
+*
+* You're free to add application-wide styles to this file and they'll appear at the bottom of the
+* compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+* files in this directory. Styles in this file should be added after the last require_* statement.
+* It is generally better to create a new file per style scope.
+*
+*= require_tree .
+*= require_self
+*= require foundation_and_overrides
 
- */
+*/
 
 
 
- * {
-     font-family: Handlee !important;
-     font-style: cursive !important;
- }
+* {
+  font-family: Handlee !important;
+  font-style: cursive !important;
+}
 
 
 
@@ -35,6 +35,7 @@
 
 section.failure, section.success {
   margin: 1vw 0;
+  margin-left: 2vw;
 }
 
 section.failure {
@@ -48,6 +49,10 @@ section.success {
 /************************************/
 /* Body Styling          */
 /************************************/
+
+body>div.placeholder {
+  height: 8vw;
+}
 
 li.navlinks {
   width: 12vw;
@@ -70,9 +75,9 @@ ul {
 }
 
 table{
-    color: #000;
-    table-layout: fixed;
-    width: 100%;
+  color: #000;
+  table-layout: fixed;
+  width: 100%;
 }
 
 table.order tr {
@@ -123,31 +128,25 @@ html {
 }
 
 #slideshow {
-	width: 100vw;
-	height: auto;
-	overflow: hidden;
-  position: fixed;
-  /* TEMP HIDING HOME IMAGES WHILE IN DEV BC NEED FLASH IMAGES TO SHOW UP */
-  top: 100vw;
-   /*top: 0vw;*/
-  left: 0vw;
-
+  width: 100vw;
+  height: auto;
+  overflow: hidden;
 }
 
 .slide {
   display: inline-block;
-	width: 100vw;
-	height: 100vh;
-	float: left;
-	position: relative;
+  width: 100vw;
+  height: 100vh;
+  float: left;
+  position: relative;
 }
 
 #slide-holder {
-	width: 400vw;
-	position: relative;
-	left: 0;
-	will-change: transform;
-	animation: scroller 15s;
+  width: 400vw;
+  position: relative;
+  left: 0;
+  will-change: transform;
+  animation: scroller 15s;
   animation-delay: 2s;
 }
 
@@ -163,26 +162,25 @@ html {
 
 }
 
-/* get rid of margins so nav bar will extend across top */
+/*
 body > header.row {
-  margin-left: 0;
-  margin-right: 0;
+margin-left: 0;
+margin-right: 0;
 }
 
-/* set nav width to 100vw */
+
 body > header.row > nav {
-  width: 100vw;
+width: 100vw;
+}*/
+header {
+  background-color: black;
 }
 
 nav {
-  background-color: #000;
-  color: #FFF;
+  color: #white;
   // height: 11vw;
   margin: 0;
   // padding: 2vw;
-  /* changing this so that flash messages and body content get pushed below nav bar */
-  /*position: fixed;*/
-  position: fixed;
   opacity: .8;
   text-align: left;
   width: 100vw;
@@ -212,7 +210,6 @@ nav a:visited {
   color: #FFF;
   // padding: 0;
 }
-
 
 
 /********************/
@@ -266,23 +263,29 @@ h1.format-forms  {
 
 
 .big-button{
-  margin-left: 41%;
+  margin-left: 50%;
   text-align: center;
 }
 
-h1.overlay a{
+h1.overlay span {
+  color: black;
+  text-transform: uppercase;
+  font-size: 30px;
+
+}
+
+h1.overlay {
   position: fixed;
   margin: auto;
   color: black;
   z-index: 1;
   padding: 3vw;
-  text-transform: uppercase;
-  font-size: 30px;
   border: 6px solid black;
   width: 40vw;
   margin: 20vw 0 0 30vw;
+  text-align: center;
 }
 
-h1.overlay a:hover {
+h1.overlay:hover {
   background-color: rgba(255, 255, 255, .2);
 }
