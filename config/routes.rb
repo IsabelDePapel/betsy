@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  get 'order_items/change_status'
+
   root 'products#home'
 
   # ======= USERS - Unnecessary to have Controller
@@ -13,6 +15,7 @@ Rails.application.routes.draw do
   # ======= MERCHANTS
   resources :merchants, only: [:index, :show]
 
+  # patch 'merchants/:merchant_id/order_items/:order_item_id/change_status', to: 'merchants#change_item_status', as: 'change_status'
 
   # ======= PRODUCTS
   resources :products, except: [:update] do
@@ -33,7 +36,7 @@ Rails.application.routes.draw do
   resources :categories, only: [:index, :create]
 
   # ======= ORDER ITEMS - Unnecessary to have Controller
-
+  patch 'order_items/:id/change_status', to: 'order_items#change_status', as: 'change_status'
   # ======= ORDERS
   resources :orders, only: [:index, :show] do
     get 'confirmation', on: :member

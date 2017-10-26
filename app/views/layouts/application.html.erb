@@ -34,10 +34,8 @@
   <%= render partial: "/layouts/flash" %>
 
   <main class="row">
-
     <%= yield %>
   </main>
-
 
   <hr class="root-hr">
   <footer>
@@ -46,6 +44,9 @@
         © 2017 - Foodsie.
       </p>
     </footer>
+  <section class="row debug">
+  <%= debug(params) if Rails.env.development? %>
+  </section>
 </body>
 </html>
 
@@ -53,8 +54,3 @@
   <!-- <section class="row debug">
   <%= debug(params) if Rails.env.development? %>
 </section> -->
-<<<<<<< Updated upstream
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
