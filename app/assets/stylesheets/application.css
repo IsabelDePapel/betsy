@@ -35,6 +35,7 @@
 
 section.failure, section.success {
   margin: 1vw 0;
+  margin-left: 2vw;
 }
 
 section.failure {
@@ -48,6 +49,10 @@ section.success {
 /************************************/
 /* Body Styling          */
 /************************************/
+
+body>div.placeholder {
+  height: 8vw;
+}
 
 li.navlinks {
   width: 12vw;
