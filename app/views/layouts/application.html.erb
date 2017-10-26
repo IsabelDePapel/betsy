@@ -13,10 +13,10 @@
 
 <body>
   <!-- Navigation bar/links -->
-  <header>
+  <header class="row expanded">
     <nav>
       <%= link_to "Home", root_path, class: "button" %>
-      <%= link_to "Categories", root_path, class: "button" %>
+      <%= link_to "Categories", 'categories_path', class: "button" %>
       <%= link_to "All Products", products_path, class: "button" %>
       <%= link_to "Cart", cart_path, class: "button" %>
       <div class="float-right">
@@ -33,9 +33,13 @@
   <!-- LEAVE THIS IN: displays flash messages -->
   <%= render partial: "/layouts/flash" %>
 
-  <main class="row">
+  <% if params[:action] == "home" %>
     <%= yield %>
-  </main>
+  <% else %>
+    <main class="row">
+      <%= yield %>
+    </main>
+  <% end %>
 
   <section class="row debug">
     <%= debug(params) if Rails.env.development? %>
