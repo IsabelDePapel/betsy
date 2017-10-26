@@ -8,13 +8,9 @@
     <%= stylesheet_link_tag    "application" %>
     <%= javascript_include_tag "application", 'data-turbolinks-track' => true %>
   </head>
-<<<<<<< Updated upstream
-
+  
 <!-- This portion is solid, please leave it alone. -->
 
-=======
-  <!-- LEAVE THIS IN -->
->>>>>>> Stashed changes
 <body>
   <!-- Navigation bar/links -->
   <header>
@@ -37,13 +33,9 @@
   <!-- LEAVE THIS IN: displays flash messages -->
   <%= render partial: "/layouts/flash" %>
 
-<<<<<<< Updated upstream
-  <%= yield %>
-=======
   <main class="row>
     <%= yield %>
   </main>
->>>>>>> Stashed changes
 
   <hr class="root-hr">
   <footer>
@@ -52,12 +44,13 @@
         © 2017 - Foodsie.
       </p>
     </footer>
+  <section class="row debug">
+  <%= debug(params) if Rails.env.development? %>
+  </section>
 </body>
 </html>
-<<<<<<< Updated upstream
 
   <!-- <section class="row debug">
   <%= debug(params) if Rails.env.development? %>
 </section> -->
-=======
->>>>>>> Stashed changes
+

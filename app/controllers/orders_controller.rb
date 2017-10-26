@@ -5,6 +5,7 @@ class OrdersController < ApplicationController
   def confirmation
     # check order id is valid
     @order = Order.find_by(id: params[:id])
+    # if we don't find an order we should have a 404 error
   end
 
   # will only existed as nested through merchant
