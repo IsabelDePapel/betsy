@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   post '/logout', to: 'sessions#logout', as: 'logout'
 
   # ======= MERCHANTS
-  resources :merchants, except: [:new, :edit, :update, :destroy] #login methods may change required routes
+  resources :merchants, only: [:index, :show]
 
 
   # ======= PRODUCTS
@@ -39,7 +39,7 @@ Rails.application.routes.draw do
     get 'confirmation', on: :member
     resources :billings, only: [:new, :create]
   end
-  
+
   get '/cart', to: "orders#cart", as: 'cart'
   patch '/cart/:order_item_id/remove_from_cart', to: "products#remove_from_cart", as: 'remove_from_cart'
   patch '/cart/:order_item_id/update_quantity', to: "products#update_quantity_in_cart", as: 'update_quantity_in_cart'

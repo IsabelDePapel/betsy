@@ -1,37 +1,30 @@
 <h1>Seller List</h1>
 
-<h1>TODO-- CHECK IF NO RATINGS, NO SELLING SINCE</h1>
-
 <table>
   <thead>
     <tr>
-      <th>
-        Seller Name
-      </th>
-      <th>
-        Average Rating
-      </th>
-      <th>
-        Number of Products
-      </th>
-      <th>
-        Foodsie Member Since
-      </th>
+      <th>Seller Name</th>
+      <th>Average Rating</th>
+      <th>Number of Products</th>
+      <th>Foodsie Member Since</th>
     </tr>
   </thead>
   <tbody>
+    <% @merchants.each do |merchant| %>
     <tr>
-      <% @merchants.each do |merchant| %>
       <td>
         <%= link_to merchant.username, merchant_products_path(merchant.id) %>
       </td>
       <td>
-        <%= merchant.average_rating %>
+        <% if !merchant.average_rating %>
+          No Reviews
+        <% else %>
+          <%= merchant.average_rating %>
+        <% end %>
       </td>
-      <td>
-        <%= merchant.created_at.strftime('%B %Y') %>
-      </td>
-      <% end %>
+      <td><%= merchant.products.count %></td>
+      <td><%= merchant.created_at.strftime('%B %Y') %></td>
     </tr>
+    <% end %>
   </tbody>
 </table>

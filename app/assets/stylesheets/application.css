@@ -30,9 +30,24 @@
 }
 
 /************************************/
-/* Body Styling          */
+/* Flash Messages          */
 /************************************/
 
+section.failure, section.success {
+  margin: 1vw 0;
+}
+
+section.failure {
+  color: red;
+}
+
+section.success {
+  color: green;
+}
+
+/************************************/
+/* Body Styling          */
+/************************************/
 
 li.navlinks {
   width: 12vw;
@@ -154,7 +169,6 @@ width: 100vw;
 }*/
 header {
   background-color: black;
-
 }
 
 nav {
@@ -191,7 +205,6 @@ nav a:visited {
   color: #FFF;
   // padding: 0;
 }
-
 
 
 /********************/

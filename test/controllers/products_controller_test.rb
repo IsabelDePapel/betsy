@@ -52,7 +52,7 @@ describe ProductsController do
 
     describe "add to cart" do
       it "creates a user and order if they don't exist and adds the item to a new cart" do
-        # skip # THIS ISN'T PASSING
+        skip # THIS ISN'T PASSING
         # confirm logout
         session[:order_id].must_be_nil
         session[:user_id].must_be_nil

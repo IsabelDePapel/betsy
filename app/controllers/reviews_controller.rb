@@ -16,8 +16,7 @@ class ReviewsController < ApplicationController
       flash[:status] = :failure
       flash[:message] = "You're not allowed to review your own products"
 
-      redirect_to root_path
-      return
+      return redirect_to products_path
     end
 
     @review.user_id =user.id
@@ -51,7 +50,7 @@ class ReviewsController < ApplicationController
     if @review.user_id != session[:user_id]
       flash[:status] = :failure
       flash[:message] = "You can only edit reviews you wrote"
-      redirect_back fallback_location: root_path
+      redirect_back fallback_location: products_path
     end
   end
 
@@ -91,7 +90,7 @@ class ReviewsController < ApplicationController
     unless @product
       flash[:status] = :failure
       flash[:message] = "Product does not exist"
-      redirect_to root_path
+      return redirect_to products_path
     end
   end
 

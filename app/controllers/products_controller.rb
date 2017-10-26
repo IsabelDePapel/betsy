@@ -1,6 +1,7 @@
 class ProductsController < ApplicationController
   before_action :authenticate_user, except: [:home, :index, :show, :add_to_cart, :remove_from_cart, :update_quantity_in_cart]
   before_action :find_product, except: [:new, :create, :index]
+  # before_action :authorize_merchant, only: [:edit, :update, :destroy, :change_visibility]
 
   def home
   end
@@ -9,19 +10,19 @@ class ProductsController < ApplicationController
     # TODO refactor when have categories (routes denested)
     if from_category? || from_merchant?
       if @category
-        @products = @category.products.order(:id)
+        @products = @category.products.where("visible = 'true'").order(:name)
       elsif @merchant
-        @products = @merchant.products.order(:id)
+        @products = @merchant.products.where("visible = 'true'").order(:name)
       else #erroneous category_id or merchant_id, render 404?
         redirect_to products_path
       end
     else
-      @products = Product.all.order(:id)
+      @products = Product.all.where("visible = 'true'").order(:name)
     end
   end
 
   def show
-    render_404 unless @product
+    render_404 unless @product && @product.visible == true
   end
 
   def new
@@ -29,12 +30,32 @@ class ProductsController < ApplicationController
   end
 
   def create
-    @product = Product.new product_params
-    if @product.save
-      redirect_to products_path
+    if params[:product][:visible] == "0"
+      params[:product][:visible] = false
     else
-      render :new, status: :bad_request
+      params[:product][:visible] = true
     end
+
+    @product = Product.new product_params
+    if @auth_user
+      @product.merchant = @auth_user
+      if @product.save
+        populate_categories(params[:categories_string], @product)
+
+        flash[:status] = :success
+        flash[:message] = "#{@product.name.capitalize} successfully saved into database!"
+        redirect_to products_path
+      else
+        flash[:status] = :failure
+        flash[:message] = "#{@product.name.capitalize} unsuccessfully saved into database!"
+        render :new, status: :bad_request
+      end
+    else
+      flash[:status] = :failure
+      flash[:message] = "Can't create product without an authorized user logged in."
+      redirect_to products_path
+    end
+
   end
 
   def edit
@@ -43,13 +64,17 @@ class ProductsController < ApplicationController
       return
     end
 
-    return if !authorize_merchant
-    # if @product.merchant.user_id != session[:user_id]
-    #   flash[:status] = :failure
-    #   flash[:message] = "You can only edit your own products"
-    #   redirect_to products_path
-    #   return
-    # end
+
+    if !authorize_merchant
+      return
+    else
+      # Prepopulate category textfield with a string of all the categories
+      category_str_array = []
+      @product.categories.each do |category|
+        category_str_array << category.name
+      end
+      params[:categories_string] = category_str_array.join(", ")
+    end
 
   end
 
@@ -62,6 +87,8 @@ class ProductsController < ApplicationController
     return if !authorize_merchant
 
     if @product.update_attributes product_params
+      @product.categories = []
+      populate_categories(params[:categories_string], @product)
       flash[:status] = :success
       flash[:message] = "#{@product.name.capitalize} successfully edited!"
       redirect_to products_path
@@ -159,11 +186,6 @@ class ProductsController < ApplicationController
   end
 
   def change_visibility
-    # product = Product.find_by(id: params[:id].to_i)
-    # if user is not logged in as the merchant who owns product
-    # if session[:user_id] == nil || session[:user_id] != product.merchant.id
-    #   flash[:error] = "You must be logged in as product owner to change product visibility"
-    # else
     unless @product
       render_404
       return
@@ -171,27 +193,24 @@ class ProductsController < ApplicationController
 
     return if !authorize_merchant
 
-    if @product.visible == false
-      @product.visible = true
-      @product.save
-      flash[:status] = :success
-      flash[:message] = "Product set to visible"
+    @product.visible = @product.visible == true ? false : true
+    status = @product.visible ? "visible" : "not visible"
 
-    else
-      @product.visible = false
-      @product.visible.save
+    if @product.save
       flash[:status] = :success
-      flash[:message] = "Product set to not visible"
+      flash[:message] = "Product set to #{status}"
+    else
+      flash[:status] = :failure
+      flash[:message] = "There was a problem"
+      flash[:details] = @product.errors.messages
     end
-    # end
-    #redirect_to root_path
     redirect_to merchant_products_path(@auth_user.id)
   end
 
   private
 
   def product_params
-    return params.require(:product).permit(:id, :name, :price, :description, :photo_url, :quantity, :merchant_id, :visible)
+    return params.require(:product).permit(:name, :price, :description, :photo_url, :quantity, :visible)
   end
 
   def find_product
@@ -220,6 +239,17 @@ class ProductsController < ApplicationController
     if params[:merchant_id]
       @merchant = Merchant.find_by(id: params[:merchant_id])
       return true
+    end
+  end
+
+  def populate_categories(category_string, product)
+    category_array = category_string.split(",").map(&:strip)
+    category_array.each do |category|
+      if Category.existing_cat?(category)
+        product.categories << Category.find_by(name: category)
+      else
+        product.categories << Category.create(name: category)
+      end
     end
   end
 end

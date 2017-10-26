@@ -1,0 +1,29 @@
+<div class="row">
+  <%= form_for @product do |f| %>
+    <%= f.label :name %>
+    <%= f.text_field :name, require: true %>
+
+    <%= f.label :price %>
+    <%= f.number_field :price, step: 0.01, min: 0.01 %>
+
+    <%= f.label :quantity %>
+    <%= f.number_field :quantity, min: 1 %>
+    <div class="">
+      <%= f.label :visible %>
+      <%= f.check_box :visible %>
+    </div>
+
+    <%= f.label(:photo_url) %>
+    <%= f.text_field(:photo_url) %>
+
+    <%= f.label(:description) %>
+    <%= f.text_area(:description) %>
+
+    <%= label_tag(:categories_string, "Categories") %>
+    <small>Please separate categories with commas. Example: candy, sweets, cute, tiny</small>
+    <%= text_field_tag :categories_string, params[:categories_string] %>
+
+    <%= f.submit button_name, class: "button" %>
+
+  <% end %>
+</div>
