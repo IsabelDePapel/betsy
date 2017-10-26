@@ -5,37 +5,44 @@ class ReviewsController < ApplicationController
   # NESTED ROUTES - will have a product id
   def new
     @review = Review.new
-    @review.product_id = params[:product_id]
+    @review.product = Product.find_by(id: params[:product_id])
+    if @review.product != nil
+      # create new user if user doesn't already exist
+      user = session[:user_id] ? User.find_by(id: session[:user_id]) : User.create
 
-    # create new user if user doesn't already exist
-    user = session[:user_id] ? User.find_by(id: session[:user_id]) : User.create
+      # if user id matches merchant's user id, deny access
+      # merchant can't review their own products
+      if user.id == @review.product.merchant.user_id
+        flash[:status] = :failure
+        flash[:message] = "You're not allowed to review your own products"
 
-    # if user id matches merchant's user id, deny access
-    # merchant can't review their own products
-    if user.id == @product.merchant.user_id
+        return redirect_to products_path
+      end
+      # @review.user_id = user.id
+    else
       flash[:status] = :failure
-      flash[:message] = "You're not allowed to review your own products"
-
-      return redirect_to products_path
+      flash[:message] = "Can't leave a review for a product that doesn't exist"
     end
-
-    @review.user_id =user.id
   end
 
   def create
     # WISHLIST - only allow users to review products they've purchased (SHOULD BE prevented at db level)
     @review = Review.new(review_params)
+    @review.product = Product.find_by(id: params[:product_id])
+    user = session[:user_id] ? User.find_by(id: session[:user_id]) : User.create
 
+    @review.user = user
     if @review.save
       flash[:status] = :success
-      flash[:message] = "Thank you for reviewing #{@product.name}!"
+      flash[:message] = "Thank you for reviewing #{@review.product.name}!"
 
-      redirect_to product_path(@product)
+      redirect_to product_path(@review.product)
     else
       flash.now[:status] = :failure
-      flash.now[:message] = "Unable to post review of #{@product.name}"
+      flash.now[:message] = "Unable to post review of #{@review.product.name}"
       flash.now[:details] = @review.errors.messages
-      render :new, status: :bad_request
+      # render :new, status: :bad_request
+      redirect_to new_product_review_path(@review.product)
     end
   end
 
@@ -70,7 +77,7 @@ class ReviewsController < ApplicationController
       flash[:message] = "Could not update your review."
       flash[:details] = @review.errors.messages
 
-      render :edit, status: :bad_request
+      render :edit
     end
   end
 
@@ -82,6 +89,7 @@ class ReviewsController < ApplicationController
 
   def review_params
     return params.require(:review).permit(:product_id, :user_id, :rating, :text)
+    # return params.require(:review).permit(:product_id, :user_id, :rating, :text)
   end
 
   def verify_product_exists

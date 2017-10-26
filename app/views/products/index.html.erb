@@ -8,7 +8,7 @@
   <div class="large-4 medium-6 small-12 columns end" id="product-container">
     <article class="product">
 
-      <%= image_tag potato, class: "thumbnail product-photo", align: "right"  %>
+      <%= image_tag product.photo_url, alt: product.name, class: "thumbnail product-photo", align: "right"  %>
       <h2><%= link_to(product.name, product_path(product.id)) %></h2>
       <p>Description: <%= product.description %></p>
       <p>Price: <%= readable_price(product.price) %></p>

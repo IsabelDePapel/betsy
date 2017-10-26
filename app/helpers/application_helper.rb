@@ -3,6 +3,24 @@ module ApplicationHelper
     number_to_currency(price)
   end
 
+  def get_name(user)
+    if user.merchant == nil
+      return "Anonymous"
+    else
+      return user.merchant.username
+    end
+  end
+
+  def readable_date(date)
+    # return a string of the HTML I want to put in the view
+    # Parenthesis cleanses the HTML
+      if date != nil
+        return date.strftime("%A, %b %d")
+      else
+        return ""
+      end
+  end
+
   def display_address(order_object)
     address = order_object.billing
     (

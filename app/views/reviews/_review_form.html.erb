@@ -1,0 +1,12 @@
+<div class="row">
+  <%= form_for [@review.product, @review], method: :post do |f| %>
+    <%= f.label :rating %>
+    <%= f.number_field :rating, min: 1, max: 5, require: true %>
+
+    <%= f.label :text, "Comments" %>
+    <small>1 (bad) to 5 (GREAT!)</small>
+    <%= f.text_area :text %>
+
+    <%= f.submit 'Create New Review', class: "button" %>
+  <% end %>
+</div>
