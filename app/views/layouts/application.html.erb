@@ -9,8 +9,6 @@
     <%= javascript_include_tag "application", 'data-turbolinks-track' => true %>
   </head>
 
-<!-- This portion is solid, please leave it alone. -->
-
 <body>
   <!-- Navigation bar/links -->
   <header>
@@ -32,8 +30,10 @@
 
   <!-- LEAVE THIS IN: displays flash messages -->
   <%= render partial: "/layouts/flash" %>
-
-  <%= yield %>
+  
+  <main class="row>
+    <%= yield %>
+  </main>
 
   <hr class="root-hr">
   <footer>
@@ -42,9 +42,10 @@
         © 2017 - Foodsie.
       </p>
     </footer>
+  <section class="row debug">
+  <%= debug(params) if Rails.env.development? %>
+  </section>
 </body>
 </html>
 
-  <!-- <section class="row debug">
-  <%= debug(params) if Rails.env.development? %>
-</section> -->
+

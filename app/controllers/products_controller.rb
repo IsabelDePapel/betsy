@@ -171,7 +171,7 @@ class ProductsController < ApplicationController
   end
 
   def update_quantity_in_cart
-    order_item = OrderItem.find(params[:order_item_id].to_i)
+    order_item = OrderItem.find_by(id: params[:order_item_id].to_i)
     if order_item
       order_item.update_attribute(:quantity, params["quantity"])
       flash[:status] = :success
@@ -203,7 +203,7 @@ class ProductsController < ApplicationController
       flash[:message] = "There was a problem"
       flash[:details] = @product.errors.messages
     end
-    redirect_to merchant_products_path(@auth_user.id)
+    redirect_to merchant_path(@auth_user.id)
   end
 
   private

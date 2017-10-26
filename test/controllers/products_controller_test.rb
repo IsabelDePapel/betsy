@@ -318,7 +318,7 @@ describe ProductsController do
 
         patch change_visibility_product_path(product)
         must_respond_with :redirect
-        must_redirect_to merchant_products_path(@auth_user.id)
+        must_redirect_to merchant_path(@auth_user.id)
         product.reload.visible.must_equal expected_vis
       end
 

@@ -5,6 +5,11 @@ describe MerchantsController do
   let(:other_merchant) { merchants(:one) }
   let(:fake_merch_id) { Merchant.last.id + 1 }
 
+  # for testing change status of order items
+  let(:paid) { order_items(:paid) } # merch2
+  let(:other_item) { order_items(:pending) } # merch1
+  let(:fake_item_id) { OrderItem.last.id + 1 }
+
   describe "not logged in" do
     before do
       # log in and then log out
@@ -37,6 +42,22 @@ describe MerchantsController do
         get merchant_path(fake_merch_id)
         must_respond_with :redirect
       end
+
+      # describe "change_item_status (unauth)" do
+      #   it "should redirect back if guest tries to change item status" do
+      #     orig_status = paid.status
+      #
+      #     patch change_status_path paid, status: "canceled"
+      #
+      #     must_respond_with :redirect
+      #     paid.reload.status.must_equal orig_status
+      #   end
+      #
+      #   it "should redirect back if guest tries to change item status of order item that doesn't exist" do
+      #     patch change_status_path fake_item_id, status: "canceled"
+      #     must_respond_with :redirect
+      #   end
+      # end
     end
 
     # describe "edit (unauth)" do
@@ -90,6 +111,7 @@ describe MerchantsController do
       it "should respond with redirect if the merchant tries to view another merchant's acct details page" do
         get merchant_path(other_merchant)
         must_respond_with :redirect
+        must_redirect_to merchants_path
       end
 
       it "should respond with not found if merchant tries to view acct page for merchant that doesn't exist" do
@@ -97,6 +119,35 @@ describe MerchantsController do
         must_respond_with :not_found
       end
     end
+
+    # describe "change_item_status" do
+    #   it "should change item status if item belongs to merchant" do
+    #     new_status = "canceled"
+    #
+    #     patch change_status_path paid, status: new_status
+    #
+    #     # must_respond_with :redirect
+    #     # must_redirect_to merchant_path(@auth_user)
+    #     # OrderItem.find_by(id: complete.id).status.must_equal new_status
+    #     paid.reload.status.must_equal new_status
+    #   end
+    #
+    #   it "should redirect to merchants page if item belongs to another merchant" do
+    #     orig_status = other_item.status
+    #
+    #     patch change_status_path other_item, status: "canceled"
+    #
+    #     # must_respond_with :redirect
+    #     # must_redirect_to merchants_path
+    #     other_item.reload.status.must_equal orig_status
+    #   end
+    #
+    #   it "should respond with not found if item doesn't exist" do
+    #     patch change_status_path fake_item_id, status: "complete"
+    #
+    #     must_respond_with :not_found
+    #   end
+    # end
   end
 
 end
