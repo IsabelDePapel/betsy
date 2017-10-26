@@ -30,7 +30,7 @@ describe ProductsController do
         session[:user_id].must_be_nil
 
         get products_path
-        must_respond_with :success # CRASHES when image takes too long to load
+        must_respond_with :success
       end
 
       it "returns success when there are no products" do
@@ -49,7 +49,7 @@ describe ProductsController do
         product.reload.visible.must_equal true
 
         get product_path(product)
-        must_respond_with :success # CRASHES when image takes too long to load
+        must_respond_with :success
       end
 
       it "returns not found if given bogus product id" do
@@ -78,7 +78,7 @@ describe ProductsController do
         num_orders = Order.count
         num_items = OrderItem.count
 
-        patch product_add_to_cart_path(product.id)
+        patch product_add_to_cart_path(product.id, {"quantity" => "4"})
         User.count.must_equal num_users + 1, "num users must be #{num_users + 1}"
         Order.count.must_equal num_orders + 1, "num orders must be #{num_orders + 1}"
         OrderItem.count.must_equal num_items + 1, "num orderitems must be #{num_items + 1}" # CRASHES
@@ -124,23 +124,22 @@ describe ProductsController do
         num = 3
 
         num.times do
-          patch product_add_to_cart_path(product.id)
+          patch product_add_to_cart_path(product.id, {"quantity" => "1"})
         end
 
         OrderItem.count.must_equal num_items + 1
-        OrderItem.last.quantity.must_equal num
+        OrderItem.last.quantity.must_equal 1
       end
     end # end of add to cart
 
     describe "remove from cart" do
       before do
         @start_count = OrderItem.count
-        patch product_add_to_cart_path(product.id)
+        patch product_add_to_cart_path(product.id, {"quantity" => "2"})
       end
 
       it "deletes the order item from the order if item in cart" do
-
-        OrderItem.count.must_equal @start_count + 1 # CRASHES
+        OrderItem.count.must_equal @start_count + 1
         added_item = OrderItem.last
 
         patch remove_from_cart_path(added_item.id)
@@ -157,11 +156,13 @@ describe ProductsController do
         num = 2
 
         num.times do
-          patch product_add_to_cart_path(product.id)
+          # when you do patch,
+          patch product_add_to_cart_path(product.id, {"quantity" => "2"})
+
         end
 
         added_item = OrderItem.last
-        added_item.quantity.must_equal num + 1 # CRASHES
+        added_item.quantity.must_equal 2 # CRASHES
 
         patch remove_from_cart_path(added_item)
 
@@ -170,7 +171,7 @@ describe ProductsController do
       end
 
       it "redirect and doesn't delete if order item doesn't exist" do
-        patch remove_from_cart_path OrderItem.last.id. + 1
+        patch remove_from_cart_path OrderItem.last.id + 1
         must_respond_with :redirect
 
         OrderItem.count.must_equal @start_count + 1 # bc prod added in before do # CRASHES
@@ -293,7 +294,7 @@ describe ProductsController do
         # confirm logged in
         session[:user_id].must_equal @auth_user.user_id
         get products_path
-        must_respond_with :success # CRASHES when image takes too long to load
+        must_respond_with :success
       end
     end
 
@@ -306,7 +307,7 @@ describe ProductsController do
         product.reload.visible.must_equal true
 
         get product_path(product)
-        must_respond_with :success # CRASHES when image takes too long to load
+        must_respond_with :success
       end
 
       it "returns success when given a product the merchant owns even if NOT currently visible" do
@@ -316,7 +317,7 @@ describe ProductsController do
         product.reload.visible.must_equal false
 
         get product_path(product)
-        must_respond_with :success # CRASHES when image takes too long to load
+        must_respond_with :success
       end
 
       it "responds with redirect when given another merchant's product that is NOT visible" do
