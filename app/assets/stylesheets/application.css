@@ -32,6 +32,8 @@ main{
 }
 
 
+
+
 /************************************/
 /* Flash Messages          */
 /************************************/
@@ -62,6 +64,10 @@ section.failure li, section.success li {
 /* Body Styling          */
 /************************************/
 
+body {
+  background: #f2f2f2 !important;
+}
+
 body>div.placeholder {
   height: 8vw;
 }
@@ -80,7 +86,7 @@ ul {
   padding-top: 13%;
 }
 
-table{
+table {
   color: #000;
   table-layout: fixed;
   width: 100%;
@@ -98,10 +104,10 @@ table.order td {
 
 th,
 td {
-  text-align: left;
+  text-align: center !important;
   overflow: hidden;
   text-transform: uppercase;
-  // width: 10%;
+  width: auto;
 }
 
 td {
@@ -119,6 +125,10 @@ html {
   padding: 0;
 }
 
+a {
+  color: #0fb379;
+}
+
 @media only screen and (orientation: landscape) {
   .homepage-banner {
     width: 100%;
@@ -130,6 +140,10 @@ html {
     height: 100%;
     width: auto;
   }
+}
+
+main section h1, main section h2, main section h3 {
+  margin-top: 2.5rem;
 }
 
 #slideshow {
@@ -189,6 +203,7 @@ nav {
   padding: 2vw 0 2vw 2.5vw;
 }
 
+
 .foodsie {
   text-transform: uppercase;
   color: white;
@@ -197,11 +212,10 @@ nav {
   display: inline;
 }
 
-nav a:link,
-nav a:hover,
-nav a:visited {
+nav li:link,
+nav li:hover,
+nav li:visited {
   color: white;
-  // padding: 0;
 }
 
 
@@ -283,6 +297,19 @@ h1.overlay:hover {
 }
 
 /********************/
+/*  Login        */
+/*******************/
+
+h1 {
+  text-align: center;
+  margin-top: 2%;
+  margin-bottom: 2%;
+}
+.button {
+ text-align: center !important;
+}
+
+/********************/
 /*  Merchants Acct Page        */
 /*******************/
 
@@ -291,9 +318,21 @@ select#status {
 }
 
 th.col-num {
-  width: 4vw;
+  width: 8%;
 }
 
 th.col-wide {
-  width: 10vw;
+  width: 25%;
+}
+
+#add-product-button {
+  margin-top: 2.5rem;
+}
+
+form label {
+  font-size: 1.5rem;
+}
+
+form small {
+  font-size: 1.25rem;
 }

@@ -35,6 +35,11 @@
 
 <section id="reviews" class="row">
   <h2>Reviews</h2>
+  <% @rating = @product.average_rating == nil ? "unrated" : @product.average_rating %>
+  <h4>Average Rating: <%= @rating %></h4>
+
+  <div class="reviews">
+
   <%= link_to "Add Review", new_product_review_path(@product.id), class: "button" %>
   <% if @product.reviews.length == 0 %>
     <h3>Currently no reviews for this product.</h3>
@@ -48,4 +53,6 @@
       </div>
     <% end %>
   <% end %>
+  </div>
+
 </section>

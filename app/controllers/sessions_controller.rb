@@ -30,7 +30,7 @@ class SessionsController < ApplicationController
         session[:order_id] = Order.find_last_cart_id(@merchant.user_id)
       end
       flash[:status] = :success
-      flash[:message] = "#{@merchant.username} is logged in"
+      flash[:message] = "You're logged in!"
 
     else
       # check if session user id already exists
@@ -58,6 +58,6 @@ class SessionsController < ApplicationController
     end
 
     # set up a landing page for all merchants??
-    redirect_to products_path
+    redirect_to merchant_path(@merchant)
   end
 end

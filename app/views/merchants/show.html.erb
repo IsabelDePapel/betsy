@@ -1,7 +1,6 @@
-
 <section class="info row">
   <section class="columns">
-    <h1><%= "#{@merchant.username}'s Profile" %></h1>
+    <h1><%= "#{@merchant.username}'s Dashboard" %></h1>
     <h2>Your Info</h2>
     <ul>
       <li>
@@ -16,16 +15,18 @@
 
 
 <div class="row">
-  <section class="business-side column small-12 medium-9">
+  <section class="business-side column small-12 medium-8">
     <section class="products">
       <div class="row">
         <h2 class="column small-8">Your Products</h2>
-        <%= link_to "Add a Product", new_product_path, class: "button column small-3 end" %>
+        <div class="column small-4">
+        <%= link_to "Add a Product", new_product_path, class: "button float-right", id: "add-product-button" %>
+        </div>
       </div>
       <table>
         <thead>
           <tr>
-            <th class="col-num">Number</th>
+            <th class="col-num">No.</th>
             <th>Name</th>
             <th class="col-num">Qty</th>
             <th>Price</th>
@@ -67,14 +68,13 @@
     </section>
   </section>
 
-  <section class="shopping-side column small-12 medium-3">
+  <section class="shopping-side column small-12 medium-4">
     <h2>Your Purchases</h2>
 
     <table>
       <thead>
         <tr>
-          <th>Order</th>
-          <th>Dates</th>
+          <th>Date</th>
           <th>Items</th>
         </tr>
       </thead>
@@ -82,8 +82,7 @@
         <% if @merchant.user.orders %>
           <% @merchant.user.orders.each do |order| %>
           <tr>
-            <td><%= link_to order.id, confirmation_order_path(order.id) %></td>>
-            <td><%= readable_date(order.updated_at) %></td>
+            <td><%= link_to "#{readable_date(order.updated_at)} - #{order.id}", confirmation_order_path(order.id) %></td>
             <td><% if order.order_items %>
               <% order.order_items.each do |item| %>
               <%= link_to item.product.name, product_path(item.product.id) %><% end %></td>
