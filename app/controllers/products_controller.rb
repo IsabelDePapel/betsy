@@ -57,8 +57,9 @@ class ProductsController < ApplicationController
         flash[:message] = "#{@product.name.capitalize} successfully saved into database!"
         redirect_to products_path
       else
-        flash[:status] = :failure
-        flash[:message] = "#{@product.name.capitalize} unsuccessfully saved into database!"
+        flash.now[:status] = :failure
+        flash.now[:message] = "#{@product.name.capitalize} unsuccessfully saved into database!"
+        flash.now[:details] = @product.errors.messages
         render :new, status: :bad_request
       end
     else
