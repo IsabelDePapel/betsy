@@ -59,8 +59,10 @@ class Order < ApplicationRecord
         if item.product.id == prod.id
           in_order = true
           existing_order_item = OrderItem.find(item.id)
-          existing_order_item.quantity = amount_ordered
-          existing_order_item.save
+          existing_order_item.quantity += amount_ordered.to_i
+          if !existing_order_item.save
+            return false
+          end
         end
       end
 
