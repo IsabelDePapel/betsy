@@ -293,6 +293,15 @@ h1.overlay:hover {
 /********************/
 /*  Merchants Acct Page        */
 /*******************/
+
 select#status {
+  width: 8vw;
+}
+
+th.col-num {
+  width: 4vw;
+}
+
+th.col-wide {
   width: 10vw;
 }
