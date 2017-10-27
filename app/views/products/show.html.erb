@@ -31,6 +31,7 @@
     <button type="button" class="button secondary" disabled>Sold Out</button>
     <% end %>
   </div>
+
 </section>
 
 <section id="reviews" class="row">
@@ -45,14 +46,12 @@
     <h3>Currently no reviews for this product.</h3>
   <% else %>
     <% @product.reviews.each do |review| %>
-      <div class="large-12 columns">
-        <p>Rating: <%= review.rating %></p>
-        <p>By: <%= get_name(review.user) %> at <%= readable_date(review.updated_at) %></p>
-        <p><%= review.text %></p>
-        <hr>
-      </div>
+    <p>Rating: <%= review.rating %></p>
+    <p>By: <%= get_name(review.user) %> at <%= readable_date(review.updated_at) %></p>
+    <p><%= review.text %></p>
+    <hr>
     <% end %>
   <% end %>
-  </div>
+</div>
 
 </section>
