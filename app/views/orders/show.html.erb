@@ -1,4 +1,30 @@
-<h1>Orders#show</h1>
-<p>Find me in app/views/orders/show.html.erb</p>
+<section class="row">
+  <h1 class= "column small-12 medium-3"><%= "Order #{@order.id}" %></h1>
+  <h4 class= "column small-12 medium-9">Placed: <%= @order.order_items[0].updated_at.strftime('%B %d, %Y') %></h2>
+</section>
 
-<p><%= params %></p>
+<section class="row">
+  <table class="column small-12 medium-9">
+    <tr>
+      <th>Status</th>
+      <th>Item</th>
+      <th>Quantity</th>
+      <th>Price</th>
+    </tr>
+
+    <% @order.order_items.each do |item| %>
+      <% if item.product.merchant == @merchant %>
+      <tr>
+        <td><%= item.status %></td>
+        <td><%= link_to item.product.name, product_path(item.product) %></td>
+        <td><%= item.quantity %></td>
+        <td><%= number_to_currency(item.price) %></td>
+      </tr>
+      <% end %>
+    <% end %>
+  </table>
+
+<section class="column small-12 medium-3 billing-info">
+  <%= display_address(@order) if @order && @order.billing %>
+  <%= display_cc(@order) if @order && @order.billing %>
+</section>

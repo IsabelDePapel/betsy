@@ -11,7 +11,9 @@ describe ProductsController do
       price: 1,
       quantity: 5,
       merchant_id: merchants(:one).id
-    }
+    },
+    categories_string:
+      "cupcakes, scones"
   } }
 
   describe "not logged in" do
@@ -39,20 +41,35 @@ describe ProductsController do
     end
 
     describe "show" do
-      it "returns success if given a valid product id" do
-        get product_path(product.id)
+      it "returns success if given a valid product id and product is visible" do
+        product.visible = true
+        product.save
+
+        # confirm visibility
+        product.reload.visible.must_equal true
+
+        get product_path(product)
         must_respond_with :success
       end
 
       it "returns not found if given bogus product id" do
+        get product_path(fake_product_id)
+        must_respond_with :not_found
+      end
+
+      it "responds with redirect if product is not visible" do
+        product.visible = false
+        product.save
+
+        # confirm visibility
+        product.reload.visible.must_equal false
         get product_path(product)
-        must_respond_with :success
+        must_respond_with :redirect
       end
     end
 
     describe "add to cart" do
       it "creates a user and order if they don't exist and adds the item to a new cart" do
-        skip # THIS ISN'T PASSING
         # confirm logout
         session[:order_id].must_be_nil
         session[:user_id].must_be_nil
@@ -61,29 +78,116 @@ describe ProductsController do
         num_orders = Order.count
         num_items = OrderItem.count
 
-        patch product_add_to_cart_path(product)
-        # User.count.must_equal num_users + 1, "num users must be #{num_users + 1}"
-        # Order.count.must_equal num_orders + 1, "num orders must be #{num_orders + 1}"
-        # OrderItem.count.must_equal num_items + 1, "num orderitems must be #{num_items + 1}"
+        patch product_add_to_cart_path(product.id, {"quantity" => "4"})
+        User.count.must_equal num_users + 1, "num users must be #{num_users + 1}"
+        Order.count.must_equal num_orders + 1, "num orders must be #{num_orders + 1}"
+        OrderItem.count.must_equal num_items + 1, "num orderitems must be #{num_items + 1}" # CRASHES
 
         session[:order_id].must_equal Order.last.id
         session[:user_id].must_equal User.last.id
 
         OrderItem.last.product.must_equal product
+
+        must_respond_with :redirect
+        must_redirect_to products_path
       end
 
-      it "creates a user if doesn't exist and adds product o existing cart" do
+      it "creates an order if doesn't exist and adds product to existing cart" do
+        login(merchants(:one), :github)
 
+        session[:order_id].must_be_nil
+        session[:user_id].must_equal merchants(:one).id
+
+        num_users = User.count
+        num_orders = Order.count
+
+        patch product_add_to_cart_path(product.id)
+
+        User.count.must_equal num_users
+        Order.count.must_equal num_orders + 1
+        session[:order_id].must_equal Order.last.id
+        must_respond_with :redirect
+        must_redirect_to products_path
       end
 
-      it "does what if product id isn't valid?? Does it still create user and order?" do
+      it "doesn't add item to cart if product id isn't valid and cart is empty" do
+        num_items = OrderItem.count
 
+        patch product_add_to_cart_path(fake_product_id)
+
+        OrderItem.count.must_equal num_items
+        Order.last.order_items.count.must_equal 0
       end
-    end
+
+      it "increases the quantity if the same item is added to the cart" do
+        num_items = OrderItem.count
+        num = 3
+
+        num.times do
+          patch product_add_to_cart_path(product.id, {"quantity" => "1"})
+        end
+
+        OrderItem.count.must_equal num_items + 1
+        OrderItem.last.quantity.must_equal 1
+      end
+    end # end of add to cart
 
     describe "remove from cart" do
+      before do
+        @start_count = OrderItem.count
+        patch product_add_to_cart_path(product.id, {"quantity" => "2"})
+      end
 
+      it "deletes the order item from the order if item in cart" do
+        OrderItem.count.must_equal @start_count + 1
+        added_item = OrderItem.last
+
+        patch remove_from_cart_path(added_item.id)
+
+        OrderItem.count.must_equal @start_count
+        OrderItem.last.wont_equal added_item
+
+        must_respond_with :redirect
+        must_redirect_to cart_path
+      end
+
+      it "deletes entire order item if qty > 1 if item in cart" do
+        # add same item to increase qty
+        num = 2
+
+        num.times do
+          # when you do patch,
+          patch product_add_to_cart_path(product.id, {"quantity" => "2"})
+
+        end
+
+        added_item = OrderItem.last
+        added_item.quantity.must_equal 2 # CRASHES
+
+        patch remove_from_cart_path(added_item)
+
+        OrderItem.count.must_equal @start_count
+        OrderItem.last.wont_equal added_item
+      end
+
+      it "redirect and doesn't delete if order item doesn't exist" do
+        patch remove_from_cart_path OrderItem.last.id + 1
+        must_respond_with :redirect
+
+        OrderItem.count.must_equal @start_count + 1 # bc prod added in before do # CRASHES
+
+      end
+      it "doesn't delete anything if order item isn't in the cart" do
+        # cart_item = OrderItem.last
+        not_in_cart = order_items(:pending)
+
+        patch remove_from_cart_path(not_in_cart)
+
+        OrderItem.count.must_equal @start_count + 1 # CRASHES
+        OrderItem.find_by(id: not_in_cart.id).wont_be_nil
+      end
     end
+
 
     # guest user not authorized for anything else related to products - it all redirects BACK
     describe "new (unauthorized)" do
@@ -195,9 +299,35 @@ describe ProductsController do
     end
 
     describe "show" do
-      it "returns success when given a valid product id" do
+      it "returns success when given a valid product id and product is visible" do
+        product.visible = true
+        product.save
+
+        # confirm vis
+        product.reload.visible.must_equal true
+
         get product_path(product)
         must_respond_with :success
+      end
+
+      it "returns success when given a product the merchant owns even if NOT currently visible" do
+        product.visible = false
+        product.save
+
+        product.reload.visible.must_equal false
+
+        get product_path(product)
+        must_respond_with :success
+      end
+
+      it "responds with redirect when given another merchant's product that is NOT visible" do
+        other_product.visible = false
+        other_product.save
+
+        other_product.reload.visible.must_equal false
+
+        get product_path(other_product)
+        must_respond_with :redirect
       end
 
       it "returns not found when given an invalid product id" do
@@ -215,6 +345,8 @@ describe ProductsController do
 
     describe "create" do
       it "creates product and redirects to products page when given valid data" do
+
+
         post products_path params: product_data
         must_respond_with :redirect
         must_redirect_to products_path

@@ -13,7 +13,7 @@
 
 <body>
   <!-- Navigation bar/links -->
-  <header>
+  <header class="row expanded">
     <nav>
 
       <h1 class ="foodsie"><%= link_to "Foodsie", root_path %></h1>
@@ -35,19 +35,24 @@
   <!-- LEAVE THIS IN: displays flash messages -->
   <%= render partial: "/layouts/flash" %>
 
-  <main class="row">
+  <% if params[:action] == "home" %>
     <%= yield %>
-  </main>
+  <% else %>
+    <main class="row">
+      <%= yield %>
+    </main>
+  <% end %>
 
+  <section class="row debug">
+    <%= debug(params) if Rails.env.development? %>
+  </section>
   <hr class="root-hr">
   <footer>
     <div class="footer">
       <p id="copyright">
         © 2017 - Foodsie.
       </p>
-    </footer>
-  <section class="row debug">
-  <%= debug(params) if Rails.env.development? %>
-  </section>
+    </div>
+  </footer>
 </body>
 </html>

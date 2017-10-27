@@ -36,7 +36,7 @@ class Product < ApplicationRecord
   end
 
   def num_sold
-    return OrderItem.where(product_id: Product.find_by(name: name).id).count
+    return OrderItem.where(product_id: Product.find_by(name: name).id).sum { |item| item.quantity }
   end
 
   # presumes that cat is a category (tested before calling)
@@ -45,7 +45,7 @@ class Product < ApplicationRecord
   end
 
   def populate_categories(category_string)
-    category_array = category_string.gsub(/^\W*/,"").gsub(/\W*$/,"").split(/\W*,\W+/)
+    category_array = category_string.gsub(/^\W*/,"").gsub(/\W*$/,"").split(/\W*,\W*/)
     self.categories = []
     category_array.each do |category|
       if Category.existing_cat?(category)

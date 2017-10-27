@@ -270,3 +270,19 @@ h1.overlay {
 h1.overlay:hover {
   background-color: rgba(255, 255, 255, .2);
 }
+
+/********************/
+/*  Merchants Acct Page        */
+/*******************/
+
+select#status {
+  width: 8vw;
+}
+
+th.col-num {
+  width: 4vw;
+}
+
+th.col-wide {
+  width: 10vw;
+}

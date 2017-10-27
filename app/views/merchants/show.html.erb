@@ -1,6 +1,6 @@
 <h1><%= "#{@merchant.username}'s Profile" %></h1>
 
-<section class="info">
+<section class="info row">
   <h2>Your Info</h2>
   <ul>
     <li>
@@ -12,50 +12,83 @@
   </ul>
 </section>
 
-<section class="products">
-  <h2>Your Products</h2>
+<div class="row">
+  <section class="business-side column small-12 medium-9">
+    <section class="products">
+      <div class="row">
+        <h2 class="column small-8">Your Products</h2>
+        <%= link_to "Add a Product", new_product_path, class: "button column small-3 end" %>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th class="col-num">Number</th>
+            <th>Name</th>
+            <th class="col-num">Qty</th>
+            <th>Price</th>
+            <th class="col-num">Sold</th>
+            <th>Visible</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @products %>
+            <% @products.each do |product| %>
+            <tr>
+              <td><%= link_to product.id, edit_product_path(product) %></td>
+              <td><%= link_to product.name, product_path(product) %></td>
+              <td>
+                <%= product.quantity == 0 ? "Out of Stock!" : product.quantity %>
+              </td>
+              <td><%= number_to_currency(product.price) %></td>
+              <td><%= product.num_sold %></td>
+              <% @visibility = product.visible ? "Visible" : "Hidden" %>
+              <td><%= link_to @visibility, change_visibility_product_path(product), method: :patch %></td>
+            </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </section>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Product Number</th>
-        <th>Product Name</th>
-        <th>Inventory</th>
-        <th>Price</th>
-        <th>Number Sold</th>
-        <th>Visible</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% if @products %>
-        <% @products.each do |product| %>
+    <section class="orders">
+      <h2>Your Orders</h2>
+
+      <%= render partial: 'items', locals: { items: @paid, state: "paid", message: "Revenue from order items to be shipped" } %>
+      <%= render partial: 'items', locals: { items: @complete, state: "complete", message: "Revenue from shipped items" } %>
+      <%= render partial: 'items', locals: { items: @canceled, state: "canceled",  message: "Lost revenue from canceled items" } %>
+    </section>
+
+    <section class="total-revenue">
+      <h2>Your Total Revenue</h2>
+      <p><%= number_to_currency(@merchant.total_revenue) %></p>
+    </section>
+  </section>
+
+  <section class="shopping-side column small-12 medium-3">
+    <h2>Your Purchases</h2>
+
+    <table>
+      <thead>
         <tr>
-          <td><%= link_to product.id, edit_product_path(product) %></td>
-          <td><%= link_to product.name, product_path(product) %></td>
-          <td>
-            <%= product.quantity == 0 ? "Out of Stock!" : product.quantity %>
-          </td>
-          <td><%= number_to_currency(product.price) %></td>
-          <td><%= product.num_sold %></td>
-          <% @visibility = product.visible ? "Visible" : "Hidden" %>
-          <td><%= link_to @visibility, change_visibility_product_path(product), method: :patch %></td>
+          <th>Order</th>
+          <th>Dates</th>
+          <th>Items</th>
         </tr>
+      </thead>
+      <tbody>
+        <% if @merchant.user.orders %>
+          <% @merchant.user.orders.each do |order| %>
+          <tr>
+            <td><%= link_to order.id, confirmation_order_path(order.id) %></td>>
+            <td><%= readable_date(order.updated_at) %></td>
+            <td><% if order.order_items %>
+              <% order.order_items.each do |item| %>
+              <%= link_to item.product.name, product_path(item.product.id) %><% end %></td>
+              <% end %>
+          </tr>
+          <% end %>
         <% end %>
-      <% end %>
-    </tbody>
-  </table>
-
-</section>
-
-<section class="orders">
-  <h2>Your Orders</h2>
-
-  <%= render partial: 'items', locals: { items: @paid, state: "paid", message: "Revenue from order items to be shipped" } %>
-  <%= render partial: 'items', locals: { items: @complete, state: "complete", message: "Revenue from shipped items" } %>
-  <%= render partial: 'items', locals: { items: @canceled, state: "canceled",  message: "Lost revenue from canceled items" } %>
-</section>
-
-<section class="total-revenue">
-  <h2>Your Total Revenue</h2>
-  <p><%= number_to_currency(@merchant.total_revenue) %></p>
-</section>
+      </tbody>
+    </table>
+  </section>
+</div>

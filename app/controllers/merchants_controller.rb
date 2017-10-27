@@ -25,45 +25,15 @@ class MerchantsController < ApplicationController
     @complete = @merchant.order_items.where(status: "complete")
     @canceled = @merchant.order_items.where(status: "canceled")
 
+    @purchases = @merchant.user.orders
+
   end
-
-  # def change_item_status
-  #   # changes status of an order item
-  #   item = OrderItem.find_by(id: params[:order_item_id])
-  #
-  #   unless item
-  #     render_404
-  #     return
-  #   end
-  #
-  #   @merchant = Merchant.find_by(id: params[:merchant_id])
-  #
-  #   # byebug
-  #   return if !authorize_merchant
-  #
-  #   puts "CHANGING STATUS"
-  #   # byebug
-  #   item.status = params[:status]
-  #   if item.save
-  #     flash[:status] = :success
-  #     flash[:message] = "Status successfully changed to #{item.reload.status}"
-  #     puts "STATUS CHANGED"
-  #   else
-  #     flash[:status] = :failure
-  #     flash[:message] = "Unable to change status"
-  #     flash[:details] = item.errors.messages
-  #   end
-  #
-  #   redirect_to merchant_path(@merchant)
-  #   puts "DONE WITH CHANGE ITEM STATUS"
-  # end
-
 
   private
 
-  def merchant_params
-    return params.require(:merchant).permit(:username, :email, :uid, :provider, :user_id)
-  end
+  # def merchant_params
+  #   return params.require(:merchant).permit(:username, :email, :uid, :provider, :user_id)
+  # end
 
   def find_merchant
     @merchant = Merchant.find_by(id: params[:id])

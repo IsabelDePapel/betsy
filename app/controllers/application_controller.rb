@@ -2,12 +2,15 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_action :find_user
+  before_action :cart_size
 
   # returns current user if already exists in session
   # else creates a new user and returns it
   #TODO move to session if no other controller uses this method
-  def get_current_user
+
+  def current_user
     if @auth_user
+      byebug
       return User.find_by(id: session[:user_id])
     else
       return User.create
@@ -34,8 +37,28 @@ class ApplicationController < ActionController::Base
   def find_user
     if session[:user_id]
       @auth_user = Merchant.find_by(user_id: session[:user_id])
+      @user = User.find_by(id: session[:user_id])
     end
   end
 
+  def authorize_merchant
+    if @merchant.user_id != session[:user_id]
+      puts "NOT AUTHORIZED"
+      flash[:status] = :failure
+      flash[:message] = "You're not authorized to do this"
+
+      redirect_to merchants_path
+
+      return false
+    end
+
+    return true
+  end
+
+  def cart_size
+    if session[:order_id]
+      @cart_size = OrderItem.where(id: session[:order_id]).count
+    end
+  end
 
 end

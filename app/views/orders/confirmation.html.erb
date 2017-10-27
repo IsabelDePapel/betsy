@@ -1,7 +1,5 @@
-<h1>Confirmation Page!</h1>
-<p>
-  Find me under app/views/orders/confirmation.html.erb
-</p>
+<h1>Order Confirmed!</h1>
+
 
 <section class="order-list">
   <ul>
@@ -36,12 +34,9 @@
       <%# FIX THE BELOW MESSY CODE %>
       Placed: <%= @order.order_items[0].updated_at.strftime('%B %d, %Y') %>
     </li>
-    <li>
-      Order Status: TODO
-    </li>
   </ul>
 </section>
 
 <section class="billing-info">
-  <%= display_address(@order) %>
+  <%= display_address(@order) if @order && @order.billing %>
 </section>

@@ -43,6 +43,8 @@ Rails.application.routes.draw do
     resources :billings, only: [:new, :create]
   end
 
+  get 'merchants/:merchant_id/orders/:order_id', to: 'orders#show', as: 'merchant_order'
+
   get '/cart', to: "orders#cart", as: 'cart'
   patch '/cart/:order_item_id/remove_from_cart', to: "products#remove_from_cart", as: 'remove_from_cart'
   patch '/cart/:order_item_id/update_quantity', to: "products#update_quantity_in_cart", as: 'update_quantity_in_cart'
