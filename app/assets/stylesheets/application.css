@@ -65,7 +65,7 @@ section.failure li, section.success li {
 /************************************/
 
 body {
-  background: #156894 !important;
+  background: #f2f2f2 !important;
 }
 
 body>div.placeholder {
@@ -123,6 +123,10 @@ td {
 html {
   margin: 0;
   padding: 0;
+}
+
+a {
+  color: #ffffff;
 }
 
 @media only screen and (orientation: landscape) {
@@ -295,13 +299,14 @@ h1.overlay:hover {
 /********************/
 /*  Login        */
 /*******************/
+
 h1 {
   text-align: center;
   margin-top: 2%;
   margin-bottom: 2%;
 }
-.login {
- text-align: center;
+.button {
+ text-align: center !important;
 }
 
 /********************/
