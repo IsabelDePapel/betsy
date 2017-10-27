@@ -98,10 +98,10 @@ table.order td {
 
 th,
 td {
-  text-align: left;
+  text-align: center !important;
   overflow: hidden;
   text-transform: uppercase;
-  // width: 10%;
+  width: auto%;
 }
 
 td {
@@ -130,6 +130,10 @@ html {
     height: 100%;
     width: auto;
   }
+}
+
+main section h1, main section h2, main section h3 {
+  margin-top: 2.5rem;
 }
 
 #slideshow {
@@ -291,9 +295,9 @@ select#status {
 }
 
 th.col-num {
-  width: 4vw;
+  width: 8%;
 }
 
 th.col-wide {
-  width: 10vw;
+  width: 25%;
 }
