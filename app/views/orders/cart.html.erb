@@ -1,33 +1,46 @@
-<h1>Cart</h1>
+<section class="row">
+  <section class="column large-9 medium-9">
+    <h1>Cart
+      <% if @order  %>
+        <small><%= @order.order_items.count %> Item(s)</small>
+      <% end  %>
+    </h1>
+  </section>
 
-<% if @order == nil || @order.order_items.length == 0 %>
-  <h3>You have nothing in your cart!</h3>
-  <p>Please add something to your cart!</p>
-  <%= link_to("See All Our Products", products_path, class: "button") %>
-<% else %>
-  <p>Order Item Count: <%= @order.order_items.count %></p>
-  <% @order.order_items.each do |item| %>
-  <p>DEBUG:
-  order_item id = <%= item.id %>
-  product id = <%= item.product.id %>
+  <section class="column large-3 medium-3">
+    <% if @order != nil && @order.order_items.length > 0 %>
+    <%= link_to("Checkout", new_order_billing_path(session[:order_id]), class: "button checkout-btn") %>
+    <% end  %>
+  </section>
 
-  </p>
+  <% if @order == nil || @order.order_items.length == 0 %>
+    <section class="column large-12">
+      <h3>You have nothing in your cart!</h3>
+      <p>Please add something to your cart!</p>
+      <%= link_to("See All Our Products", products_path, class: "button") %>
+    </section>
+  <% else %>
 
-  <h3><%= item.product.name %></h3>
-  <p>Amount Ordered: <%= item.quantity %></p>
+    <section class="column large-12 medium-12" id="cart-contents">
+    <% @order.order_items.each do |item| %>
+        <section class="row">
+          <section class="column large-9 medium-9">
+            <h3><%= item.product.name %></h3>
+            <p>Amount Ordered: <%= item.quantity %></p>
 
-  <%= form_tag(update_quantity_in_cart_path(item.id), method: :patch) do %>
-    <%= label_tag :quantity %>
-    <%= select_tag :quantity, options_for_select(1..item.product.quantity, item.quantity)%>
-    <%= submit_tag 'Change Quantity', class: "button" %>
+            <%= form_tag(update_quantity_in_cart_path(item.id), method: :patch) do %>
+            <%= label_tag :quantity %>
+            <%= select_tag :quantity, options_for_select(1..item.product.quantity, item.quantity)%>
+            <%= submit_tag 'Change Quantity', class: "button" %>
+            <% end %>
+          </section>
+
+          <section class="column large-3 medium-3">
+            <%= link_to("Delete", remove_from_cart_path(item.id), method: :patch, class: "alert button delete-btn") %>
+          </section>
+        </section>
+    <% end %>
+    </section>
   <% end %>
 
-  <%= link_to("Delete", remove_from_cart_path(item.id), method: :patch, class: "alert button") %>
-  <% end %>
-
-<% end %>
-
-<% if @order != nil && @order.order_items.length > 0 %>
-  <%= link_to("Checkout", new_order_billing_path(session[:order_id]), class: "button") %>
-<% end  %>
-<!--  Should go to order/order_id/billing/new -->
+</section>
