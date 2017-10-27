@@ -23,10 +23,10 @@
         <li class="navlinks"><%= link_to "All Products", products_path %></li>
         <li class="navlinks"><%= link_to "Cart", cart_path%></li>
         <% if @auth_user %>
-        <%= link_to "Hello, #{@auth_user.username}", merchant_path(@auth_user), class: "button" %>
-        <%= link_to "Sign Out", logout_path, method: :post, class: "button" %>
+        <%= link_to "Hello, #{@auth_user.username}", merchant_path(@auth_user) %>
+        <%= link_to "Sign Out", logout_path, method: :post %>
         <% else %>
-        <li class="navlinks"><%= link_to "Sign In/Up", login_path%></li>
+        <li class="navlinks"><%= link_to "Sign In/Up", login_path %></li>
         <% end %>
       </div>
     </nav>
