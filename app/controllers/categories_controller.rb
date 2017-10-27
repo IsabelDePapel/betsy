@@ -7,7 +7,7 @@ class CategoriesController < ApplicationController
   def create #TODO Move me to products.rb!!
     find_product
     #break apart list
-    cat_list = category_params[:category][:name].split(/\W+/)
+    cat_list = category_params[:category][:name].gsub(/^\W*/,"").gsub(/\W*$/,"").split(/\W*,\W*/)
     #check array for if cat exists
 
     cat_list.each do |item|
