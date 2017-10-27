@@ -48,4 +48,21 @@ module ApplicationHelper
   def potato
     return "https://vignette1.wikia.nocookie.net/adventuretimewithfinnandjake/images/9/93/Potato-potato.jpg/revision/latest?cb=20120411031630"
   end
+
+  def uri?(string)
+    uri = URI.parse(string)
+    %w( http https ).include?(uri.scheme)
+  rescue URI::BadURIError
+    false
+  rescue URI::InvalidURIError
+    false
+  end
+
+  def asset_exist?(path)
+    if Rails.configuration.assets.compile
+      Rails.application.precompiled_assets.include? path
+    else
+      Rails.application.assets_manifest.assets[path].present?
+    end
+  end
 end
