@@ -1,4 +1,4 @@
-<section class="row">
+
   <section class="column large-9 medium-9">
     <h1>Cart
       <% if @order  %>
@@ -25,7 +25,7 @@
     <% @order.order_items.each do |item| %>
         <section class="row">
           <section class="column large-9 medium-9">
-            <h3><%= item.product.name %></h3>
+            <h3><%= link_to(item.product.name, product_path(item.product.id)) %></h3>
             <p>Amount Ordered: <%= item.quantity %></p>
 
             <%= form_tag(update_quantity_in_cart_path(item.id), method: :patch) do %>
@@ -42,5 +42,3 @@
     <% end %>
     </section>
   <% end %>
-
-</section>

@@ -1,4 +1,4 @@
-<section class="row">
+<section id="product-show-description" class="row">
   <div class="large-6 columns">
     <h3><%= @product.name %></h3>
     <% if @auth_user && @auth_user.id == @product.merchant_id %>
@@ -31,21 +31,21 @@
       <%= link_to image_tag @product.photo_url, alt: 'link to', class: "product" %>
     <% end %>
   </div>
-</section>
 
-<section id="reviews" class="row">
-  <h2>Reviews</h2>
-  <%= link_to "Add Review", new_product_review_path(@product.id), class: "button" %>
-  <% if @product.reviews.length == 0 %>
+  <!-- Review Section -->
+
+  <div id="reviews" class="large-12 columns">
+    <h2>Reviews</h2>
+    <%= link_to "Add Review", new_product_review_path(@product.id), class: "button" %>
+    <% if @product.reviews.length == 0 %>
     <h3>Currently no reviews for this product.</h3>
-  <% else %>
+    <% else %>
     <% @product.reviews.each do |review| %>
-      <div class="large-12 columns">
-        <p>Rating: <%= review.rating %></p>
-        <p>By: <%= get_name(review.user) %> at <%= readable_date(review.updated_at) %></p>
-        <p><%= review.text %></p>
-        <hr>
-      </div>
+    <p>Rating: <%= review.rating %></p>
+    <p>By: <%= get_name(review.user) %> at <%= readable_date(review.updated_at) %></p>
+    <p><%= review.text %></p>
+    <hr>
     <% end %>
-  <% end %>
+    <% end %>
+  </div>
 </section>
