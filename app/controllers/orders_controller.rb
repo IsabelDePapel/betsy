@@ -4,7 +4,8 @@ class OrdersController < ApplicationController
 
   def confirmation
     find_order
-    if @user != @order.user || !@auth_user || Order.find_by(id: params[:id].to_i).user != @auth_user.user
+    # if @user != @order.user || !@auth_user && Order.find_by(id: params[:id].to_i).user != @auth_user.user
+    if @user != @order.user
       flash[:status] = :failure
       flash[:message] = "Order not available"
       return redirect_to products_path
