@@ -232,6 +232,17 @@ article.column {
   text-align: center;
 }
 
+#index-category-list .category {
+  border: 2px #010601 solid;
+}
+
+#index-product-list .product {
+  border: 2px #010601 solid;
+}
+
+img {
+  border: 2px #010601 solid;
+}
 
 /********************/
 /*  Forms */
@@ -305,8 +316,12 @@ h1 {
   margin-top: 2%;
   margin-bottom: 2%;
 }
-.button {
- text-align: center !important;
+
+div.login {
+  margin: auto;
+  width: 50%;
+  border: 3px solid green;
+  padding: 10px;
 }
 
 /********************/
