@@ -323,3 +323,11 @@ th.col-wide {
 #add-product-button {
   margin-top: 2.5rem;
 }
+
+form label {
+  font-size: 1.5rem;
+}
+
+form small {
+  font-size: 1.25rem;
+}
