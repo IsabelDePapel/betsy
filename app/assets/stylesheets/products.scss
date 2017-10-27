@@ -18,7 +18,6 @@
 #index-product-list .product p{
   margin-bottom: 0px;
 }
-
 #index-product-list{
   margin: auto;
 }
@@ -38,4 +37,8 @@ img.thumbnail.product-photo{
 
 select{
   width: 50px;
+}
+img.product-photo{
+  float: right;
+  position: relative;
 }
