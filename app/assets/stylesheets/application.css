@@ -15,6 +15,9 @@
 *= require foundation_and_overrides
 */
 
+main{
+  margin-top: 50px;
+}
 
 
 * {
@@ -34,6 +37,7 @@
 /************************************/
 
 section.failure, section.success {
+  padding-top: 30px;
   margin: 1vw 0;
   /*margin-left: 2vw;*/
   max-width: 75rem;
