@@ -22,6 +22,7 @@
         <li class="navlinks"><%= link_to "Categories", categories_path %></li>
         <li class="navlinks"><%= link_to "All Products", products_path %></li>
         <% @size = @cart_size == nil ? 0 : @cart_size %>
+        <%# byebug %>
         <li class="navlinks"><%= link_to "Cart - #{@size} #{"item".pluralize(@size)}", cart_path%></li>
         <% if @auth_user %>
         <li class="navlinks"><%= link_to "Your Dashboard", merchant_path(@auth_user) %></li>

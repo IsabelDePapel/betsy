@@ -57,7 +57,7 @@ class ApplicationController < ActionController::Base
 
   def cart_size
     if session[:order_id]
-      @cart_size = OrderItem.where(id: session[:order_id]).count
+      @cart_size = OrderItem.where(order_id: session[:order_id]).count
     end
   end
 
