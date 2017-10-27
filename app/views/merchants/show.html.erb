@@ -1,16 +1,19 @@
-<h1><%= "#{@merchant.username}'s Profile" %></h1>
 
 <section class="info row">
-  <h2>Your Info</h2>
-  <ul>
-    <li>
-      Username: <%= @merchant.username %>
-    </li>
-    <li>
-      email: <%= @merchant.email %>
-    </li>
-  </ul>
+  <section class="columns">
+    <h1><%= "#{@merchant.username}'s Profile" %></h1>
+    <h2>Your Info</h2>
+    <ul>
+      <li>
+        Username: <%= @merchant.username %>
+      </li>
+      <li>
+        email: <%= @merchant.email %>
+      </li>
+    </ul>
+  </section>
 </section>
+
 
 <div class="row">
   <section class="business-side column small-12 medium-9">

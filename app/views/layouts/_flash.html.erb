@@ -1,18 +1,20 @@
 <% if flash[:message] %>
   <section class="row status <%= flash[:status] %>">
-    <h3><%= flash[:message] %></h3>
+    <section class="column">
+      <h3><%= flash[:message] %></h3>
 
-    <% if flash[:details] %>
+      <% if flash[:details] %>
       <ul>
         <% flash[:details].each do |field, problems| %>
-          <% problems.each do |problem| %>
-            <li>
-              <%= "#{field}: #{problem}" %>
-            </li>
-          <% end %>
+        <% problems.each do |problem| %>
+        <li>
+          <%= "#{field}: #{problem}" %>
+        </li>
+        <% end %>
         <% end %>
       </ul>
-    <% end %>
+      <% end %>
+    </section>
 
   </section>
 <% end %>
