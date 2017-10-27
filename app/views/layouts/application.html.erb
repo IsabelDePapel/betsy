@@ -18,7 +18,8 @@
       <%= link_to "Home", root_path, class: "button" %>
       <%= link_to "Categories", 'categories_path', class: "button" %>
       <%= link_to "All Products", products_path, class: "button" %>
-      <%= link_to "Cart", cart_path, class: "button" %>
+      <% @size = @cart_size == nil ? 0 : @cart_size %>
+      <%= link_to "Cart - #{@size} #{"item".pluralize(@size)}", cart_path, class: "button" %>
       <div class="float-right">
         <% if @auth_user %>
         <%= link_to "Hello, #{@auth_user.username}", merchant_path(@auth_user), class: "button" %>
@@ -50,6 +51,7 @@
       <p id="copyright">
         © 2017 - Foodsie.
       </p>
-    </footer>
+    </div>
+  </footer>
 </body>
 </html>

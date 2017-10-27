@@ -4,6 +4,7 @@ class CategoriesController < ApplicationController
     @categories = Category.order(:name)
   end
 
+
   private
   def category_params
     return params.require(:category).permit(:name)
