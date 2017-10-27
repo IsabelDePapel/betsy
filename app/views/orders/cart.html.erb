@@ -1,4 +1,4 @@
-<h2>Cart</h2>
+<h1>Cart</h1>
 
 <% if @order == nil || @order.order_items.length == 0 %>
   <h3>You have nothing in your cart!</h3>
@@ -19,7 +19,7 @@
   <%= form_tag(update_quantity_in_cart_path(item.id), method: :patch) do %>
     <%= label_tag :quantity %>
     <%= select_tag :quantity, options_for_select(1..item.product.quantity, item.quantity)%>
-    <%= submit_tag 'Change Quantity' %>
+    <%= submit_tag 'Change Quantity', class: "button" %>
   <% end %>
 
   <%= link_to("Delete", remove_from_cart_path(item.id), method: :patch, class: "alert button") %>

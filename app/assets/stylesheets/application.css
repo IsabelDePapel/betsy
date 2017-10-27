@@ -15,6 +15,9 @@
 *= require foundation_and_overrides
 */
 
+main{
+  margin-top: 50px;
+}
 
 
 * {
@@ -29,11 +32,14 @@
 }
 
 
+
+
 /************************************/
 /* Flash Messages          */
 /************************************/
 
 section.failure, section.success {
+  padding-top: 30px;
   margin: 1vw 0;
   /*margin-left: 2vw;*/
   max-width: 75rem;
@@ -58,6 +64,10 @@ section.failure li, section.success li {
 /* Body Styling          */
 /************************************/
 
+body {
+  background: #f2f2f2 !important;
+}
+
 body>div.placeholder {
   height: 8vw;
 }
@@ -76,7 +86,7 @@ ul {
   padding-top: 13%;
 }
 
-table{
+table {
   color: #000;
   table-layout: fixed;
   width: 100%;
@@ -97,7 +107,7 @@ td {
   text-align: center !important;
   overflow: hidden;
   text-transform: uppercase;
-  width: auto%;
+  width: auto;
 }
 
 td {
@@ -113,6 +123,10 @@ td {
 html {
   margin: 0;
   padding: 0;
+}
+
+a {
+  color: #ffffff;
 }
 
 @media only screen and (orientation: landscape) {
@@ -189,6 +203,7 @@ nav {
   padding: 2vw 0 2vw 2.5vw;
 }
 
+
 .foodsie {
   text-transform: uppercase;
   color: white;
@@ -197,11 +212,10 @@ nav {
   display: inline;
 }
 
-nav a:link,
-nav a:hover,
-nav a:visited {
+nav li:link,
+nav li:hover,
+nav li:visited {
   color: white;
-  // padding: 0;
 }
 
 
@@ -283,6 +297,19 @@ h1.overlay:hover {
 }
 
 /********************/
+/*  Login        */
+/*******************/
+
+h1 {
+  text-align: center;
+  margin-top: 2%;
+  margin-bottom: 2%;
+}
+.button {
+ text-align: center !important;
+}
+
+/********************/
 /*  Merchants Acct Page        */
 /*******************/
 
@@ -296,4 +323,16 @@ th.col-num {
 
 th.col-wide {
   width: 25%;
+}
+
+#add-product-button {
+  margin-top: 2.5rem;
+}
+
+form label {
+  font-size: 1.5rem;
+}
+
+form small {
+  font-size: 1.25rem;
 }

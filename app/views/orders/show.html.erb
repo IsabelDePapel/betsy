@@ -4,15 +4,16 @@
 </section>
 
 <section class="row">
-  <table class="column small-12 medium-9">
-    <tr>
-      <th>Status</th>
-      <th>Item</th>
-      <th>Quantity</th>
-      <th>Price</th>
-    </tr>
+  <section class="column small-12 medium-9">
+    <table>
+      <tr>
+        <th>Status</th>
+        <th>Item</th>
+        <th>Quantity</th>
+        <th>Price</th>
+      </tr>
 
-    <% @order.order_items.each do |item| %>
+      <% @order.order_items.each do |item| %>
       <% if item.product.merchant == @merchant %>
       <tr>
         <td><%= item.status %></td>
@@ -21,10 +22,12 @@
         <td><%= number_to_currency(item.price) %></td>
       </tr>
       <% end %>
-    <% end %>
-  </table>
+      <% end %>
+    </table>
+  </section>
 
-<section class="column small-12 medium-3 billing-info">
-  <%= display_address(@order) if @order && @order.billing %>
-  <%= display_cc(@order) if @order && @order.billing %>
+  <section class="column small-12 medium-3 billing-info">
+    <%= display_address(@order) if @order && @order.billing %>
+    <%= display_cc(@order) if @order && @order.billing %>
+  </section>
 </section>

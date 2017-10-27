@@ -1,23 +1,27 @@
-<h1><%= "#{@merchant.username}'s Dashboard" %></h1>
-
 <section class="info row">
-  <h2>Your Info</h2>
-  <ul>
-    <li>
-      Username: <%= @merchant.username %>
-    </li>
-    <li>
-      email: <%= @merchant.email %>
-    </li>
-  </ul>
+  <section class="columns">
+    <h1><%= "#{@merchant.username}'s Dashboard" %></h1>
+    <h2>Your Info</h2>
+    <ul>
+      <li>
+        Username: <%= @merchant.username %>
+      </li>
+      <li>
+        email: <%= @merchant.email %>
+      </li>
+    </ul>
+  </section>
 </section>
+
 
 <div class="row">
   <section class="business-side column small-12 medium-8">
     <section class="products">
       <div class="row">
         <h2 class="column small-8">Your Products</h2>
-        <%= link_to "Add a Product", new_product_path, class: "button column small-3 end" %>
+        <div class="column small-4">
+        <%= link_to "Add a Product", new_product_path, class: "button float-right", id: "add-product-button" %>
+        </div>
       </div>
       <table>
         <thead>
