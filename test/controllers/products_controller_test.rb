@@ -78,10 +78,10 @@ describe ProductsController do
         num_orders = Order.count
         num_items = OrderItem.count
 
-        patch product_add_to_cart_path(product.id)
+        patch product_add_to_cart_path(product.id, {"quantity" => "4"})
         User.count.must_equal num_users + 1, "num users must be #{num_users + 1}"
         Order.count.must_equal num_orders + 1, "num orders must be #{num_orders + 1}"
-        OrderItem.count.must_equal num_items + 1, "num orderitems must be #{num_items + 1}"
+        OrderItem.count.must_equal num_items + 1, "num orderitems must be #{num_items + 1}" # CRASHES
 
         session[:order_id].must_equal Order.last.id
         session[:user_id].must_equal User.last.id
@@ -124,22 +124,21 @@ describe ProductsController do
         num = 3
 
         num.times do
-          patch product_add_to_cart_path(product.id)
+          patch product_add_to_cart_path(product.id, {"quantity" => "1"})
         end
 
         OrderItem.count.must_equal num_items + 1
-        OrderItem.last.quantity.must_equal num
+        OrderItem.last.quantity.must_equal 1
       end
     end # end of add to cart
 
     describe "remove from cart" do
       before do
         @start_count = OrderItem.count
-        patch product_add_to_cart_path(product.id)
+        patch product_add_to_cart_path(product.id, {"quantity" => "2"})
       end
 
       it "deletes the order item from the order if item in cart" do
-
         OrderItem.count.must_equal @start_count + 1
         added_item = OrderItem.last
 
@@ -157,11 +156,13 @@ describe ProductsController do
         num = 2
 
         num.times do
-          patch product_add_to_cart_path(product.id)
+          # when you do patch,
+          patch product_add_to_cart_path(product.id, {"quantity" => "2"})
+
         end
 
         added_item = OrderItem.last
-        added_item.quantity.must_equal num + 1
+        added_item.quantity.must_equal 2 # CRASHES
 
         patch remove_from_cart_path(added_item)
 
@@ -170,10 +171,10 @@ describe ProductsController do
       end
 
       it "redirect and doesn't delete if order item doesn't exist" do
-        patch remove_from_cart_path OrderItem.last.id. + 1
+        patch remove_from_cart_path OrderItem.last.id + 1
         must_respond_with :redirect
 
-        OrderItem.count.must_equal @start_count + 1 # bc prod added in before do
+        OrderItem.count.must_equal @start_count + 1 # bc prod added in before do # CRASHES
 
       end
       it "doesn't delete anything if order item isn't in the cart" do
@@ -182,7 +183,7 @@ describe ProductsController do
 
         patch remove_from_cart_path(not_in_cart)
 
-        OrderItem.count.must_equal @start_count + 1
+        OrderItem.count.must_equal @start_count + 1 # CRASHES
         OrderItem.find_by(id: not_in_cart.id).wont_be_nil
       end
     end

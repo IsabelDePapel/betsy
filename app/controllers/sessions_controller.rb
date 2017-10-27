@@ -34,7 +34,7 @@ class SessionsController < ApplicationController
 
     else
       # check if session user id already exists
-      user = get_current_user
+      user = current_user
       provider = auth_hash['provider']
 
       case provider
