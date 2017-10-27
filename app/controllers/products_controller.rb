@@ -55,7 +55,7 @@ class ProductsController < ApplicationController
 
         flash[:status] = :success
         flash[:message] = "#{@product.name.capitalize} successfully saved into database!"
-        redirect_to products_path
+        redirect_to merchant_path(@auth_user)
       else
         flash.now[:status] = :failure
         flash.now[:message] = "#{@product.name.capitalize} unsuccessfully saved into database!"
