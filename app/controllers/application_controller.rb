@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_action :find_user
+  before_action :cart_size
 
   # returns current user if already exists in session
   # else creates a new user and returns it
@@ -52,6 +53,12 @@ class ApplicationController < ActionController::Base
     end
 
     return true
+  end
+
+  def cart_size
+    if session[:order_id]
+      @cart_size = OrderItem.where(id: session[:order_id]).count
+    end
   end
 
 end
