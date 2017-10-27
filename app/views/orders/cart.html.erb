@@ -1,12 +1,12 @@
 <h2>Cart</h2>
 
-<% if @order == nil || @order_items.length == 0%>
+<% if @order == nil || @order.order_items.length == 0 %>
   <h3>You have nothing in your cart!</h3>
   <p>Please add something to your cart!</p>
   <%= link_to("See All Our Products", products_path, class: "button") %>
 <% else %>
-  <p>Order Item Count: <%= @order_items.count %></p>
-  <% @order_items.each do |item| %>
+  <p>Order Item Count: <%= @order.order_items.count %></p>
+  <% @order.order_items.each do |item| %>
   <p>DEBUG:
   order_item id = <%= item.id %>
   product id = <%= item.product.id %>
