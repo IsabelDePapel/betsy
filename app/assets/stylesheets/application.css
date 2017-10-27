@@ -32,6 +32,8 @@ main{
 }
 
 
+
+
 /************************************/
 /* Flash Messages          */
 /************************************/
@@ -62,6 +64,10 @@ section.failure li, section.success li {
 /* Body Styling          */
 /************************************/
 
+body {
+  background: #156894 !important;
+}
+
 body>div.placeholder {
   height: 8vw;
 }
@@ -80,7 +86,7 @@ ul {
   padding-top: 13%;
 }
 
-table{
+table {
   color: #000;
   table-layout: fixed;
   width: 100%;
@@ -193,6 +199,7 @@ nav {
   padding: 2vw 0 2vw 2.5vw;
 }
 
+
 .foodsie {
   text-transform: uppercase;
   color: white;
@@ -201,11 +208,10 @@ nav {
   display: inline;
 }
 
-nav a:link,
-nav a:hover,
-nav a:visited {
+nav li:link,
+nav li:hover,
+nav li:visited {
   color: white;
-  // padding: 0;
 }
 
 
@@ -284,6 +290,18 @@ h1.overlay {
 
 h1.overlay:hover {
   background-color: rgba(255, 255, 255, .2);
+}
+
+/********************/
+/*  Login        */
+/*******************/
+h1 {
+  text-align: center;
+  margin-top: 2%;
+  margin-bottom: 2%;
+}
+.login {
+ text-align: center;
 }
 
 /********************/
