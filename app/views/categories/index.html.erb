@@ -7,7 +7,7 @@
       <div class="large-4 medium-6 small-12 columns column-block end">
         <article class="category">
           <h2><%= category.name %></h2>
-          <%= link_to "View #{return_visible_products(category).length} Product(s)", category_products_path(category.name), class: "button" %>
+          <%= link_to "View #{return_visible_products(category).length} #{"Product".pluralize(return_visible_products(category).length)}", category_products_path(category.name), class: "button" %>
         </article>
       </div>
     <% end  %>

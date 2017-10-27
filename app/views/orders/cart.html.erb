@@ -1,19 +1,4 @@
-<head>
-  <h2>Cart</h2>
-  <%= csrf_meta_tags %>
-  <link href="https://fonts.googleapis.com/css?family=Handlee" rel="stylesheet">
-  <%= stylesheet_link_tag    "application" %>
-  <%= javascript_include_tag "application", 'data-turbolinks-track' => true %>
-</head>
-
-
-<p>
-DEBUG:
-session[:order_id] = <%= session[:order_id] %>
-session[:user_id] = <%= session[:user_id] %>
-</p>
-<hr>
-<hr>
+<h2>Cart</h2>
 
 <% if @order == nil || @order.order_items.length == 0 %>
   <h3>You have nothing in your cart!</h3>
@@ -38,8 +23,6 @@ session[:user_id] = <%= session[:user_id] %>
   <% end %>
 
   <%= link_to("Delete", remove_from_cart_path(item.id), method: :patch, class: "alert button") %>
-
-  <hr>
   <% end %>
 
 <% end %>

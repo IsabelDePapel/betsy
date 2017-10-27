@@ -15,16 +15,18 @@
   <!-- Navigation bar/links -->
   <header class="row expanded">
     <nav>
-      <%= link_to "Home", root_path, class: "button" %>
-      <%= link_to "Categories", 'categories_path', class: "button" %>
-      <%= link_to "All Products", products_path, class: "button" %>
-      <%= link_to "Cart", cart_path, class: "button" %>
+
+      <h1 class ="foodsie"><%= link_to "Foodsie", root_path %></h1>
+
       <div class="float-right">
+        <li class="navlinks"><%= link_to "Categories", categories_path %></li>
+        <li class="navlinks"><%= link_to "All Products", products_path %></li>
+        <li class="navlinks"><%= link_to "Cart", cart_path%></li>
         <% if @auth_user %>
-        <%= link_to "Hello, #{@auth_user.username}", merchant_path(@auth_user), class: "button" %>
-        <%= link_to "Sign Out", logout_path, method: :post, class: "button" %>
+        <%= link_to "Hello, #{@auth_user.username}", merchant_path(@auth_user) %>
+        <%= link_to "Sign Out", logout_path, method: :post %>
         <% else %>
-        <%= link_to "Sign In/Up", login_path, class: "button" %>
+        <li class="navlinks"><%= link_to "Sign In/Up", login_path %></li>
         <% end %>
       </div>
     </nav>
@@ -50,6 +52,7 @@
       <p id="copyright">
         © 2017 - Foodsie.
       </p>
-    </footer>
+    </div>
+  </footer>
 </body>
 </html>

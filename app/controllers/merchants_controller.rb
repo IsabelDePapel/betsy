@@ -25,6 +25,8 @@ class MerchantsController < ApplicationController
     @complete = @merchant.order_items.where(status: "complete")
     @canceled = @merchant.order_items.where(status: "canceled")
 
+    @purchases = @merchant.user.orders
+
   end
 
   private
