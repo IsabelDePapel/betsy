@@ -25,6 +25,6 @@
   </table>
 
 <section class="column small-12 medium-3 billing-info">
-  <%= display_address(@order) %>
-  <%= display_cc(@order) %>
+  <%= display_address(@order) if @order && @order.billing %>
+  <%= display_cc(@order) if @order && @order.billing %>
 </section>
