@@ -22,6 +22,11 @@ class OrdersController < ApplicationController
   def show
     @order = Order.find_by(id: params[:order_id])
 
+    if !@auth_user || @auth_user.id != params[:merchant_id].to_i
+      flash[:status] = :failure
+      flash[:message] = "Cannot view order if you're not the authorized owner"
+      return redirect_to products_path
+    end
     # case for cart
     # case for merchant checking their orders they bought
     # case for merchant checking orders from people who bought from them
@@ -29,9 +34,6 @@ class OrdersController < ApplicationController
 
   def cart
     @order = Order.find_by(id: session[:order_id])
-    if @order
-      @order_items = @order.order_items.order(:id)
-    end
   end
 
   private
