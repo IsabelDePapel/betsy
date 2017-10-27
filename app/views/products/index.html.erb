@@ -14,7 +14,11 @@
       <p>Description: <%= product.description %></p>
       <p>Price: <%= readable_price(product.price) %></p>
       <p>Quantity Available: <%= product.quantity %></p>
-      <p>Seller: <%= product.merchant.username %></p>
+      <p>Seller: <%= link_to product.merchant.username, merchant_products_path(product.merchant) %></p>
+      <% @rating = product.average_rating == nil ? "unrated" : product.average_rating %>
+      <p>
+        Avg Rating: <%= @rating %>
+      </p>
       <p class="categories-buttons">
         Categories:
         <% product.categories.each do |category| %>

@@ -55,7 +55,7 @@ class ProductsController < ApplicationController
 
         flash[:status] = :success
         flash[:message] = "#{@product.name.capitalize} successfully saved into database!"
-        redirect_to products_path
+        redirect_to merchant_path(@auth_user)
       else
         flash.now[:status] = :failure
         flash.now[:message] = "#{@product.name.capitalize} unsuccessfully saved into database!"
@@ -154,7 +154,7 @@ class ProductsController < ApplicationController
     cart_order = Order.find_by(id: session[:order_id])
     if !cart_order.add_product_to_order(product, params["quantity"]) #:product_id is NOT valid
       flash[:status] = :failure
-      flash[:message] = "Can't add non-existent product to cart."
+      flash[:message] = "Can't add product to cart."
     else # product exists, :product_id is valid
       flash[:status] = :success
       flash[:message] = "Successfully added product to cart."
