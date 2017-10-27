@@ -8,12 +8,12 @@
   <div class="large-4 medium-6 small-12 columns end" id="product-container">
     <article class="product">
       <% if product.photo_url && (uri?(product.photo_url) || asset_exist?(product.photo_url)) %>
-        <%= image_tag product.photo_url, alt: product.name, class: "thumbnail product-photo", align: "right"  %>
+      <div class="row">
+        <%= image_tag product.photo_url, alt: product.name, class: "thumbnail product-photo" %>
+      </div>
       <% end %>
-      <h2><%= link_to(product.name, product_path(product.id)) %></h2>
-      <p>Description: <%= product.description %></p>
+      <h3><%= link_to(product.name, product_path(product.id)) %></h3>
       <p>Price: <%= readable_price(product.price) %></p>
-      <p>Quantity Available: <%= product.quantity %></p>
       <p>Seller: <%= link_to product.merchant.username, merchant_products_path(product.merchant) %></p>
       <% @rating = product.average_rating == nil ? "unrated" : product.average_rating %>
       <p>
