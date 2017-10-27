@@ -15,7 +15,7 @@ module ApplicationHelper
     # return a string of the HTML I want to put in the view
     # Parenthesis cleanses the HTML
       if date != nil
-        return date.strftime("%A, %b %d")
+        return date.strftime('%b %-d, %Y')
       else
         return ""
       end

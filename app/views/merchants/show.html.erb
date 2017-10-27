@@ -1,4 +1,4 @@
-<h1><%= "#{@merchant.username}'s Profile" %></h1>
+<h1><%= "#{@merchant.username}'s Dashboard" %></h1>
 
 <section class="info row">
   <h2>Your Info</h2>
@@ -13,7 +13,7 @@
 </section>
 
 <div class="row">
-  <section class="business-side column small-12 medium-9">
+  <section class="business-side column small-12 medium-8">
     <section class="products">
       <div class="row">
         <h2 class="column small-8">Your Products</h2>
@@ -22,7 +22,7 @@
       <table>
         <thead>
           <tr>
-            <th class="col-num">Number</th>
+            <th class="col-num">No.</th>
             <th>Name</th>
             <th class="col-num">Qty</th>
             <th>Price</th>
@@ -64,14 +64,13 @@
     </section>
   </section>
 
-  <section class="shopping-side column small-12 medium-3">
+  <section class="shopping-side column small-12 medium-4">
     <h2>Your Purchases</h2>
 
     <table>
       <thead>
         <tr>
-          <th>Order</th>
-          <th>Dates</th>
+          <th>Date</th>
           <th>Items</th>
         </tr>
       </thead>
@@ -79,8 +78,7 @@
         <% if @merchant.user.orders %>
           <% @merchant.user.orders.each do |order| %>
           <tr>
-            <td><%= link_to order.id, confirmation_order_path(order.id) %></td>>
-            <td><%= readable_date(order.updated_at) %></td>
+            <td><%= link_to "#{readable_date(order.updated_at)} - #{order.id}", confirmation_order_path(order.id) %></td>
             <td><% if order.order_items %>
               <% order.order_items.each do |item| %>
               <%= link_to item.product.name, product_path(item.product.id) %><% end %></td>
