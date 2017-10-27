@@ -301,3 +301,7 @@ th.col-num {
 th.col-wide {
   width: 25%;
 }
+
+#add-product-button {
+  margin-top: 2.5rem;
+}

@@ -19,7 +19,9 @@
     <section class="products">
       <div class="row">
         <h2 class="column small-8">Your Products</h2>
-        <%= link_to "Add a Product", new_product_path, class: "button column small-3 end" %>
+        <div class="column small-4">
+        <%= link_to "Add a Product", new_product_path, class: "button float-right" %>
+        </div>
       </div>
       <table>
         <thead>
