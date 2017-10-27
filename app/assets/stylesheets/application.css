@@ -15,8 +15,13 @@
 *= require foundation_and_overrides
 */
 
-main{
+
+main.row{
   margin-top: 50px;
+}
+main{
+  margin:auto;
+
 }
 
 
@@ -44,7 +49,7 @@ section.failure, section.success {
   /*margin-left: 2vw;*/
   max-width: 75rem;
   margin-right: auto;
-  margin-left: auto
+  margin-left: auto;
 }
 
 section.failure {
