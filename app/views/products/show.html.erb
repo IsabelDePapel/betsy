@@ -1,5 +1,11 @@
 <section class="row">
-  <div class="large-6 columns">
+  <div class="small-12 large-6 columns">
+    <% if @product.photo_url && (uri?(@product.photo_url) || asset_exist?(@product.photo_url)) %>
+    <%= link_to image_tag @product.photo_url, alt: 'link to', class: "product" %>
+    <% end %>
+  </div>
+
+  <div class="small-12 large-6 columns">
     <h3><%= @product.name %></h3>
     <% if @auth_user && @auth_user.id == @product.merchant_id %>
       <%= link_to "Edit Product", edit_product_path(@product), class: "button" %>
@@ -23,12 +29,6 @@
     <% end %>
     <% else  %>
     <button type="button" class="button secondary" disabled>Sold Out</button>
-    <% end %>
-  </div>
-
-  <div class="large-6 columns">
-    <% if @product.photo_url && (uri?(@product.photo_url) || asset_exist?(@product.photo_url)) %>
-      <%= link_to image_tag @product.photo_url, alt: 'link to', class: "product" %>
     <% end %>
   </div>
 </section>
