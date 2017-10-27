@@ -240,7 +240,7 @@ class ProductsController < ApplicationController
 
   def from_category?
     if params[:category_id]
-      @category = Category.find_by(id: params[:category_id])
+      @category = Category.find_by(name: params[:category_id])
       return true
     end
   end
