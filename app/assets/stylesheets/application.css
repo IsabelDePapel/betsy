@@ -35,7 +35,10 @@
 
 section.failure, section.success {
   margin: 1vw 0;
-  margin-left: 2vw;
+  /*margin-left: 2vw;*/
+  max-width: 75rem;
+  margin-right: auto;
+  margin-left: auto
 }
 
 section.failure {
@@ -44,6 +47,10 @@ section.failure {
 
 section.success {
   color: green;
+}
+
+section.failure li, section.success li {
+  font-size: 1.25rem;
 }
 
 
